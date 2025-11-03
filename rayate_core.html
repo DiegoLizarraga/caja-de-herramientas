@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎨 Rayate - Dibujo con Gestos</title>
+    <style>
+        /* Variables CSS para armonía de colores */
+        :root {
+            --primary-color: #4A90E2;
+            --primary-dark: #2E5A99;
+            --primary-light: #7BB3F0;
+            --secondary-color: #E2854A;
+            --secondary-dark: #CC6B32;
+            --secondary-light: #F0A377;
+            --tertiary-color: #4AE285;
+            --tertiary-dark: #32CC6B;
+            --tertiary-light: #77F0A3;
+            --neutral-white: #FFFFFF;
+            --neutral-light: #F8F9FA;
+            --neutral-medium: #6C757D;
+            --neutral-dark: #212529;
+            --neutral-black: #000000;
+            --accent-cyan: rgb(34, 212, 253);
+            --accent-purple: rgb(138, 43, 226);
+            --accent-pink: rgb(255, 20, 147);
+            --shadow-light: rgba(74, 144, 226, 0.1);
+            --shadow-medium: rgba(74, 144, 226, 0.2);
+            --shadow-dark: rgba(74, 144, 226, 0.3);
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 50%, var(--tertiary-color) 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--neutral-white);
+        }
+
+        .container {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 25px 50px var(--shadow-dark), inset 0 1px 0 var(--glass-border);
+            backdrop-filter: blur(20px);
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--accent-cyan), var(--primary-light), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 4px 20px var(--shadow-medium);
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 span {
+            color: var(--accent-cyan);
+            border: 2px solid var(--accent-cyan);
+            padding: 8px 16px;
+            border-radius: 15px;
+            background: rgba(34, 212, 253, 0.1);
+            backdrop-filter: blur(10px);
+            display: inline-block;
+            margin: 0 8px;
+            font-weight: 800;
+            text-shadow: 0 0 20px var(--accent-cyan);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(34, 212, 253, 0.5); }
+            to { box-shadow: 0 0 30px rgba(34, 212, 253, 0.8); }
+        }
+
+        .mode-switcher {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .mode-btn {
+            padding: 12px 24px;
+            border: 2px solid var(--accent-cyan);
+            border-radius: 25px;
+            background: var(--glass-bg);
+            color: var(--neutral-white);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .mode-btn.active {
+            background: var(--accent-cyan);
+            color: var(--neutral-dark);
+            box-shadow: 0 0 20px var(--accent-cyan);
+        }
+
+        .mode-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--shadow-medium);
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 25px;
+            background: linear-gradient(135deg, var(--glass-bg) 0%, rgba(226, 133, 74, 0.1) 100%);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: inset 0 2px 10px var(--shadow-light), 0 8px 32px var(--shadow-medium);
+            backdrop-filter: blur(15px);
+        }
+
+        .tool-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .tool-group:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px var(--shadow-medium);
+        }
+
+        .tool-group label {
+            font-weight: 600;
+            color: var(--neutral-white);
+            font-size: 0.95em;
+            text-shadow: 0 2px 4px var(--shadow-dark);
+            letter-spacing: 0.5px;
+        }
+
+        .tool-group label span {
+            color: var(--accent-cyan);
+            border: 1px solid var(--accent-cyan);
+            padding: 4px 8px;
+            border-radius: 8px;
+            background: rgba(34, 212, 253, 0.1);
+            font-weight: 700;
+            font-size: 0.9em;
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            padding: 10px;
+            background: var(--glass-bg);
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .color-option {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .color-option:hover {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            border-color: var(--neutral-white);
+        }
+
+        .color-option.active {
+            border-color: var(--accent-cyan);
+            transform: scale(1.25);
+            box-shadow: 0 0 25px var(--accent-cyan), 0 8px 25px rgba(0, 0, 0, 0.4);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 25px var(--accent-cyan), 0 8px 25px rgba(0, 0, 0, 0.4); }
+            50% { box-shadow: 0 0 35px var(--accent-cyan), 0 12px 35px rgba(0, 0, 0, 0.6); }
+        }
+
+        .brush-size {
+            width: 160px;
+            height: 10px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color), var(--tertiary-color));
+            border-radius: 8px;
+            outline: none;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2), 0 2px 10px var(--shadow-medium);
+        }
+
+        .brush-size::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(45deg, var(--neutral-white), var(--accent-cyan));
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 2px 5px rgba(255, 255, 255, 0.5);
+            transition: all 0.2s ease;
+            border: 2px solid var(--accent-cyan);
+        }
+
+        .brush-size::-webkit-slider-thumb:hover {
+            transform: scale(1.3);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 15px var(--accent-cyan);
+        }
+
+        .brush-preview {
+            width: 70px;
+            height: 70px;
+            background: var(--glass-bg);
+            border: 2px solid var(--accent-cyan);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 12px;
+            box-shadow: inset 0 2px 10px var(--shadow-light), 0 4px 15px var(--shadow-medium);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brush-dot {
+            border-radius: 50%;
+            background: var(--neutral-dark);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            font-size: 0.9em;
+            position: relative;
+            overflow: hidden;
+            color: var(--neutral-white);
+        }
+
+        .btn-clear {
+            background: linear-gradient(45deg, rgb(255, 107, 107), rgb(238, 90, 90));
+            border: 2px solid rgb(255, 107, 107);
+        }
+
+        .btn-clear:hover {
+            background: linear-gradient(45deg, rgb(238, 90, 90), rgb(255, 107, 107));
+            box-shadow: 0 0 25px rgb(255, 107, 107);
+        }
+
+        .btn-save {
+            background: linear-gradient(45deg, rgb(81, 207, 102), rgb(64, 192, 87));
+            border: 2px solid rgb(81, 207, 102);
+        }
+
+        .btn-save:hover {
+            background: linear-gradient(45deg, rgb(64, 192, 87), rgb(81, 207, 102));
+            box-shadow: 0 0 25px rgb(81, 207, 102);
+        }
+
+        .btn-camera {
+            background: linear-gradient(45deg, var(--accent-purple), var(--accent-pink));
+            border: 2px solid var(--accent-purple);
+        }
+
+        .btn-camera:hover {
+            background: linear-gradient(45deg, var(--accent-pink), var(--accent-purple));
+            box-shadow: 0 0 25px var(--accent-purple);
+        }
+
+        .btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .drawing-area {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .canvas-container {
+            flex: 1;
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            background: var(--neutral-white);
+            border: 3px solid var(--accent-cyan);
+        }
+
+        #canvas {
+            display: block;
+            cursor: crosshair;
+            background: var(--neutral-white);
+            border-radius: 17px;
+            width: 100%;
+            height: auto;
+        }
+
+        .camera-container {
+            flex: 0 0 300px;
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            background: var(--neutral-dark);
+            border: 3px solid var(--accent-purple);
+        }
+
+        #video {
+            width: 100%;
+            height: auto;
+            display: block;
+            transform: scaleX(-1);
+        }
+
+        .gesture-status {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            padding: 8px 12px;
+            color: var(--neutral-white);
+            font-weight: 600;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        .status {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px 25px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            font-weight: 600;
+            color: var(--neutral-white);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 25px var(--shadow-medium);
+        }
+
+        .status span {
+            color: var(--accent-cyan);
+            border: 1px solid var(--accent-cyan);
+            padding: 4px 12px;
+            border-radius: 10px;
+            background: rgba(34, 212, 253, 0.1);
+            font-weight: 700;
+            margin: 0 5px;
+        }
+
+        .saved-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(45deg, var(--tertiary-color), var(--tertiary-dark));
+            color: var(--neutral-white);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.85em;
+            font-weight: 700;
+            opacity: 0;
+            transform: translateY(-15px) scale(0.8);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 8px 25px rgba(74, 226, 133, 0.4);
+            border: 2px solid var(--tertiary-light);
+        }
+
+        .saved-indicator.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            animation: saveSuccess 0.6s ease;
+        }
+
+        @keyframes saveSuccess {
+            0% { transform: translateY(-15px) scale(0.8); }
+            50% { transform: translateY(-5px) scale(1.1); }
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: var(--neutral-white);
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .loading.hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .drawing-area {
+                flex-direction: column;
+            }
+
+            .camera-container {
+                flex: none;
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+
+            .toolbar {
+                flex-direction: column;
+                gap: 25px;
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2.2em;
+            }
+
+            .mode-switcher {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading" id="loading">
+        🎨 Cargando MediaPipe y configurando cámara...
+    </div>
+
+    <div class="container">
+        <h1>🎨 <span>Rayate</span> - Dibujo con Gestos</h1>
+        
+        <div class="mode-switcher">
+            <button class="mode-btn active" id="mouseMode">🖱️ Modo Mouse</button>
+            <button class="mode-btn" id="gestureMode">👋 Modo Gestos</button>
+        </div>
+        
+        <div class="toolbar">
+            <div class="tool-group">
+                <label><span>Colores</span> Vibrantes</label>
+                <div class="color-palette">
+                    <div class="color-option active" style="background: #000" data-color="#000" title="Negro"></div>
+                    <div class="color-option" style="background: #ff0000" data-color="#ff0000" title="Rojo"></div>
+                    <div class="color-option" style="background: #00ff00" data-color="#00ff00" title="Verde"></div>
+                    <div class="color-option" style="background: #0000ff" data-color="#0000ff" title="Azul"></div>
+                    <div class="color-option" style="background: #ffff00" data-color="#ffff00" title="Amarillo"></div>
+                    <div class="color-option" style="background: #ff00ff" data-color="#ff00ff" title="Magenta"></div>
+                    <div class="color-option" style="background: #00ffff" data-color="#00ffff" title="Cyan"></div>
+                    <div class="color-option" style="background: #ffa500" data-color="#ffa500" title="Naranja"></div>
+                </div>
+            </div>
+            
+            <div class="tool-group">
+                <label><span>Tamaño</span> del Pincel</label>
+                <input type="range" class="brush-size" min="1" max="50" value="5" id="brushSize">
+                <div class="brush-preview">
+                    <div class="brush-dot" id="brushPreview"></div>
+                </div>
+            </div>
+            
+            <div class="tool-group">
+                <label><span>Acciones</span> Rápidas</label>
+                <div class="buttons">
+                    <button class="btn btn-camera" id="toggleCameraBtn">📹 Activar Cámara</button>
+                    <button class="btn btn-clear" id="clearBtn">🗑️ Limpiar</button>
+                    <button class="btn btn-save" id="saveBtn">💾 Descargar</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="drawing-area">
+            <div class="canvas-container">
+                <canvas id="canvas" width="800" height="600"></canvas>
+                <div class="saved-indicator" id="savedIndicator">✅ ¡Guardado automáticamente!</div>
+            </div>
+            
+            <div class="camera-container" id="cameraContainer" style="display: none;">
+                <video id="video" autoplay muted playsinline></video>
+                <div class="gesture-status" id="gestureStatus">
+                    📸 Cámara lista - Usa gestos para dibujar
+                </div>
+            </div>
+        </div>
+        
+        <div class="status">
+            <span>Nuevo:</span> Dibuja con gestos de manos usando la cámara
+            <br>
+            <small>• ✋ Mano abierta = Dibujar • ✊ Puño = Parar • ☝️ Índice levantado = Cambiar color</small>
+        </div>
+    </div>
+
+    <!-- MediaPipe -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+
+    <script>
+        class GestureDrawingApp {
+            constructor() {
+                this.canvas = document.getElementById('canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.video = document.getElementById('video');
+                this.isDrawing = false;
+                this.currentColor = '#000';
+                this.currentSize = 5;
+                this.mode = 'mouse'; // 'mouse' or 'gesture'
+                this.cameraActive = false;
+                this.hands = null;
+                this.camera = null;
+                
+                // Variables para seguimiento de gestos
+                this.lastHandPosition = null;
+                this.gestureState = 'idle'; // 'idle', 'drawing', 'color_change'
+                this.colorIndex = 0;
+                this.colors = ['#000', '#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500'];
+                this.lastGestureChange = 0; // Para debounce
+                
+                this.setupCanvas();
+                this.setupEventListeners();
+                this.loadDrawing();
+                this.updateBrushPreview();
+                this.initializeMediaPipe();
+            }
+
+            async initializeMediaPipe() {
+                try {
+                    // Esperar a que MediaPipe se cargue
+                    if (typeof Hands === 'undefined') {
+                        console.log('Esperando a que MediaPipe se cargue...');
+                        await new Promise(resolve => {
+                            const checkLoaded = () => {
+                                if (typeof Hands !== 'undefined') {
+                                    resolve();
+                                } else {
+                                    setTimeout(checkLoaded, 100);
+                                }
+                            };
+                            checkLoaded();
+                        });
+                    }
+
+                    // Configurar MediaPipe Hands
+                    this.hands = new Hands({
+                        locateFile: (file) => {
+                            return `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`;
+                        }
+                    });
+
+                    this.hands.setOptions({
+                        maxNumHands: 1,
+                        modelComplexity: 1,
+                        minDetectionConfidence: 0.5,
+                        minTrackingConfidence: 0.3,
+                        staticImageMode: false
+                    });
+
+                    this.hands.onResults((results) => this.handleHandResults(results));
+                    
+                    console.log('MediaPipe inicializado correctamente');
+                    this.showGestureStatus('✅ MediaPipe listo - Activa la cámara');
+                } catch (error) {
+                    console.error('Error inicializando MediaPipe:', error);
+                    this.showGestureStatus('❌ Error: MediaPipe no disponible');
+                }
+                
+                document.getElementById('loading').classList.add('hidden');
+            }
+
+            async setupCamera() {
+                try {
+                    const constraints = {
+                        video: { 
+                            width: { ideal: 640 },
+                            height: { ideal: 480 },
+                            facingMode: 'user',
+                            frameRate: { ideal: 30 }
+                        }
+                    };
+                    
+                    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                    this.video.srcObject = stream;
+                    
+                    return new Promise((resolve) => {
+                        this.video.addEventListener('loadeddata', async () => {
+                            console.log('Video loaded, dimensions:', this.video.videoWidth, 'x', this.video.videoHeight);
+                            
+                            this.camera = new Camera(this.video, {
+                                onFrame: async () => {
+                                    if (this.hands && this.cameraActive && this.mode === 'gesture') {
+                                        try {
+                                            await this.hands.send({ image: this.video });
+                                        } catch (error) {
+                                            console.error('Error sending frame to MediaPipe:', error);
+                                        }
+                                    }
+                                },
+                                width: 640,
+                                height: 480
+                            });
+                            
+                            this.camera.start();
+                            resolve(true);
+                        });
+                        
+                        this.video.addEventListener('error', (e) => {
+                            console.error('Video error:', e);
+                            resolve(false);
+                        });
+                    });
+                    
+                } catch (error) {
+                    console.error('Error accessing camera:', error);
+                    this.showGestureStatus('❌ Error: No se puede acceder a la cámara');
+                    return false;
+                }
+            }
+
+            handleHandResults(results) {
+                if (!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) {
+                    this.gestureState = 'idle';
+                    this.showGestureStatus('👋 Muestra tu mano frente a la cámara');
+                    return;
+                }
+
+                const landmarks = results.multiHandLandmarks[0];
+                const gesture = this.classifyGesture(landmarks);
+                const indexTip = landmarks[8]; // Punta del índice
+                
+                // Convertir coordenadas de la cámara al canvas
+                const canvasRect = this.canvas.getBoundingClientRect();
+                const x = (1 - indexTip.x) * this.canvas.width; // Espejo horizontal
+                const y = indexTip.y * this.canvas.height;
+
+                this.handleGestureDrawing(gesture, x, y);
+            }
+
+            classifyGesture(landmarks) {
+                // Puntos clave de los dedos (landmarks de MediaPipe)
+                const thumbTip = landmarks[4];
+                const thumbIp = landmarks[3];
+                const indexTip = landmarks[8];
+                const indexPip = landmarks[6];
+                const indexMcp = landmarks[5];
+                const middleTip = landmarks[12];
+                const middlePip = landmarks[10];
+                const ringTip = landmarks[16];
+                const ringPip = landmarks[14];
+                const pinkyTip = landmarks[20];
+                const pinkyPip = landmarks[18];
+                const wrist = landmarks[0];
+
+                // Función para calcular si un dedo está extendido
+                const isFingerExtended = (tip, pip, mcp = null) => {
+                    if (mcp) {
+                        // Para mejor precisión, usar MCP como referencia
+                        return tip.y < pip.y && pip.y < mcp.y;
+                    }
+                    return tip.y < pip.y;
+                };
+
+                // Detectar dedos extendidos
+                const thumbExtended = thumbTip.x > thumbIp.x; // Pulgar tiene lógica diferente
+                const indexExtended = isFingerExtended(indexTip, indexPip, indexMcp);
+                const middleExtended = isFingerExtended(middleTip, middlePip);
+                const ringExtended = isFingerExtended(ringTip, ringPip);
+                const pinkyExtended = isFingerExtended(pinkyTip, pinkyPip);
+
+                // Contar dedos extendidos
+                const extendedFingers = [
+                    thumbExtended,
+                    indexExtended,
+                    middleExtended,
+                    ringExtended,
+                    pinkyExtended
+                ];
+                
+                const fingerCount = extendedFingers.filter(Boolean).length;
+
+                // Debug info
+                console.log(`Dedos extendidos: ${fingerCount}`, {
+                    thumb: thumbExtended,
+                    index: indexExtended,
+                    middle: middleExtended,
+                    ring: ringExtended,
+                    pinky: pinkyExtended
+                });
+
+                // Clasificar gestos basado en dedos extendidos
+                if (fingerCount === 0) {
+                    return 'fist'; // Puño cerrado
+                } else if (fingerCount === 1 && indexExtended) {
+                    return 'point'; // Solo índice extendido
+                } else if (fingerCount >= 4) {
+                    return 'open'; // Mano abierta (4 o 5 dedos)
+                } else if (fingerCount >= 2) {
+                    return 'open'; // También consideramos 2-3 dedos como "abierto"
+                } else {
+                    return 'other'; // Otros gestos
+                }
+            }
+
+            handleGestureDrawing(gesture, x, y) {
+                // Agregar debounce para cambios de estado
+                const now = Date.now();
+                if (this.lastGestureChange && now - this.lastGestureChange < 200) {
+                    return; // Evitar cambios muy rápidos
+                }
+
+                switch (gesture) {
+                    case 'fist':
+                        if (this.gestureState === 'drawing') {
+                            this.stopGestureDrawing();
+                            this.lastGestureChange = now;
+                        }
+                        this.showGestureStatus('✊ Puño - Parado');
+                        break;
+                        
+                    case 'point':
+                        if (this.gestureState !== 'color_change') {
+                            this.cycleColor();
+                            this.gestureState = 'color_change';
+                            this.lastGestureChange = now;
+                            setTimeout(() => {
+                                if (this.gestureState === 'color_change') {
+                                    this.gestureState = 'idle';
+                                }
+                            }, 1000); // Reset después de 1 segundo
+                        }
+                        this.showGestureStatus(`☝️ Cambiando color - ${this.currentColor}`);
+                        break;
+                        
+                    case 'open':
+                        if (this.gestureState !== 'drawing') {
+                            this.startGestureDrawing(x, y);
+                            this.lastGestureChange = now;
+                        } else {
+                            this.continueGestureDrawing(x, y);
+                        }
+                        this.showGestureStatus('✋ Mano abierta - Dibujando');
+                        break;
+                        
+                    default:
+                        // No cambiar estado inmediatamente para evitar flickering
+                        setTimeout(() => {
+                            if (this.gestureState !== 'drawing') {
+                                this.gestureState = 'idle';
+                                this.showGestureStatus('👋 Haz un gesto para dibujar');
+                            }
+                        }, 300);
+                        break;
+                }
+            }
+
+            startGestureDrawing(x, y) {
+                this.gestureState = 'drawing';
+                this.ctx.beginPath();
+                this.ctx.moveTo(x, y);
+                this.lastHandPosition = { x, y };
+            }
+
+            continueGestureDrawing(x, y) {
+                if (!this.lastHandPosition) return;
+
+                // Suavizar el movimiento
+                const smoothX = this.lastHandPosition.x * 0.3 + x * 0.7;
+                const smoothY = this.lastHandPosition.y * 0.3 + y * 0.7;
+
+                this.ctx.strokeStyle = this.currentColor;
+                this.ctx.lineWidth = this.currentSize;
+                this.ctx.lineCap = 'round';
+                this.ctx.lineJoin = 'round';
+                this.ctx.lineTo(smoothX, smoothY);
+                this.ctx.stroke();
+                this.ctx.beginPath();
+                this.ctx.moveTo(smoothX, smoothY);
+
+                this.lastHandPosition = { x: smoothX, y: smoothY };
+            }
+
+            stopGestureDrawing() {
+                this.gestureState = 'idle';
+                this.lastHandPosition = null;
+                this.saveDrawing();
+                this.showSavedIndicator();
+            }
+
+            cycleColor() {
+                this.colorIndex = (this.colorIndex + 1) % this.colors.length;
+                this.currentColor = this.colors[this.colorIndex];
+                this.updateActiveColor();
+                this.updateBrushPreview();
+            }
+
+            updateActiveColor() {
+                document.querySelectorAll('.color-option').forEach(option => {
+                    option.classList.remove('active');
+                    if (option.dataset.color === this.currentColor) {
+                        option.classList.add('active');
+                    }
+                });
+            }
+
+            showGestureStatus(message) {
+                const statusEl = document.getElementById('gestureStatus');
+                if (statusEl) {
+                    statusEl.textContent = message;
+                }
+            }
+
+            setupCanvas() {
+                this.resizeCanvas();
+                window.addEventListener('resize', () => this.resizeCanvas());
+                this.ctx.lineCap = 'round';
+                this.ctx.lineJoin = 'round';
+            }
+
+            resizeCanvas() {
+                const container = this.canvas.parentElement;
+                const containerWidth = container.clientWidth - 40;
+                
+                if (window.innerWidth <= 768) {
+                    this.canvas.width = containerWidth;
+                    this.canvas.height = containerWidth * 0.75;
+                } else {
+                    this.canvas.width = Math.min(800, containerWidth);
+                    this.canvas.height = 600;
+                }
+                
+                this.loadDrawing();
+            }
+
+            setupEventListeners() {
+                // Cambio de modo
+                document.getElementById('mouseMode').addEventListener('click', () => {
+                    this.setMode('mouse');
+                });
+
+                document.getElementById('gestureMode').addEventListener('click', () => {
+                    this.setMode('gesture');
+                });
+
+                // Toggle cámara
+                document.getElementById('toggleCameraBtn').addEventListener('click', () => {
+                    this.toggleCamera();
+                });
+
+                // Eventos de dibujo para mouse (solo en modo mouse)
+                this.canvas.addEventListener('mousedown', (e) => {
+                    if (this.mode === 'mouse') this.startDrawing(e);
+                });
+                this.canvas.addEventListener('mousemove', (e) => {
+                    if (this.mode === 'mouse') this.draw(e);
+                });
+                this.canvas.addEventListener('mouseup', () => {
+                    if (this.mode === 'mouse') this.stopDrawing();
+                });
+                this.canvas.addEventListener('mouseout', () => {
+                    if (this.mode === 'mouse') this.stopDrawing();
+                });
+
+                // Eventos táctiles para móvil (solo en modo mouse)
+                this.canvas.addEventListener('touchstart', (e) => {
+                    if (this.mode === 'mouse') {
+                        e.preventDefault();
+                        const touch = e.touches[0];
+                        const mouseEvent = new MouseEvent('mousedown', {
+                            clientX: touch.clientX,
+                            clientY: touch.clientY
+                        });
+                        this.canvas.dispatchEvent(mouseEvent);
+                    }
+                });
+
+                this.canvas.addEventListener('touchmove', (e) => {
+                    if (this.mode === 'mouse') {
+                        e.preventDefault();
+                        const touch = e.touches[0];
+                        const mouseEvent = new MouseEvent('mousemove', {
+                            clientX: touch.clientX,
+                            clientY: touch.clientY
+                        });
+                        this.canvas.dispatchEvent(mouseEvent);
+                    }
+                });
+
+                this.canvas.addEventListener('touchend', (e) => {
+                    if (this.mode === 'mouse') {
+                        e.preventDefault();
+                        const mouseEvent = new MouseEvent('mouseup', {});
+                        this.canvas.dispatchEvent(mouseEvent);
+                    }
+                });
+
+                // Selector de colores
+                document.querySelectorAll('.color-option').forEach(option => {
+                    option.addEventListener('click', (e) => {
+                        document.querySelector('.color-option.active').classList.remove('active');
+                        e.target.classList.add('active');
+                        this.currentColor = e.target.dataset.color;
+                        
+                        // Actualizar índice de color para gestos
+                        this.colorIndex = this.colors.indexOf(this.currentColor);
+                        if (this.colorIndex === -1) this.colorIndex = 0;
+                        
+                        this.updateBrushPreview();
+                    });
+                });
+
+                // Tamaño del pincel
+                document.getElementById('brushSize').addEventListener('input', (e) => {
+                    this.currentSize = e.target.value;
+                    this.updateBrushPreview();
+                });
+
+                // Botones
+                document.getElementById('clearBtn').addEventListener('click', () => this.clearCanvas());
+                document.getElementById('saveBtn').addEventListener('click', () => this.downloadDrawing());
+            }
+
+            setMode(mode) {
+                this.mode = mode;
+                
+                // Actualizar UI
+                document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+                if (mode === 'mouse') {
+                    document.getElementById('mouseMode').classList.add('active');
+                    this.canvas.style.cursor = 'crosshair';
+                } else {
+                    document.getElementById('gestureMode').classList.add('active');
+                    this.canvas.style.cursor = 'default';
+                }
+
+                // Detener cualquier dibujo actual
+                this.isDrawing = false;
+                this.gestureState = 'idle';
+            }
+
+            async toggleCamera() {
+                const btn = document.getElementById('toggleCameraBtn');
+                const container = document.getElementById('cameraContainer');
+                
+                if (!this.cameraActive) {
+                    btn.textContent = '⏳ Iniciando cámara...';
+                    btn.disabled = true;
+                    
+                    const success = await this.setupCamera();
+                    
+                    if (success) {
+                        this.cameraActive = true;
+                        container.style.display = 'block';
+                        btn.textContent = '📹 Detener Cámara';
+                        btn.classList.remove('btn-camera');
+                        btn.classList.add('btn-clear');
+                        this.showGestureStatus('📸 Cámara activada - Haz gestos para dibujar');
+                        
+                        // Cambiar automáticamente a modo gestos
+                        this.setMode('gesture');
+                    } else {
+                        btn.textContent = '📹 Error en Cámara';
+                    }
+                    
+                    btn.disabled = false;
+                } else {
+                    this.stopCamera();
+                }
+            }
+
+            stopCamera() {
+                const btn = document.getElementById('toggleCameraBtn');
+                const container = document.getElementById('cameraContainer');
+                
+                if (this.video.srcObject) {
+                    const tracks = this.video.srcObject.getTracks();
+                    tracks.forEach(track => track.stop());
+                    this.video.srcObject = null;
+                }
+                
+                if (this.camera) {
+                    this.camera.stop();
+                }
+                
+                this.cameraActive = false;
+                container.style.display = 'none';
+                btn.textContent = '📹 Activar Cámara';
+                btn.classList.remove('btn-clear');
+                btn.classList.add('btn-camera');
+                
+                // Volver al modo mouse
+                this.setMode('mouse');
+            }
+
+            getMousePos(e) {
+                const rect = this.canvas.getBoundingClientRect();
+                return {
+                    x: (e.clientX - rect.left) * (this.canvas.width / rect.width),
+                    y: (e.clientY - rect.top) * (this.canvas.height / rect.height)
+                };
+            }
+
+            startDrawing(e) {
+                this.isDrawing = true;
+                const pos = this.getMousePos(e);
+                this.ctx.beginPath();
+                this.ctx.moveTo(pos.x, pos.y);
+            }
+
+            draw(e) {
+                if (!this.isDrawing) return;
+
+                const pos = this.getMousePos(e);
+                
+                this.ctx.strokeStyle = this.currentColor;
+                this.ctx.lineWidth = this.currentSize;
+                this.ctx.lineTo(pos.x, pos.y);
+                this.ctx.stroke();
+                this.ctx.beginPath();
+                this.ctx.moveTo(pos.x, pos.y);
+            }
+
+            stopDrawing() {
+                if (this.isDrawing) {
+                    this.isDrawing = false;
+                    this.saveDrawing();
+                    this.showSavedIndicator();
+                }
+            }
+
+            updateBrushPreview() {
+                const preview = document.getElementById('brushPreview');
+                const size = Math.max(4, Math.min(this.currentSize, 30));
+                preview.style.width = size + 'px';
+                preview.style.height = size + 'px';
+                preview.style.backgroundColor = this.currentColor;
+            }
+
+            clearCanvas() {
+                if (confirm('¿Estás seguro de que quieres borrar todo el dibujo?')) {
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    this.saveDrawing();
+                    this.showSavedIndicator();
+                }
+            }
+
+            saveDrawing() {
+                try {
+                    const imageData = this.canvas.toDataURL();
+                    const drawingData = {
+                        image: imageData,
+                        timestamp: new Date().toISOString(),
+                        canvasWidth: this.canvas.width,
+                        canvasHeight: this.canvas.height
+                    };
+                    
+                    // Usar variable en memoria en lugar de localStorage
+                    window.savedDrawing = drawingData;
+                    console.log('Dibujo guardado automáticamente');
+                } catch (error) {
+                    console.error('Error al guardar el dibujo:', error);
+                }
+            }
+
+            loadDrawing() {
+                try {
+                    const savedData = window.savedDrawing;
+                    
+                    if (savedData && savedData.image) {
+                        const img = new Image();
+                        img.onload = () => {
+                            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                            this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
+                        };
+                        img.src = savedData.image;
+                    }
+                } catch (error) {
+                    console.error('Error al cargar el dibujo:', error);
+                }
+            }
+
+            downloadDrawing() {
+                try {
+                    const tempCanvas = document.createElement('canvas');
+                    const tempCtx = tempCanvas.getContext('2d');
+                    tempCanvas.width = this.canvas.width;
+                    tempCanvas.height = this.canvas.height;
+                    
+                    tempCtx.fillStyle = '#ffffff';
+                    tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+                    tempCtx.drawImage(this.canvas, 0, 0);
+                    
+                    const link = document.createElement('a');
+                    link.download = `rayate-dibujo-${new Date().toISOString().split('T')[0]}.png`;
+                    link.href = tempCanvas.toDataURL();
+                    link.click();
+                } catch (error) {
+                    console.error('Error al descargar el dibujo:', error);
+                    alert('Error al descargar el dibujo');
+                }
+            }
+
+            showSavedIndicator() {
+                const indicator = document.getElementById('savedIndicator');
+                indicator.classList.add('show');
+                setTimeout(() => {
+                    indicator.classList.remove('show');
+                }, 2000);
+            }
+        }
+
+        // Inicializar la aplicación cuando se carga la página
+        document.addEventListener('DOMContentLoaded', () => {
+            new GestureDrawingApp();
+        });
+
+        // Prevenir scroll en móviles
+        document.addEventListener('touchstart', (e) => {
+            if (e.target.tagName === 'CANVAS') {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchend', (e) => {
+            if (e.target.tagName === 'CANVAS') {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchmove', (e) => {
+            if (e.target.tagName === 'CANVAS') {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+name: voice_commands_demo
+description: Demo de comandos de voz con ElevenLabs
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  http: ^1.1.0
+  record: ^5.0.4
+  path_provider: ^2.1.1
+  permission_handler: ^11.0.1
+  flutter_tts: ^3.8.5
+  provider: ^6.0.5
+  just_audio: ^0.9.36
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+
+
+  
