@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lector de Texto a Voz</title>
+    <style>
+        /* --- Estilos Generales --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        /* --- Contenedor Principal --- */
+        .container {
+            background: #ffffff;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 700px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- Área de Texto --- */
+        #text-to-speak {
+            width: 100%;
+            height: 150px;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.75rem;
+            font-size: 1.1rem;
+            line-height: 1.5;
+            resize: vertical;
+            margin-bottom: 1.5rem;
+            box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+        }
+
+        #text-to-speak:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* --- Controles --- */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        #speak-button { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        #pause-button { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        #resume-button { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        #stop-button { background: linear-gradient(135deg, #ef4444, #dc2626); }
+
+        /* --- Configuración Avanzada --- */
+        .settings {
+            background-color: #f7fafc;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .settings h2 {
+            font-size: 1.25rem;
+            color: #4a5568;
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        .setting-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .setting-item label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #2d3748;
+        }
+
+        select, input[type="range"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #cbd5e0;
+            border-radius: 0.375rem;
+            background-color: white;
+        }
+
+        .range-value {
+            font-weight: bold;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+        <h1>🎤 Lector de Texto a Voz</h1>
+        <p style="text-align: center; color: #718096;">Escribe o pega el texto abajo y presiona "Hablar" para que tu navegador lo lea en voz alta.</p>
+
+        <textarea id="text-to-speak" placeholder="Hola, mundo. Este es un ejemplo de texto que el navegador puede leer. Puedes escribir lo que quieras aquí.">
+            ¡Hola! Bienvenido a este lector de texto a voz. Esta herramienta utiliza la tecnología nativa de tu navegador para convertir texto en audio. ¡Pruébala cambiando la voz, la velocidad y el tono!
+        </textarea>
+
+        <div class="controls">
+            <button id="speak-button"><i class="fas fa-play"></i> Hablar</button>
+            <button id="pause-button"><i class="fas fa-pause"></i> Pausar</button>
+            <button id="resume-button"><i class="fas fa-play-circle"></i> Reanudar</button>
+            <button id="stop-button"><i class="fas fa-stop"></i> Detener</button>
+        </div>
+
+        <div class="settings">
+            <h2>⚙️ Configuración Avanzada</h2>
+            <div class="setting-group">
+                <div class="setting-item">
+                    <label for="voice-select">Voz:</label>
+                    <select id="voice-select"></select>
+                </div>
+
+                <div class="setting-item">
+                    <label for="lang-select">Idioma:</label>
+                    <select id="lang-select"></select>
+                </div>
+
+                <div class="setting-item">
+                    <label for="rate-range">Velocidad: <span id="rate-value" class="range-value">1</span></label>
+                    <input type="range" id="rate-range" min="0.5" max="2" value="1" step="0.1">
+                </div>
+
+                <div class="setting-item">
+                    <label for="pitch-range">Tono: <span id="pitch-value" class="range-value">1</span></label>
+                    <input type="range" id="pitch-range" min="0" max="2" value="1" step="0.1">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Font Awesome para los iconos -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <script>
+        // 1. OBTENER REFERENCIAS A LOS ELEMENTOS DEL DOM
+        const textArea = document.getElementById('text-to-speak');
+        const speakButton = document.getElementById('speak-button');
+        const pauseButton = document.getElementById('pause-button');
+        const resumeButton = document.getElementById('resume-button');
+        const stopButton = document.getElementById('stop-button');
+        const voiceSelect = document.getElementById('voice-select');
+        const langSelect = document.getElementById('lang-select');
+        const rateRange = document.getElementById('rate-range');
+        const pitchRange = document.getElementById('pitch-range');
+        const rateValue = document.getElementById('rate-value');
+        const pitchValue = document.getElementById('pitch-value');
+
+        // 2. VERIFICAR SOPORTE DE LA API
+        if (!('speechSynthesis' in window)) {
+            alert("Lo siento, tu navegador no soporta la API de síntesis de voz. Prueba con una versión reciente de Chrome o Firefox.");
+            // Deshabilitar controles
+            speakButton.disabled = true;
+            pauseButton.disabled = true;
+            resumeButton.disabled = true;
+            stopButton.disabled = true;
+        }
+
+        // 3. VARIABLES GLOBALES
+        const synth = window.speechSynthesis;
+        let voices = [];
+        let utterance = new SpeechSynthesisUtterance();
+
+        // 4. FUNCIONES
+
+        // Función para poblar las listas de voces e idiomas
+        function populateVoiceList() {
+            voices = synth.getVoices();
+            voiceSelect.innerHTML = ''; // Limpiar opciones anteriores
+            langSelect.innerHTML = ''; // Limpiar opciones anteriores
+
+            const languages = new Set();
+
+            voices.forEach(voice => {
+                // Añadir a la lista de voces
+                const option = document.createElement('option');
+                option.textContent = `${voice.name} (${voice.lang})`;
+                option.setAttribute('data-lang', voice.lang);
+                option.setAttribute('data-name', voice.name);
+                voiceSelect.appendChild(option);
+
+                // Añadir idioma único al set
+                languages.add(voice.lang);
+            });
+
+            // Poblar el selector de idiomas
+            languages.forEach(lang => {
+                const option = document.createElement('option');
+                option.textContent = lang;
+                option.value = lang;
+                langSelect.appendChild(option);
+            });
+        }
+
+        // Función principal para hablar
+        function speak() {
+            if (synth.speaking) {
+                console.error('Ya se está hablando.');
+                return;
+            }
+            if (textArea.value !== '') {
+                // Cancelar cualquier speech previo
+                synth.cancel();
+
+                // Crear un nuevo utterance con el texto actual
+                utterance = new SpeechSynthesisUtterance(textArea.value);
+
+                // Asignar configuración
+                const selectedVoiceName = voiceSelect.selectedOptions[0].getAttribute('data-name');
+                utterance.voice = voices.find(voice => voice.name === selectedVoiceName);
+                utterance.lang = langSelect.value;
+                utterance.pitch = pitchRange.value;
+                utterance.rate = rateRange.value;
+
+                // Eventos del utterance (opcional, pero útil para depurar)
+                utterance.onstart = () => {
+                    console.log('Ha comenzado a hablar.');
+                    speakButton.disabled = true;
+                };
+                utterance.onend = () => {
+                    console.log('Ha terminado de hablar.');
+                    speakButton.disabled = false;
+                };
+                utterance.onerror = (event) => {
+                    console.error('Error en speechSynthesis:', event.error);
+                };
+
+                // Iniciar el speech
+                synth.speak(utterance);
+            }
+        }
+        
+        // 5. EVENT LISTENERS
+
+        // Cargar las voces cuando estén disponibles
+        populateVoiceList();
+        if (synth.onvoiceschanged !== undefined) {
+            synth.onvoiceschanged = populateVoiceList;
+        }
+
+        speakButton.addEventListener('click', speak);
+        pauseButton.addEventListener('click', () => synth.pause());
+        resumeButton.addEventListener('click', () => synth.resume());
+        stopButton.addEventListener('click', () => synth.cancel());
+
+        // Actualizar los valores de los rangos en tiempo real
+        rateRange.addEventListener('input', () => {
+            rateValue.textContent = rateRange.value;
+        });
+        pitchRange.addEventListener('input', () => {
+            pitchValue.textContent = pitchRange.value;
+        });
+
+    </script>
+</body>
+</html>

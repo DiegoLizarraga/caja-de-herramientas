@@ -11,8 +11,8 @@ class GestureAppLauncher:
         # ============================================
         self.gesture_paths = {
             'rock': r'C:\Users\DiegoB)\Desktop\linux core.lnk',      # PIEDRA
-            'paper': r'C:\ruta\a\tu\aplicacion2.lnk',              # PAPEL
-            'scissors': r'C:\ruta\a\tu\aplicacion3.lnk'            # TIJERAS
+            'paper': r'C:\Users\DiegoB)\Desktop\insters.xlsx', # PAPEL
+            'scissors': r'"C:\Users\DiegoB)\Desktop\Arduino IDE.lnk"'            # TIJERAS
         }
         # ============================================
         
@@ -27,29 +27,54 @@ class GestureAppLauncher:
         self.last_launch_time = 0
         
     def detect_hand_contour(self, frame):
-        """Detecta la contorno de la mano usando color de piel"""
-        # Convertir a HSV para mejor detección de piel
+        """Detecta la contorno de la mano usando color de piel y filtros mejorados"""
+        # Convertir a HSV y YCrCb para mejor detección de piel
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        ycrcb = cv2.cvtColor(frame, cv2.COLOR_BGR2YCR_CB)
         
-        # Rango de color de piel
-        lower_skin = np.array([0, 20, 70], dtype=np.uint8)
-        upper_skin = np.array([20, 255, 255], dtype=np.uint8)
+        # Rangos de color de piel en HSV
+        lower_skin_hsv = np.array([0, 30, 60], dtype=np.uint8)
+        upper_skin_hsv = np.array([20, 150, 255], dtype=np.uint8)
         
-        # Crear máscara
-        mask = cv2.inRange(hsv, lower_skin, upper_skin)
+        # Rangos de color de piel en YCrCb
+        lower_skin_ycrcb = np.array([0, 135, 85], dtype=np.uint8)
+        upper_skin_ycrcb = np.array([255, 180, 135], dtype=np.uint8)
         
-        # Aplicar operaciones morfológicas
-        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
-        mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
-        mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+        # Crear máscaras
+        mask_hsv = cv2.inRange(hsv, lower_skin_hsv, upper_skin_hsv)
+        mask_ycrcb = cv2.inRange(ycrcb, lower_skin_ycrcb, upper_skin_ycrcb)
+        
+        # Combinar máscaras
+        mask = cv2.bitwise_and(mask_hsv, mask_ycrcb)
+        
+        # Aplicar operaciones morfológicas más agresivas
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+        mask = cv2.erode(mask, kernel, iterations=1)
+        mask = cv2.dilate(mask, kernel, iterations=2)
+        mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel, iterations=2)
         
         # Encontrar contornos
-        contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         
-        if len(contours) > 0:
-            hand_contour = max(contours, key=cv2.contourArea)
-            if cv2.contourArea(hand_contour) > 5000:
-                return hand_contour, mask
+        # Filtrar contornos por área y forma
+        valid_contours = []
+        for contour in contours:
+            area = cv2.contourArea(contour)
+            if area < 7000:  # Ignora contornos muy pequeños
+                continue
+                
+            # Calcular la proporción de aspecto del contorno
+            x, y, w, h = cv2.boundingRect(contour)
+            aspect_ratio = float(w) / h
+            
+            # Las manos típicamente tienen una proporción de aspecto entre 0.5 y 1.5
+            if 0.5 <= aspect_ratio <= 1.5:
+                valid_contours.append(contour)
+        
+        if valid_contours:
+            # Seleccionar el contorno más grande que cumple los criterios
+            hand_contour = max(valid_contours, key=cv2.contourArea)
+            return hand_contour, mask
         
         return None, mask
     
@@ -69,28 +94,40 @@ class GestureAppLauncher:
             return 'none'
         circularity = 4 * np.pi * area / (perimeter ** 2)
         
-        # Aproximar contorno
-        epsilon = 0.02 * perimeter
-        approx = cv2.approxPolyDP(hand_contour, epsilon, True)
-        num_points = len(approx)
+        # Calcular hull y defectos
+        hull = cv2.convexHull(hand_contour, returnPoints=False)
+        defects = cv2.convexityDefects(hand_contour, hull)
         
-        # Contar defectos (dedos)
+        # Contar dedos usando defectos de convexidad
         finger_count = 0
-        try:
-            hull = cv2.convexHull(hand_contour)
-            if hull is not None and len(hull) > 3:
-                defects = cv2.convexityDefects(hand_contour, hull)
-                if defects is not None:
-                    finger_count = len(defects)
-        except:
-            finger_count = 0
+        if defects is not None:
+            for i in range(defects.shape[0]):
+                s, e, f, d = defects[i, 0]
+                start = tuple(hand_contour[s][0])
+                end = tuple(hand_contour[e][0])
+                far = tuple(hand_contour[f][0])
+                
+                # Calcular el ángulo entre los puntos
+                a = np.sqrt((end[0] - start[0])**2 + (end[1] - start[1])**2)
+                b = np.sqrt((far[0] - start[0])**2 + (far[1] - start[1])**2)
+                c = np.sqrt((end[0] - far[0])**2 + (end[1] - far[1])**2)
+                angle = np.arccos((b**2 + c**2 - a**2)/(2*b*c))
+                
+                # Si el ángulo es menor que 90 grados, cuenta como un dedo
+                if angle <= np.pi/2:
+                    finger_count += 1
+        
+        # Dibujar contorno y hull para debug visual
+        cv2.drawContours(frame, [hand_contour], -1, (0, 255, 0), 2)
+        hull_points = cv2.convexHull(hand_contour)
+        cv2.drawContours(frame, [hull_points], -1, (0, 0, 255), 2)
         
         # Clasificar gestos basado en circularidad y dedos
-        if circularity > 0.7:  # Forma circular = puño cerrado
+        if circularity > 0.85:  # Forma más circular = puño cerrado (piedra)
             return 'rock'
-        elif finger_count > 8:  # Muchos defectos = mano abierta
+        elif finger_count >= 4:  # 4 o más dedos = mano abierta (papel)
             return 'paper'
-        elif 3 <= finger_count <= 6:  # Defectos medios = tijeras
+        elif 1 <= finger_count <= 3:  # 1-3 dedos = tijeras
             return 'scissors'
         
         return 'none'
@@ -106,17 +143,28 @@ class GestureAppLauncher:
         
         path = self.gesture_paths[gesture]
         
+        # Eliminar comillas extras si existen
+        path = path.strip('"')
+        
         if not os.path.exists(path):
             print(f"⚠️  Error: La ruta no existe: {path}")
             return False
         
         try:
-            subprocess.Popen(path)
-            print(f"✅ Aplicación abierta: {gesture.upper()}")
+            # Usar os.startfile para archivos .lnk en Windows
+            if path.lower().endswith('.lnk'):
+                os.startfile(path)
+            else:
+                # Para otros tipos de archivos, usar subprocess con shell=True
+                subprocess.Popen([path], shell=True)
+            
+            print(f"✅ Aplicación abierta: {gesture.upper()} -> {path}")
             self.last_launch_time = current_time
             return True
         except Exception as e:
             print(f"❌ Error al abrir la aplicación: {e}")
+            print(f"   Ruta: {path}")
+            print(f"   Tipo de archivo: {os.path.splitext(path)[1]}")
             return False
     
     def draw_hand_contour(self, frame):
@@ -147,21 +195,44 @@ class GestureAppLauncher:
         
         gesture_display = gesture_icons.get(gesture, gesture.upper())
         
-        # Fondo para el texto
-        cv2.rectangle(frame, (10, 10), (450, 120), (0, 0, 0), -1)
-        cv2.rectangle(frame, (10, 10), (450, 120), (0, 255, 0), 2)
+        # Etiqueta de gesto en la esquina superior derecha
+        label_size = cv2.getTextSize(gesture_display, cv2.FONT_HERSHEY_SIMPLEX, 1.0, 2)[0]
+        label_x = width - label_size[0] - 20
         
-        cv2.putText(frame, gesture_display, (20, 60),
-                   cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 255, 0), 2)
+        # Fondo para la etiqueta
+        cv2.rectangle(frame, 
+                     (label_x - 10, 10), 
+                     (width - 10, 50), 
+                     (0, 0, 0), -1)
+        cv2.rectangle(frame, 
+                     (label_x - 10, 10), 
+                     (width - 10, 50), 
+                     (0, 255, 0), 2)
+        
+        # Texto de la etiqueta
+        cv2.putText(frame, gesture_display, 
+                   (label_x, 40),
+                   cv2.FONT_HERSHEY_SIMPLEX, 1.0, 
+                   (0, 255, 0), 2)
+        
+        # Panel de información principal
+        cv2.rectangle(frame, (10, 10), (300, 120), (0, 0, 0), -1)
+        cv2.rectangle(frame, (10, 10), (300, 120), (0, 255, 0), 2)
         
         # Mostrar tiempo de espera
         if is_holding and gesture != 'none':
             elapsed = time.time() - self.gesture_start_time
             remaining = max(0, self.gesture_hold_time - elapsed)
-            color = (0, int(255 * (1 - remaining / self.gesture_hold_time)), 
-                    int(255 * (remaining / self.gesture_hold_time)))
-            cv2.putText(frame, f"Abriendo en: {remaining:.1f}s", (20, 100),
+            progress = 1 - remaining / self.gesture_hold_time
+            color = (0, int(255 * progress), int(255 * (1 - progress)))
+            
+            cv2.putText(frame, f"Gesto detectado!", (20, 40),
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+            cv2.putText(frame, f"Abriendo en: {remaining:.1f}s", (20, 80),
                        cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
+        else:
+            cv2.putText(frame, "Esperando gesto...", (20, 60),
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
         
         # Instrucciones
         cv2.putText(frame, "ESC para salir", (10, height - 20),
