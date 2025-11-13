@@ -220,9 +220,9 @@ class PokerRoguelike {
         
         if (this.score >= this.targetScore) {
             title.textContent = '¡Ronda Completada!';
-            message.textContent = `¡Excelente! Conseguiste ${this.score} puntos. ¡Pasa a la siguiente ronda!`;
+            message.textContent = `¡Excelente! Conseguiste ${this.score} puntos. ¡Pasa a la siguiente ronda balatreate!`;
         } else {
-            title.textContent = 'Ronda Fallida';
+            title.textContent = 'Ronda Fallida tontito';
             message.textContent = `Solo conseguiste ${this.score} de ${this.targetScore} puntos. ¡Game Over!`;
             document.getElementById('nextRoundBtn').style.display = 'none';
         }
