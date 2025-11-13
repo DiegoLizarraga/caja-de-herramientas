@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poker Roguelike - Juego tipo Balatro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <div class="score-panel">
+                <div class="score-item">
+                    <span class="label">PUNTOS</span>
+                    <span class="value" id="score">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">MULTIPLICADOR</span>
+                    <span class="value" id="multiplier">1</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">RONDA</span>
+                    <span class="value" id="round">1</span>
+                </div>
+                <div class="score-item">
+                    <span class="label">OBJETIVO</span>
+                    <span class="value" id="target">300</span>
+                </div>
+            </div>
+            <div class="resources">
+                <div class="resource">
+                    <span class="label">MANOS</span>
+                    <span class="value" id="hands">3</span>
+                </div>
+                <div class="resource">
+                    <span class="label">DESCARTES</span>
+                    <span class="value" id="discards">2</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="game-main">
+            <div class="play-area">
+                <div class="hand-label">TU MANO</div>
+                <div class="cards-container" id="hand">
+                    <!-- Las cartas se generarán dinámicamente -->
+                </div>
+                <div class="hand-info" id="handInfo"></div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-primary" id="playBtn">JUGAR MANO</button>
+                <button class="btn btn-secondary" id="discardBtn">DESCARTAR</button>
+                <button class="btn btn-danger" id="endRoundBtn">TERMINAR RONDA</button>
+            </div>
+
+            <div class="message-area" id="messageArea"></div>
+        </main>
+
+        <div class="modal" id="roundEndModal">
+            <div class="modal-content">
+                <h2 id="modalTitle">Ronda Completada</h2>
+                <p id="modalMessage"></p>
+                <button class="btn btn-primary" id="nextRoundBtn">Siguiente Ronda</button>
+            </div>
+        </div>
+
+        <div class="modal" id="gameOverModal">
+            <div class="modal-content">
+                <h2>Game Over</h2>
+                <p id="gameOverMessage"></p>
+                <button class="btn btn-primary" id="restartBtn">Reiniciar Juego</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
