@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rex: Tu Compañero Dinosaurio</title>
+    <style>
+        /* --- ESTILOS VISUALES AMIGABLES --- */
+        :root {
+            --primary-blue: #4FC3F7;
+            --deep-blue: #0277BD;
+            --soft-bg: #E1F5FE;
+            --text-color: #37474F;
+            --bubble-color: #FFFFFF;
+            --button-color: #FFCA28;
+            --button-text: #5D4037;
+        }
+
+        body {
+            font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--soft-bg);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--primary-blue);
+            width: 100%;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            margin: 0;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* --- AVATAR DEL DINOSAURIO --- */
+        .avatar-container {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            margin-bottom: 20px;
+        }
+
+        #dino-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 8px solid white;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            background-color: #fff;
+        }
+
+        /* Animación al hablar */
+        .speaking #dino-image {
+            transform: scale(1.05);
+            border-color: var(--button-color);
+            animation: bounce 1s infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: scale(1.05) translateY(0); }
+            to { transform: scale(1.05) translateY(-10px); }
+        }
+
+        .img-hint {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* --- BURBUJA DE DIÁLOGO --- */
+        .dialogue-box {
+            background-color: var(--bubble-color);
+            padding: 20px;
+            border-radius: 20px;
+            border-bottom-left-radius: 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            text-align: center;
+            max-width: 90%;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- BOTONES --- */
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            background-color: var(--button-color);
+            color: var(--button-text);
+            border: none;
+            padding: 15px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #FBC02D;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .action-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 #FBC02D; }
+        .action-btn:active { transform: translateY(2px); box-shadow: 0 0 0 #FBC02D; }
+
+        /* --- ÁREA DE CHAT --- */
+        .input-area {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            background: white;
+            padding: 10px;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        input[type="text"] {
+            flex: 1;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1rem;
+ outline: none;
+            border-radius: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .mic-btn {
+            background-color: var(--deep-blue);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: background 0.3s;
+        }
+
+        .mic-btn:hover { background-color: var(--primary-blue); }
+        .mic-btn.listening { background-color: #ef5350; animation: pulse 1.5s infinite; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 83, 80, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 83, 80, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 83, 80, 0); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🦖 Rex: Tu Amigo Azul</h1>
+    </header>
+
+    <main>
+        <div class="avatar-container" id="avatarContainer">
+            <!-- Asegúrate de que tu imagen se llame dino.png -->
+            <img id="dino-image" src="dino.png" alt="Rex el Dinosaurio" onerror="this.src='https://picsum.photos/seed/dinosaurioazul/300/300'">
+        </div>
+        <p class="img-hint">betados ????
+        </p>
+
+        <div class="dialogue-box" id="dialogue">
+            ¡Hola! Soy Rex. ¿Quieres que te cuente un cuento o cantemos una canción?
+        </div>
+
+        <div class="controls">
+            <button class="action-btn" onclick="rex.tellStory()">📖 Cuento</button>
+            <button class="action-btn" onclick="rex.singSong()">🎵 Canción</button>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Escribe algo aquí..." onkeypress="handleEnter(event)">
+            <button class="mic-btn" id="micBtn" onclick="toggleSpeechRecognition()" title="Hablar">🎤</button>
+        </div>
+    </main>
+
+    <script>
+        // --- CONFIGURACIÓN ---
+        const dialogueBox = document.getElementById('dialogue');
+        const avatarContainer = document.getElementById('avatarContainer');
+        const userInput = document.getElementById('userInput');
+        const micBtn = document.getElementById('micBtn');
+        
+        const synth = window.speechSynthesis;
+        let voices = [];
+
+        // --- SISTEMA DE VOZ FIJO ---
+        function loadVoices() {
+            voices = synth.getVoices();
+        }
+
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = loadVoices;
+        }
+        loadVoices(); // Cargar inmediatamente
+
+        // --- CLASE DEL ASISTENTE ---
+        class DinosaurAssistant {
+            constructor() {
+                this.name = "Rex";
+                this.isSpeaking = false;
+            }
+
+            speak(text) {
+                if (synth.speaking) {
+                    synth.cancel();
+                }
+
+                avatarContainer.classList.add('speaking');
+                dialogueBox.textContent = text;
+                this.isSpeaking = true;
+
+                const utterThis = new SpeechSynthesisUtterance(text);
+
+                // --- AQUÍ SE FIJA LA VOZ A "MICROSOFT SABINA" O GOOGLE ---
+                // Buscamos específicamente "Microsoft Sabina" (común en Windows)
+                let selectedVoice = voices.find(v => v.name.includes("Microsoft Sabina"));
+
+                // Si no encuentra Sabina, intenta buscar "Google Español" (común en Chrome)
+                if (!selectedVoice) {
+                    selectedVoice = voices.find(v => v.name.includes("Google Español"));
+                }
+
+                // Asignamos la voz encontrada
+                if (selectedVoice) {
+                    utterThis.voice = selectedVoice;
+                }
+
+                // Configuración de personalidad
+                utterThis.pitch = 1.2; // Tono agudo para alegría
+                utterThis.rate = 0.9;  // Velocidad lenta para claridad
+
+                utterThis.onend = () => {
+                    avatarContainer.classList.remove('speaking');
+                    this.isSpeaking = false;
+                };
+
+                synth.speak(utterThis);
+            }
+
+            processCommand(input) {
+                const lowerInput = input.toLowerCase();
+                let response = "";
+
+                if (lowerInput.includes('hola') || lowerInput.includes('buenos dias')) {
+                    response = "¡Hola amigo! ¡Qué alegría verte hoy! ¿Cómo estás?";
+                } 
+                else if (lowerInput.includes('como te llamas') || lowerInput.includes('tu nombre')) {
+                    response = "Me llamo Rex, y soy tu amigo dinosaurio azul. ¡Tengo mucha emoción de jugar contigo!";
+                }
+                else if (lowerInput.includes('cuento') || lowerInput.includes('historia')) {
+                    this.tellStory();
+                    return;
+                }
+                else if (lowerInput.includes('canta') || lowerInput.includes('cancion')) {
+                    this.singSong();
+                    return;
+                }
+                else if (lowerInput.includes('gracias')) {
+                    response = "¡De nada! Ayudar a mis amigos me hace muy feliz.";
+                }
+                else if (lowerInput.includes('adios')) {
+                    response = "¡Adiós! No olvides que estaré aquí cuando quieras jugar. ¡Cuídate mucho!";
+                }
+                else if (lowerInput.includes('triste') || lowerInput.includes('llorar')) {
+                    response = "Ah, entiendo. A veces nos sentimos tristes, y está bien. Pero recuerda que yo soy tu amigo y siempre te apoyaré. ¿Te cuento algo divertido?";
+                }
+                else if (lowerInput.includes('te quiero') || lowerInput.includes('amo')) {
+                    response = "¡Ay! ¡Yo también te quiero mucho! Eres un super amigo.";
+                }
+                else {
+                    const fallbacks = [
+                        "¡Qué interesante! Cuéntame más sobre eso.",
+                        "¡Escuchar es lo que mejor sé hacer! Sigue hablando.",
+                        "No estoy seguro de entender, pero me encanta que me hables.",
+                        "¡Wow! Eso suena muy divertido."
+                    ];
+                    response = fallbacks[Math.floor(Math.random() * fallbacks.length)];
+                }
+                this.speak(response);
+            }
+
+            tellStory() {
+                const stories = [
+                    " es una linda chica uwu, la cual nacio en los barrios mas bajos de tepic nayarit. ella cuenta su infancia como un evento traumatico y siempre dice me pegaron de chiquito spiderman. png  . su tio intento violarla pero ella tomo una cuchara y lo castro xd. despues de ese incidente fue internada en una escuela de internado solo para señoritas pero ella tenia un PITOTE ALV. jajajaja ignoren eso xd. en ese escuela enseñaban hechiseria de defense pero se paso de vrga cuando una maestra la regaño por no traer falda. entonces ella le solto un pinche hechizo de fuego y le quemo las pinches greñas a la vieja pendeja. piro magic  fue lo ultimo que escucho esa señora antes que megumin le tostara las pestañas. tras ese incidente fue expulsada de esa escuela",
+                    "me da risa saber que los dinosaurios ya no existen porque les callo una piedra en al cabeza boink",
+                    " Despacito descpacito que el dinosaurio ando sin.... no importa"
+                ];
+                this.speak(stories[Math.floor(Math.random() * stories.length)]);
+            }
+
+            singSong() {
+                const songs = [
+                    "🎵 Estrellita, ¿dónde estás? 🎵 Quiero verte caminando... 🎵",
+                    "🎵 En un bosque encantado, vivía un dino feliz, comía hojas verdes y nunca se puso gris. 🎵",
+                    "🎵 Arriba, abajo, al centro y al centro. ¡Baila con Rex, vamos muy contento! 🎵"
+                ];
+                this.speak("¡Claro! Vamos a cantar juntos. " + songs[Math.floor(Math.random() * songs.length)]);
+            }
+        }
+
+        const rex = new DinosaurAssistant();
+
+        // --- INTERACCIÓN USUARIO ---
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                const text = userInput.value;
+                if (text.trim() !== "") {
+                    rex.processCommand(text);
+                    userInput.value = "";
+                }
+            }
+        }
+
+        // --- RECONOCIMIENTO DE VOZ (MICRÓFONO) ---
+        let recognition;
+        let isListening = false;
+
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'es-ES';
+            recognition.continuous = false;
+
+            recognition.onstart = () => {
+                isListening = true;
+                micBtn.classList.add('listening');
+                userInput.placeholder = "Escuchando...";
+            };
+
+            recognition.onend = () => {
+                isListening = false;
+                micBtn.classList.remove('listening');
+                userInput.placeholder = "Escribe algo aquí...";
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                userInput.value = transcript;
+                setTimeout(() => rex.processCommand(transcript), 500);
+            };
+
+            recognition.onerror = () => {
+                isListening = false;
+                micBtn.classList.remove('listening');
+            };
+        } else {
+            micBtn.style.display = 'none';
+        }
+
+        function toggleSpeechRecognition() {
+            if (!recognition) {
+                alert("Tu navegador no soporta voz. Escribe en la caja.");
+                return;
+            }
+            if (isListening) recognition.stop();
+            else recognition.start();
+        }
+    </script>
+</body>
+</html>

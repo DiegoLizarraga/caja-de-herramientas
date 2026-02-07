@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rogue Soul</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        
+        #gameContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(to bottom, #0f1f3f 0%, #1a3a52 50%, #2d5a7b 100%);
+            overflow: hidden;
+        }
+        
+        #gameCanvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        
+        #ui {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #e94560;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 20px;
+            border-radius: 5px;
+            font-size: 18px;
+            z-index: 10;
+        }
+        
+        #ui div {
+            margin: 8px 0;
+        }
+        
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #aaa;
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 12px 20px;
+            border-radius: 5px;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        #gameOverScreen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        #gameOverScreen h1 {
+            color: #e94560;
+            font-size: 72px;
+        }
+        
+        #gameOverScreen p {
+            color: #aaa;
+            font-size: 24px;
+        }
+        
+        #restartBtn {
+            padding: 15px 40px;
+            background: #e94560;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        #restartBtn:hover {
+            background: #ff5a73;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        <div id="ui">
+            <div>❤️ HP: <span id="hpDisplay">100</span>/100</div>
+            <div>📍 Distancia: <span id="distanceDisplay">0</span>m</div>
+            <div>⚔️ Nivel: <span id="levelDisplay">1</span></div>
+            <div>💰 Oro: <span id="goldDisplay">0</span></div>
+        </div>
+        <div id="controls">A: Lentitud | D: Velocidad | Espacio: Saltar | K: Atacar</div>
+        <div id="gameOverScreen">
+            <h1 id="gameOverTitle">¡Juego Terminado!</h1>
+            <p id="gameOverText">Distancia: <span id="finalDistance">0</span>m | Oro: <span id="finalScore">0</span></p>
+            <button id="restartBtn">Reiniciar</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Game state
+        const game = {
+            running: true,
+            level: 1,
+            gold: 0,
+            cameraX: 0,
+            maxDistance: 0
+        };
+
+        // Player
+        const player = {
+            x: 100,
+            y: 0,
+            width: 25,
+            height: 35,
+            velocityX: 8,
+            velocityY: 0,
+            hp: 100,
+            maxHp: 100,
+            speed: 4,
+            jumpPower: 14,
+            isJumping: false,
+            attackCooldown: 0,
+            attackRange: 50,
+            isAttacking: false,
+            direction: 1,
+            baseSpeed: 8
+        };
+
+        // Game arrays
+        let enemies = [];
+        let platforms = [];
+        let particles = [];
+        const keys = {};
+
+        // Input handling
+        window.addEventListener('keydown', (e) => {
+            const key = e.key.toLowerCase();
+            keys[key] = true;
+            
+            if (key === ' ') {
+                e.preventDefault();
+                if (!player.isJumping) {
+                    player.velocityY = -player.jumpPower;
+                    player.isJumping = true;
+                }
+            }
+            
+            if (key === 'k') {
+                attack();
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+
+        // Platform class
+        class Platform {
+            constructor(x, y, width, height = 30) {
+                this.x = x;
+                this.y = y;
+                this.width = width;
+                this.height = height;
+            }
+
+            draw() {
+                ctx.fillStyle = '#2d7a5f';
+                ctx.fillRect(this.x - game.cameraX, this.y, this.width, this.height);
+                ctx.strokeStyle = '#4da97a';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(this.x - game.cameraX, this.y, this.width, this.height);
+            }
+
+            isColliding(rect) {
+                return rect.x < this.x + this.width &&
+                       rect.x + rect.width > this.x &&
+                       rect.y + rect.height >= this.y &&
+                       rect.y + rect.height <= this.y + this.height + 5;
+            }
+        }
+
+        // Enemy class
+        class Enemy {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.width = 22;
+                this.height = 28;
+                this.hp = Math.floor(20 + game.level * 5);
+                this.maxHp = this.hp;
+                this.speed = 2.5 + game.level * 0.3;
+                this.velocityY = 0;
+                this.attackCooldown = 0;
+                this.direction = 1;
+                this.onPlatform = false;
+            }
+
+            update() {
+                // Move towards player
+                const dx = player.x - this.x;
+                if (Math.abs(dx) < 300) {
+                    this.direction = dx > 0 ? 1 : -1;
+                    if (Math.abs(dx) < 40 && this.attackCooldown <= 0) {
+                        player.hp -= Math.floor(8 + game.level * 1.5);
+                        this.attackCooldown = 40;
+                    }
+                }
+
+                this.x += this.direction * this.speed;
+                this.velocityY += 0.5;
+                this.y += this.velocityY;
+                this.onPlatform = false;
+
+                // Platform collision
+                for (let platform of platforms) {
+                    if (platform.isColliding(this)) {
+                        this.y = platform.y - this.height;
+                        this.velocityY = 0;
+                        this.onPlatform = true;
+                        break;
+                    }
+                }
+
+                // Ground collision
+                if (this.y + this.height >= canvas.height - 20) {
+                    this.y = canvas.height - 20 - this.height;
+                    this.velocityY = 0;
+                    this.onPlatform = true;
+                }
+
+                if (this.attackCooldown > 0) this.attackCooldown--;
+            }
+
+            draw() {
+                ctx.fillStyle = '#e94560';
+                ctx.fillRect(this.x - game.cameraX, this.y, this.width, this.height);
+
+                // HP bar
+                const barWidth = this.width;
+                const hpRatio = this.hp / this.maxHp;
+                ctx.fillStyle = '#00ff00';
+                ctx.fillRect(this.x - game.cameraX, this.y - 10, barWidth * hpRatio, 5);
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(this.x - game.cameraX, this.y - 10, barWidth, 5);
+            }
+        }
+
+        // Generate platforms
+        function generatePlatforms() {
+            platforms = [];
+            
+            // Ground
+            platforms.push(new Platform(0, canvas.height - 30, 100000, 30));
+
+            // Starting platform
+            platforms.push(new Platform(0, canvas.height - 100, 150, 30));
+
+            let x = 200;
+            while (x < game.cameraX + canvas.width + 2000) {
+                const height = Math.floor(Math.random() * 150) + 100;
+                const width = Math.floor(Math.random() * 150) + 80;
+                const y = Math.floor(Math.random() * 200) + 200;
+                
+                platforms.push(new Platform(x, y, width, 30));
+                x += width + Math.floor(Math.random() * 100) + 50;
+            }
+        }
+
+        // Attack function
+        function attack() {
+            if (player.attackCooldown > 0) return;
+
+            player.attackCooldown = 25;
+            player.isAttacking = true;
+            setTimeout(() => { player.isAttacking = false; }, 150);
+
+            for (let i = enemies.length - 1; i >= 0; i--) {
+                const e = enemies[i];
+                const dist = Math.hypot(player.x - e.x, player.y - e.y);
+                if (dist < player.attackRange + player.width) {
+                    e.hp -= 30;
+                    createParticles(e.x, e.y, 8);
+                    if (e.hp <= 0) {
+                        enemies.splice(i, 1);
+                        game.gold += 15 + game.level * 5;
+                    }
+                }
+            }
+        }
+
+        // Particles
+        function createParticles(x, y, count) {
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8 - 2,
+                    life: 40,
+                    maxLife: 40
+                });
+            }
+        }
+
+        // Spawn enemies
+        function spawnEnemies() {
+            const count = Math.min(1 + Math.floor(game.level / 2), 5);
+            for (let i = 0; i < count; i++) {
+                const x = game.cameraX + canvas.width + Math.random() * 500 + 100;
+                const y = Math.random() * 200 + 100;
+                enemies.push(new Enemy(x, y));
+            }
+        }
+
+        // Game loop
+        function gameLoop() {
+            if (!game.running) {
+                requestAnimationFrame(gameLoop);
+                return;
+            }
+
+            // Clear canvas
+            ctx.fillStyle = '#1a3a52';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Player movement - siempre avanza, A y D controlan dirección
+            player.velocityX = player.baseSpeed;
+            if (keys['a']) player.velocityX = player.baseSpeed * 0.5;
+            if (keys['d']) player.velocityX = player.baseSpeed * 1.5;
+            if (keys['d']) player.direction = 1;
+            if (keys['a']) player.direction = -1;
+
+            player.x += player.velocityX;
+            player.velocityY += 0.5;
+            player.y += player.velocityY;
+
+            // Platform collision
+            let onPlatform = false;
+            for (let platform of platforms) {
+                if (player.velocityY >= 0 && platform.isColliding(player)) {
+                    player.y = platform.y - player.height;
+                    player.velocityY = 0;
+                    player.isJumping = false;
+                    onPlatform = true;
+                    break;
+                }
+            }
+
+            // Update cooldowns
+            if (player.attackCooldown > 0) player.attackCooldown--;
+
+            // Update enemies
+            enemies.forEach(e => e.update());
+
+            // Update particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.3;
+                p.life--;
+                if (p.life <= 0) particles.splice(i, 1);
+            }
+
+            // Camera follows player
+            game.cameraX = Math.max(0, player.x - 150);
+            game.maxDistance = Math.max(game.maxDistance, Math.floor(player.x / 50));
+
+            // Spawn enemies
+            if (enemies.length === 0) {
+                game.level++;
+                spawnEnemies();
+            }
+
+            // Generate more platforms if needed
+            if (Math.max(...platforms.map(p => p.x)) < game.cameraX + canvas.width + 1000) {
+                generatePlatforms();
+            }
+
+            // Draw platforms
+            for (let platform of platforms) {
+                platform.draw();
+            }
+
+            // Draw ground
+            ctx.fillStyle = '#1a4d3a';
+            ctx.fillRect(-game.cameraX, canvas.height - 30, 100000, 30);
+
+            // Draw player
+            ctx.save();
+            ctx.fillStyle = '#00bfff';
+            const drawX = player.x - game.cameraX;
+            
+            ctx.scale(player.direction, 1);
+            ctx.fillRect(player.direction > 0 ? drawX : -drawX - player.width, player.y, player.width, player.height);
+            
+            if (player.isAttacking) {
+                ctx.fillStyle = 'rgba(255, 200, 0, 0.6)';
+                if (player.direction > 0) {
+                    ctx.fillRect(drawX + player.width, player.y + 10, player.attackRange, 15);
+                } else {
+                    ctx.fillRect(-drawX - player.attackRange, player.y + 10, player.attackRange, 15);
+                }
+            }
+            
+            ctx.restore();
+
+            // Draw player HP bar
+            ctx.fillStyle = '#00ff00';
+            ctx.fillRect(drawX, player.y - 12, (player.width * player.hp) / player.maxHp, 6);
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(drawX, player.y - 12, player.width, 6);
+
+            // Draw enemies
+            enemies.forEach(e => e.draw());
+
+            // Draw particles
+            particles.forEach(p => {
+                ctx.fillStyle = `rgba(233, 69, 96, ${p.life / p.maxLife})`;
+                ctx.fillRect(p.x - game.cameraX, p.y, 5, 5);
+            });
+
+            // Update UI
+            document.getElementById('hpDisplay').textContent = Math.max(0, player.hp);
+            document.getElementById('levelDisplay').textContent = game.level;
+            document.getElementById('goldDisplay').textContent = game.gold;
+            document.getElementById('distanceDisplay').textContent = Math.floor(player.x / 50);
+
+            // Check game over
+            if (player.hp <= 0) {
+                game.running = false;
+                showGameOver();
+            }
+
+            // Fall off map
+            if (player.y > canvas.height + 100) {
+                player.hp = 0;
+                game.running = false;
+                showGameOver();
+            }
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        function showGameOver() {
+            const gameOverScreen = document.getElementById('gameOverScreen');
+            document.getElementById('finalDistance').textContent = Math.floor(player.x / 50);
+            document.getElementById('finalScore').textContent = game.gold;
+            gameOverScreen.style.display = 'flex';
+        }
+
+        function restart() {
+            player.hp = 100;
+            player.x = 100;
+            player.y = canvas.height - 150;
+            player.velocityX = player.baseSpeed;
+            player.velocityY = 0;
+            game.level = 1;
+            game.gold = 0;
+            game.cameraX = 0;
+            game.maxDistance = 0;
+            game.running = true;
+            enemies = [];
+            particles = [];
+            document.getElementById('gameOverScreen').style.display = 'none';
+            generatePlatforms();
+            spawnEnemies();
+            gameLoop();
+        }
+
+        document.getElementById('restartBtn').addEventListener('click', restart);
+
+        // Start game
+        generatePlatforms();
+        spawnEnemies();
+        gameLoop();
+    </script>
+</body>
+</html>
