@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flores para ti</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Garamond', serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #E0F6FF 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            color: #2d5016;
+            margin-bottom: 10px;
+            font-weight: normal;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            color: #4a7c2c;
+            font-size: 1.1em;
+            font-style: italic;
+        }
+
+        .container {
+            display: flex;
+            gap: 30px;
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        .garden-section {
+            flex: 1;
+            background: linear-gradient(180deg, #90EE90 0%, #98FB98 50%, #8FD98F 100%);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15);
+            position: relative;
+            min-height: 600px;
+            overflow: hidden;
+        }
+
+        .garden-section::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 150px;
+            background: linear-gradient(180deg, transparent 0%, rgba(139, 69, 19, 0.2) 100%);
+            pointer-events: none;
+        }
+
+        .garden-title {
+            font-size: 2em;
+            color: #2d5016;
+            margin-bottom: 30px;
+            text-align: center;
+            animation: fadeInDown 1s ease-out 0.2s both;
+        }
+
+        .garden {
+            position: relative;
+            height: 500px;
+            width: 100%;
+        }
+
+        .flower {
+            position: absolute;
+            cursor: move;
+            animation: growFlower 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            user-select: none;
+        }
+
+        @keyframes growFlower {
+            0% {
+                transform: scale(0) translateY(30px);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .flower:hover {
+            filter: brightness(1.15);
+        }
+
+        .flower svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+        }
+
+        .controls-section {
+            width: 350px;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15);
+            max-height: 700px;
+            overflow-y: auto;
+            animation: fadeInRight 0.8s ease-out 0.3s both;
+        }
+
+        .controls-title {
+            font-size: 1.8em;
+            color: #2d5016;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .flower-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .flower-btn {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            color: #2d5016;
+        }
+
+        .flower-btn:hover {
+            border-color: #4a7c2c;
+            background: #f0f8f0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(74, 124, 44, 0.2);
+        }
+
+        .flower-btn.active {
+            background: #4a7c2c;
+            color: white;
+            border-color: #2d5016;
+        }
+
+        .input-section {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            color: #2d5016;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            resize: vertical;
+        }
+
+        textarea {
+            min-height: 100px;
+            font-size: 0.85em;
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #4a7c2c, #2d5016);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-family: 'Georgia', serif;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(74, 124, 44, 0.3);
+        }
+
+        .info-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            color: #856404;
+            line-height: 1.6;
+        }
+
+        .flower-count {
+            text-align: center;
+            color: #2d5016;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #ddd;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .controls-section {
+                width: 100%;
+                max-height: none;
+            }
+
+            .header h1 {
+                font-size: 2.5em;
+            }
+        }
+
+        /* Scrollbar styling */
+        .controls-section::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .controls-section::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .controls-section::-webkit-scrollbar-thumb {
+            background: #4a7c2c;
+            border-radius: 10px;
+        }
+
+        .controls-section::-webkit-scrollbar-thumb:hover {
+            background: #2d5016;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🌸 Flores para ti 🌸</h1>
+        <p>agregale las flores que quieras</p>
+    </div>
+
+    <div class="container">
+        <div class="garden-section">
+            <h2 class="garden-title">Tu Jardín</h2>
+            <div class="garden" id="garden"></div>
+        </div>
+
+        <div class="controls-section">
+            <h2 class="controls-title">Agregar Flores</h2>
+            
+            <div class="info-box">
+                <strong>¿Cómo funciona?</strong><br>
+                Selecciona un tipo de flor, personaliza su HTML y haz clic en "Agregar al jardín".
+            </div>
+
+            <div class="flower-selector" id="flowerSelector"></div>
+
+            <div class="input-section">
+                <label class="input-label">Posición X (0-100%):</label>
+                <input type="text" id="posX" placeholder="50" value="50">
+                
+                <label class="input-label">Posición Y (0-100%):</label>
+                <input type="text" id="posY" placeholder="50" value="50">
+
+                <label class="input-label">Tamaño (50-150px):</label>
+                <input type="text" id="size" placeholder="80" value="80">
+
+                <label class="input-label">HTML Personalizado:</label>
+                <textarea id="customHTML" placeholder="Pega aquí el código HTML de tu flor..."></textarea>
+
+                <button class="add-btn" onclick="addFlower()">🌺 Agregar al Jardín</button>
+            </div>
+
+            <div class="flower-count">
+                <span id="count">0</span> flores en tu jardín
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const FLOWERS = {
+            rose: {
+                name: '🌹 Rosa',
+                html: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="30" r="8" fill="#ff1744"/>
+                    <circle cx="42" cy="25" r="7" fill="#ff1744"/>
+                    <circle cx="58" cy="25" r="7" fill="#ff1744"/>
+                    <circle cx="38" cy="32" r="6" fill="#ff1744"/>
+                    <circle cx="62" cy="32" r="6" fill="#ff1744"/>
+                    <path d="M 50 40 Q 50 60 48 80" stroke="#228B22" stroke-width="2" fill="none"/>
+                    <ellipse cx="45" cy="50" rx="8" ry="12" fill="#2d5016" opacity="0.6"/>
+                </svg>`
+            },
+            tulip: {
+                name: '🌷 Tulipán',
+                html: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M 30 50 Q 25 30 30 10" stroke="#228B22" stroke-width="3" fill="none"/>
+                    <path d="M 50 50 Q 50 25 50 5" stroke="#228B22" stroke-width="3" fill="none"/>
+                    <path d="M 70 50 Q 75 30 70 10" stroke="#228B22" stroke-width="3" fill="none"/>
+                    <path d="M 30 10 Q 40 15 50 15 Q 60 15 70 10 Q 60 20 50 22 Q 40 20 30 10" fill="#FF69B4"/>
+                    <ellipse cx="40" cy="55" rx="6" ry="8" fill="#228B22" opacity="0.7"/>
+                </svg>`
+            },
+            daisy: {
+                name: '🌼 Margarita',
+                html: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="12" fill="#FFD700"/>
+                    <circle cx="50" cy="20" r="8" fill="#FFFFFF"/>
+                    <circle cx="65" cy="28" r="8" fill="#FFFFFF"/>
+                    <circle cx="72" cy="43" r="8" fill="#FFFFFF"/>
+                    <circle cx="65" cy="58" r="8" fill="#FFFFFF"/>
+                    <circle cx="50" cy="70" r="8" fill="#FFFFFF"/>
+                    <circle cx="35" cy="58" r="8" fill="#FFFFFF"/>
+                    <circle cx="28" cy="43" r="8" fill="#FFFFFF"/>
+                    <circle cx="35" cy="28" r="8" fill="#FFFFFF"/>
+                    <path d="M 50 60 Q 50 75 48 90" stroke="#228B22" stroke-width="2" fill="none"/>
+                </svg>`
+            },
+            sunflower: {
+                name: '🌻 Girasol',
+                html: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="45" r="18" fill="#FFA500"/>
+                    <circle cx="50" cy="15" r="10" fill="#FFD700"/>
+                    <circle cx="68" cy="23" r="10" fill="#FFD700"/>
+                    <circle cx="75" cy="40" r="10" fill="#FFD700"/>
+                    <circle cx="68" cy="57" r="10" fill="#FFD700"/>
+                    <circle cx="50" cy="65" r="10" fill="#FFD700"/>
+                    <circle cx="32" cy="57" r="10" fill="#FFD700"/>
+                    <circle cx="25" cy="40" r="10" fill="#FFD700"/>
+                    <circle cx="32" cy="23" r="10" fill="#FFD700"/>
+                    <path d="M 50 60 Q 50 80 48 95" stroke="#228B22" stroke-width="3" fill="none"/>
+                    <ellipse cx="42" cy="75" rx="5" ry="8" fill="#2d5016"/>
+                </svg>`
+            },
+            lily: {
+                name: '🌺 Lirio',
+                html: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M 50 35 L 45 15 L 48 28" fill="#FF1493"/>
+                    <path d="M 50 35 L 55 15 L 52 28" fill="#FF1493"/>
+                    <path d="M 35 45 L 20 35 L 32 40" fill="#FF1493"/>
+                    <path d="M 65 45 L 80 35 L 68 40" fill="#FF1493"/>
+                    <path d="M 40 55 L 28 75 L 40 60" fill="#FF1493"/>
+                    <path d="M 60 55 L 72 75 L 60 60" fill="#FF1493"/>
+                    <circle cx="50" cy="45" r="8" fill="#FFD700"/>
+                    <path d="M 50 50 Q 50 70 48 85" stroke="#228B22" stroke-width="2" fill="none"/>
+                </svg>`
+            },
+            orchid: {
+                name: '🌸 Orquídea',
+                html: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="35" r="10" fill="#DA70D6"/>
+                    <circle cx="35" cy="45" r="8" fill="#DA70D6"/>
+                    <circle cx="65" cy="45" r="8" fill="#DA70D6"/>
+                    <circle cx="40" cy="58" r="7" fill="#DA70D6"/>
+                    <circle cx="60" cy="58" r="7" fill="#DA70D6"/>
+                    <circle cx="50" cy="50" r="5" fill="#FFFFFF"/>
+                    <path d="M 50 60 Q 50 75 48 88" stroke="#228B22" stroke-width="2" fill="none"/>
+                </svg>`
+            }
+        };
+
+        let flowerCount = 0;
+
+        function initializeFlowerSelector() {
+            const selector = document.getElementById('flowerSelector');
+            Object.entries(FLOWERS).forEach(([key, flower]) => {
+                const btn = document.createElement('button');
+                btn.className = 'flower-btn';
+                btn.textContent = flower.name;
+                btn.onclick = () => {
+                    document.querySelectorAll('.flower-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    document.getElementById('customHTML').value = flower.html;
+                };
+                selector.appendChild(btn);
+            });
+        }
+
+        function addFlower() {
+            const html = document.getElementById('customHTML').value.trim();
+            const posX = parseFloat(document.getElementById('posX').value) || 50;
+            const posY = parseFloat(document.getElementById('posY').value) || 50;
+            const size = parseFloat(document.getElementById('size').value) || 80;
+
+            if (!html) {
+                alert('Por favor, ingresa código HTML para tu flor.');
+                return;
+            }
+
+            const flower = document.createElement('div');
+            flower.className = 'flower';
+            flower.innerHTML = html;
+            flower.style.left = posX + '%';
+            flower.style.top = posY + '%';
+            flower.style.width = size + 'px';
+            flower.style.height = size + 'px';
+            flower.style.transform = 'translate(-50%, -50%)';
+
+            makeDraggable(flower);
+            document.getElementById('garden').appendChild(flower);
+
+            flowerCount++;
+            document.getElementById('count').textContent = flowerCount;
+
+            // Reset inputs
+            document.getElementById('posX').value = Math.random() * 80 + 10;
+            document.getElementById('posY').value = Math.random() * 70 + 20;
+        }
+
+        function makeDraggable(element) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+            element.onmousedown = dragMouseDown;
+
+            function dragMouseDown(e) {
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+
+                const garden = document.getElementById('garden');
+                const rect = garden.getBoundingClientRect();
+                
+                element.style.left = ((e.clientX - rect.left) / rect.width * 100) + '%';
+                element.style.top = ((e.clientY - rect.top) / rect.height * 100) + '%';
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+
+        // Initialize
+        initializeFlowerSelector();
+        document.querySelector('.flower-btn')?.click();
+
+        // Allow Enter key to add flower
+        document.getElementById('customHTML').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                addFlower();
+            }
+        });
+    </script>
+</body>
+</html>
