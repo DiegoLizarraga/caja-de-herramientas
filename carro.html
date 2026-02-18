@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Conducción 3D</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            background: #000;
+        }
+
+        #canvas {
+            display: block;
+            width: 100%;
+            height: 100vh;
+        }
+
+        #hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #0f0;
+            font-size: 16px;
+            font-family: monospace;
+            text-shadow: 0 0 10px #0f0;
+            z-index: 10;
+        }
+
+        .hud-item {
+            margin: 10px 0;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 8px 12px;
+            border: 2px solid #0f0;
+            border-radius: 4px;
+        }
+
+        #speedometer {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border: 2px solid #0f0;
+            border-radius: 8px;
+            color: #0f0;
+            font-family: monospace;
+            text-align: center;
+            z-index: 10;
+        }
+
+        #speedometer div {
+            margin: 5px 0;
+            font-size: 18px;
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 20px;
+            border: 2px solid #0f0;
+            border-radius: 8px;
+            color: #0f0;
+            font-family: monospace;
+            font-size: 12px;
+            z-index: 10;
+        }
+
+        #controls p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="hud">
+        <div class="hud-item">🚗 JUEGO DE CONDUCCIÓN 3D</div>
+        <div class="hud-item">Posición: <span id="position">0, 0, 0</span></div>
+    </div>
+
+    <div id="speedometer">
+        <div>⚡ VELOCIDAD</div>
+        <div id="speed">0 km/h</div>
+        <div style="font-size: 12px; margin-top: 10px; color: #888;">RPM: <span id="rpm">0</span></div>
+    </div>
+
+    <div id="controls">
+        <p>↑ W / ARRIBA - Acelerar</p>
+        <p>↓ S / ABAJO - Frenar</p>
+        <p>← A / IZQUIERDA - Girar izquierda</p>
+        <p>→ D / DERECHA - Girar derecha</p>
+        <p style="margin-top: 10px; color: #888;">ESPACIO - Elevar cámara</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Configuración de escena
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x87ceeb);
+        scene.fog = new THREE.Fog(0x87ceeb, 500, 2000);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 5000);
+        camera.position.set(0, 3, -10);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFShadowShadowMap;
+        document.body.appendChild(renderer.domElement);
+
+        // Iluminación
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(100, 100, 50);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 4096;
+        directionalLight.shadow.mapSize.height = 4096;
+        directionalLight.shadow.camera.left = -200;
+        directionalLight.shadow.camera.right = 200;
+        directionalLight.shadow.camera.top = 200;
+        directionalLight.shadow.camera.bottom = -200;
+        directionalLight.shadow.camera.far = 500;
+        scene.add(directionalLight);
+
+        // Crear carretera
+        function createRoad() {
+            const roadGeometry = new THREE.PlaneGeometry(50, 1000);
+            const roadMaterial = new THREE.MeshLambertMaterial({ color: 0x333333 });
+            const road = new THREE.Mesh(roadGeometry, roadMaterial);
+            road.rotation.x = -Math.PI / 2;
+            road.receiveShadow = true;
+            scene.add(road);
+
+            // Línea central
+            const lineGeometry = new THREE.PlaneGeometry(2, 1000);
+            const lineMaterial = new THREE.MeshLambertMaterial({ color: 0xffff00 });
+            const line = new THREE.Mesh(lineGeometry, lineMaterial);
+            line.rotation.x = -Math.PI / 2;
+            line.position.z = 0.01;
+            scene.add(line);
+
+            // Bordes de carretera
+            for (let i = -500; i < 500; i += 20) {
+                const borderGeometry = new THREE.BoxGeometry(1, 0.5, 20);
+                const borderMaterial = new THREE.MeshLambertMaterial({ color: 0xff0000 });
+                
+                const borderLeft = new THREE.Mesh(borderGeometry, borderMaterial);
+                borderLeft.position.set(-26, 0.25, i);
+                borderLeft.castShadow = true;
+                borderLeft.receiveShadow = true;
+                scene.add(borderLeft);
+
+                const borderRight = new THREE.Mesh(borderGeometry, borderMaterial);
+                borderRight.position.set(26, 0.25, i);
+                borderRight.castShadow = true;
+                borderRight.receiveShadow = true;
+                scene.add(borderRight);
+            }
+        }
+
+        // Crear coche
+        function createCar() {
+            const group = new THREE.Group();
+
+            // Chasis
+            const chassisGeometry = new THREE.BoxGeometry(2, 1.2, 4);
+            const chassisMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
+            const chassis = new THREE.Mesh(chassisGeometry, chassisMaterial);
+            chassis.position.y = 0.6;
+            chassis.castShadow = true;
+            chassis.receiveShadow = true;
+            group.add(chassis);
+
+            // Techo
+            const roofGeometry = new THREE.BoxGeometry(1.8, 0.8, 2);
+            const roofMaterial = new THREE.MeshPhongMaterial({ color: 0xcc0000 });
+            const roof = new THREE.Mesh(roofGeometry, roofMaterial);
+            roof.position.y = 1.6;
+            roof.position.z = -0.3;
+            roof.castShadow = true;
+            roof.receiveShadow = true;
+            group.add(roof);
+
+            // Ruedas
+            const wheelGeometry = new THREE.CylinderGeometry(0.4, 0.4, 0.3, 16);
+            const wheelMaterial = new THREE.MeshPhongMaterial({ color: 0x222222 });
+
+            const wheels = [];
+            const wheelPositions = [
+                [-0.8, 0.4, 1],
+                [0.8, 0.4, 1],
+                [-0.8, 0.4, -1],
+                [0.8, 0.4, -1]
+            ];
+
+            wheelPositions.forEach(pos => {
+                const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
+                wheel.rotation.z = Math.PI / 2;
+                wheel.position.set(...pos);
+                wheel.castShadow = true;
+                wheel.receiveShadow = true;
+                group.add(wheel);
+                wheels.push(wheel);
+            });
+
+            group.position.y = 0;
+            group.castShadow = true;
+            scene.add(group);
+
+            return { mesh: group, wheels: wheels };
+        }
+
+        // Crear árboles
+        function createTrees() {
+            for (let i = -500; i < 500; i += 50) {
+                for (let side of [-40, 40]) {
+                    const trunkGeometry = new THREE.CylinderGeometry(0.5, 0.7, 8, 8);
+                    const trunkMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+                    const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+                    trunk.position.set(side, 4, i);
+                    trunk.castShadow = true;
+                    trunk.receiveShadow = true;
+                    scene.add(trunk);
+
+                    const foliageGeometry = new THREE.ConeGeometry(6, 12, 8);
+                    const foliageMaterial = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+                    const foliage = new THREE.Mesh(foliageGeometry, foliageMaterial);
+                    foliage.position.set(side, 12, i);
+                    foliage.castShadow = true;
+                    foliage.receiveShadow = true;
+                    scene.add(foliage);
+                }
+            }
+        }
+
+        // Estado del coche
+        const carState = {
+            position: new THREE.Vector3(0, 0, 0),
+            rotation: 0,
+            velocity: new THREE.Vector3(0, 0, 0),
+            speed: 0,
+            acceleration: 0,
+            maxSpeed: 3,
+            friction: 0.92,
+            angularVelocity: 0
+        };
+
+        // Entrada de teclado
+        const keys = {};
+        window.addEventListener('keydown', (e) => {
+            keys[e.key.toLowerCase()] = true;
+            keys[e.code] = true;
+        });
+        window.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+            keys[e.code] = false;
+        });
+
+        // Crear escena
+        createRoad();
+        createTrees();
+        const car = createCar();
+        car.mesh.position.copy(carState.position);
+
+        // Variables de cámara
+        let cameraHeight = 3;
+
+        // Loop de animación
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Entrada de usuario
+            let accelerating = keys['w'] || keys['W'] || keys['ArrowUp'];
+            let braking = keys['s'] || keys['S'] || keys['ArrowDown'];
+            let turningLeft = keys['a'] || keys['A'] || keys['ArrowLeft'];
+            let turningRight = keys['d'] || keys['D'] || keys['ArrowRight'];
+            let raisingCamera = keys[' '];
+
+            // Aceleración
+            if (accelerating) {
+                carState.acceleration = 0.008;
+            } else if (braking) {
+                carState.acceleration = -0.015;
+            } else {
+                carState.acceleration = -0.002;
+            }
+
+            // Aplicar aceleración
+            carState.speed += carState.acceleration;
+            carState.speed = Math.max(-1.5, Math.min(carState.maxSpeed, carState.speed));
+
+            // Giro
+            const turnSpeed = 0.05;
+            if (turningLeft) {
+                carState.angularVelocity += turnSpeed;
+            }
+            if (turningRight) {
+                carState.angularVelocity -= turnSpeed;
+            }
+            carState.angularVelocity *= 0.85;
+            carState.rotation += carState.angularVelocity;
+
+            // Movimiento
+            carState.position.x += Math.sin(carState.rotation) * carState.speed;
+            carState.position.z += Math.cos(carState.rotation) * carState.speed;
+
+            // Límites del mapa
+            carState.position.x = Math.max(-22, Math.min(22, carState.position.x));
+
+            // Actualizar coche
+            car.mesh.position.copy(carState.position);
+            car.mesh.rotation.y = carState.rotation;
+
+            // Rotar ruedas
+            car.wheels.forEach((wheel, index) => {
+                if (index < 2) {
+                    wheel.rotation.x += carState.speed * 0.3;
+                }
+            });
+
+            // Cámara suave
+            if (raisingCamera) {
+                cameraHeight = Math.min(20, cameraHeight + 0.3);
+            } else {
+                cameraHeight = Math.max(3, cameraHeight - 0.1);
+            }
+
+            const cameraDistance = 10;
+            const behindCar = -Math.cos(carState.rotation) * cameraDistance;
+            const rightOfCar = Math.sin(carState.rotation) * cameraDistance;
+
+            camera.position.x = carState.position.x + rightOfCar;
+            camera.position.y = carState.position.y + cameraHeight;
+            camera.position.z = carState.position.z + behindCar;
+            camera.lookAt(carState.position.x, carState.position.y + 0.5, carState.position.z);
+
+            // Actualizar HUD
+            document.getElementById('position').textContent = 
+                `${carState.position.x.toFixed(1)}, ${carState.position.y.toFixed(1)}, ${carState.position.z.toFixed(1)}`;
+            
+            const kmh = Math.abs(carState.speed * 50).toFixed(0);
+            document.getElementById('speed').textContent = `${kmh} km/h`;
+            document.getElementById('rpm').textContent = Math.abs(carState.speed * 3000).toFixed(0);
+
+            renderer.render(scene, camera);
+        }
+
+        // Manejar redimensionamiento
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+    </script>
+</body>
+</html>
