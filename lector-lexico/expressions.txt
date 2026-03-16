@@ -1,0 +1,17 @@
+b=7
+tmp = 32.4 *(-8.6 - b)/       6.1
+d = a ** b
+result=x+y*z
+area = base * height / 2
+total=(price+tax)*quantity
+val=100/4+3*2-1
+pi=3.14159
+r=5
+circle = pi*r*r
+a=((b+c)*(d-e))/f
+9*7
+==
+))77--
+r+z
+x=0.5*m*v*v
+output=input*gain+offset
