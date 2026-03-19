@@ -72,15 +72,15 @@
     <script>
         const gamesData = {
             nivel1: [
-                { id: 'cadena-palabras', titleKey: 'game.cadena_palabras', descKey: 'game.cadena_desc', icon: '🔗', path: '../games/auditivo/nivel-1/Cadena-Palabras/index.html', nivel: '1' },
-                { id: 'eco-palabras', titleKey: 'game.eco_palabras', descKey: 'game.eco_desc', icon: '🎤', path: '../games/auditivo/nivel-1/eco-palabras/index.html', nivel: '1' }
+                { id: 'cadena-palabras', titleKey: 'game.cadena_palabras', descKey: 'game.cadena_desc', icon: '🔗', path: `../games-${localStorage.getItem('blueminds_lang') || 'es'}/auditivo/nivel-1/Cadena-Palabras/index.html`, nivel: '1' },
+                { id: 'eco-palabras', titleKey: 'game.eco_palabras', descKey: 'game.eco_desc', icon: '🎤', path: `../games-${localStorage.getItem('blueminds_lang') || 'es'}/auditivo/nivel-1/eco-palabras/index.html`, nivel: '1' }
             ],
             nivel2: [
-                { id: 'cadena-palabras-2', titleKey: 'game.cadena_palabras_2', descKey: 'game.cadena_2_desc', icon: '🧠', path: '../games/auditivo/nivel-2/Cadena-Palabras2/index.html', nivel: '2' },
-                { id: 'completa-oracion', titleKey: 'game.completa_oracion_aud', descKey: 'game.completa_aud_desc', icon: '📝', path: '../games/auditivo/nivel-2/Completa-Oracion-Auditiva/index.html', nivel: '2' }
+                { id: 'cadena-palabras-2', titleKey: 'game.cadena_palabras_2', descKey: 'game.cadena_2_desc', icon: '🧠', path: `../games-${localStorage.getItem('blueminds_lang') || 'es'}/auditivo/nivel-2/Cadena-Palabras2/index.html`, nivel: '2' },
+                { id: 'completa-oracion', titleKey: 'game.completa_oracion_aud', descKey: 'game.completa_aud_desc', icon: '📝', path: `../games-${localStorage.getItem('blueminds_lang') || 'es'}/auditivo/nivel-2/Completa-Oracion-Auditiva/index.html`, nivel: '2' }
             ],
             nivel3: [
-                { id: 'eco-palabras-2', titleKey: 'game.eco_palabras_2', descKey: 'game.eco_2_desc', icon: '🎤', path: '../games/auditivo/nivel-3/eco-palabras-2/index.html', nivel: '3' }
+                { id: 'eco-palabras-2', titleKey: 'game.eco_palabras_2', descKey: 'game.eco_2_desc', icon: '🎤', path: `../games-${localStorage.getItem('blueminds_lang') || 'es'}/auditivo/nivel-3/eco-palabras-2/index.html`, nivel: '3' }
             ]
         };
 
