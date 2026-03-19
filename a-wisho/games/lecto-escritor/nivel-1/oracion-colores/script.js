@@ -13,41 +13,41 @@ let hintLevel = 0; // 0 = sin pista, 1 = pista visual, 2 = primera palabra marca
 const sentences = [
     {
         words: [
-            { text: "El", color: "blue" },
-            { text: "perro", color: "red" },
-            { text: "corre", color: "green" }
+            { text: tg("El"), color: "blue" },
+            { text: tg("perro"), color: "red" },
+            { text: tg("corre"), color: "green" }
         ],
         image: "https://img.freepik.com/vector-premium/lindo-perrito-corriendo-ilustracion-dibujos-animados-vector_2699-745.jpg"
     },
     {
         words: [
-            { text: "La", color: "blue" },
-            { text: "niña", color: "red" },
-            { text: "salta", color: "green" }
+            { text: tg("La"), color: "blue" },
+            { text: tg("niña"), color: "red" },
+            { text: tg("salta"), color: "green" }
         ],
         image: "https://img.freepik.com/vector-premium/nina-saltando-aislado-blanco_253263-210.jpg?w=2000"
     },
     {
         words: [
-            { text: "El", color: "blue" },
-            { text: "gato", color: "red" },
-            { text: "duerme", color: "green" }
+            { text: tg("El"), color: "blue" },
+            { text: tg("gato"), color: "red" },
+            { text: tg("duerme"), color: "green" }
         ],
         image: "https://img.freepik.com/vector-premium/dibujo-dibujos-animados-gato-durmiendo_29937-9676.jpg?w=2000"
     },
     {
         words: [
-            { text: "El", color: "blue" },
-            { text: "pájaro", color: "red" },
-            { text: "vuela", color: "green" }
+            { text: tg("El"), color: "blue" },
+            { text: tg("pájaro"), color: "red" },
+            { text: tg("vuela"), color: "green" }
         ],
         image: "https://th.bing.com/th/id/R.ce83d3472f6439efaade884fc47b6f1e?rik=L55fb4CfQuAcOQ&riu=http%3a%2f%2fst.depositphotos.com%2f1199300%2f1509%2fv%2f950%2fdepositphotos_15093187-stock-illustration-flying-bird-cartoon-isolated-on.jpg&ehk=8pgE4ap73POBZLUYjAbuQHk4wtZjcI0d%2bviTP29cANQ%3d&risl=&pid=ImgRaw&r=0"
     },
     {
         words: [
-            { text: "El", color: "blue" },
-            { text: "sol", color: "red" },
-            { text: "brilla", color: "green" }
+            { text: tg("El"), color: "blue" },
+            { text: tg("sol"), color: "red" },
+            { text: tg("brilla"), color: "green" }
         ],
         image: "https://png.pngtree.com/background/20230519/original/pngtree-cartoon-sun-in-a-sunny-landscape-picture-image_2666701.jpg"
     }

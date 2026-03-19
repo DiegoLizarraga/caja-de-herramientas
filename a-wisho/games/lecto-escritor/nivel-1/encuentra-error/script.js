@@ -14,7 +14,7 @@ const exercises = {
             sentence: "El gato son bonito.",
             errorWord: "son",
             correctWord: "es",
-            options: ["es", "somos", "eres"],
+            options: [tg("es"), tg("somos"), tg("eres")],
             errorType: "verbo",
             explanation: "El sujeto 'el gato' es singular, por eso el verbo debe ser 'ES' (singular), no 'SON' (plural).",
             hint: "¿Es el gato uno solo o varios? Busca la palabra que sea singular."
@@ -23,7 +23,7 @@ const exercises = {
             sentence: "Los niño corren rápido.",
             errorWord: "niño",
             correctWord: "niños",
-            options: ["niños", "niña", "niñas"],
+            options: [tg("niños"), tg("niña"), tg("niñas")],
             errorType: "número",
             explanation: "'Los' es plural, así que debe ir con 'NIÑOS' (plural), no 'NIÑO' (singular).",
             hint: "La palabra antes dice 'LOS' (plural), entonces la siguiente debe ser plural también."
@@ -32,7 +32,7 @@ const exercises = {
             sentence: "La gata es blanca y grande.",
             errorWord: "grandon",
             correctWord: "grande",
-            options: ["grandes", "grande", "grandas"],
+            options: [tg("grandes"), tg("grande"), tg("grandas")],
             errorType: "género/número",
             explanation: "Bien hecho. 'GRANDE' es correcto porque funciona igual para singular y plural.",
             hint: "Los adjetivos deben coincidir en número con el sustantivo."
@@ -43,7 +43,7 @@ const exercises = {
             sentence: "Los carros es muy rápidos.",
             errorWord: "es",
             correctWord: "son",
-            options: ["son", "es", "eres"],
+            options: [tg("son"), tg("es"), tg("eres")],
             errorType: "verbo",
             explanation: "'Los carros' (plural) necesita el verbo 'SON' (plural). 'ES' es solo para singular como 'El carro ES'.",
             hint: "¿Hay uno o varios carros? El verbo debe ser plural como el sustantivo."
@@ -52,7 +52,7 @@ const exercises = {
             sentence: "Ella tiene unos libros rojo.",
             errorWord: "rojo",
             correctWord: "rojos",
-            options: ["rojos", "roja", "rojas"],
+            options: [tg("rojos"), tg("roja"), tg("rojas")],
             errorType: "número",
             explanation: "'Unos libros' es plural masculino, así que el adjetivo debe ser 'ROJOS' (plural), no 'ROJO' (singular).",
             hint: "Si hay varios libros, el color también debe estar en plural."
@@ -61,7 +61,7 @@ const exercises = {
             sentence: "El profesor dijo a los estudiantes que trabajien duro.",
             errorWord: "trabajien",
             correctWord: "trabajen",
-            options: ["trabajen", "trabajan", "trabajar"],
+            options: [tg("trabajen"), tg("trabajan"), tg("trabajar")],
             errorType: "modo verbal",
             explanation: "Correcto. 'TRABAJEN' es subjuntivo y es lo adecuado después de 'que'.",
             hint: "Después de 'que' suele ir subjuntivo cuando es una orden o deseo."
@@ -72,7 +72,7 @@ const exercises = {
             sentence: "Si yo taria rico, viajaría al mundo.",
             errorWord: "taria",
             correctWord: "fuera",
-            options: ["fuera", "soñara", "tuviera"],
+            options: [tg("fuera"), tg("soñara"), tg("tuviera")],
             errorType: "tiempo verbal",
             explanation: "En condicionales, la prótasis (primera parte) debe ir en imperfecto de subjuntivo 'FUERA', no en condicional 'SERÍA'.",
             hint: "En 'Si...' las estructuras condicionales tienen reglas especiales de conjugación."
@@ -81,7 +81,7 @@ const exercises = {
             sentence: "A pesar de sus errores, el estudiante anduvo con sus estudios.",
             errorWord: "anduvo",
             correctWord: "continuó",
-            options: ["continuó", "continúa", "continuar"],
+            options: [tg("continuó"), tg("continúa"), tg("continuar")],
             errorType: "tiempo verbal",
             explanation: "Correcto. 'CONTINUÓ' (pretérito) es el tiempo adecuado para narrar una acción pasada.",
             hint: "Busca consistencia temporal en toda la oración."
@@ -90,7 +90,7 @@ const exercises = {
             sentence: "Aunque allia sido difícil, nosotros lograremos éxito.",
             errorWord: "allia",
             correctWord: "haya",
-            options: ["haya", "ha", "había"],
+            options: [tg("haya"), tg("ha"), tg("había")],
             errorType: "modo verbal",
             explanation: "Correcto. 'HAYA' (presente de subjuntivo) es obligatorio después de 'aunque'.",
             hint: "Expresiones de concesión como 'aunque' requieren subjuntivo."

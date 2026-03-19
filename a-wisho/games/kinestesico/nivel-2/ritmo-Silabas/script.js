@@ -14,12 +14,12 @@ let rhythmAnalysis = {
 };
 
 const words = [
-    { word: "gato", syllables: ["GA", "TO"], difficulty: 1 },
-    { word: "perro", syllables: ["PE", "RRO"], difficulty: 1 },
-    { word: "mariposa", syllables: ["MA", "RI", "PO", "SA"], difficulty: 2 },
-    { word: "elefante", syllables: ["E", "LE", "FAN", "TE"], difficulty: 2 },
-    { word: "computadora", syllables: ["COM", "PU", "TA", "DO", "RA"], difficulty: 3 },
-    { word: "bicicleta", syllables: ["BI", "CI", "CLE", "TA"], difficulty: 2 },
+    { word: tg("gato"), syllables: ["GA", "TO"], difficulty: 1 },
+    { word: tg("perro"), syllables: ["PE", "RRO"], difficulty: 1 },
+    { word: tg("mariposa"), syllables: ["MA", "RI", "PO", "SA"], difficulty: 2 },
+    { word: tg("elefante"), syllables: ["E", "LE", "FAN", "TE"], difficulty: 2 },
+    { word: tg("computadora"), syllables: ["COM", "PU", "TA", "DO", "RA"], difficulty: 3 },
+    { word: tg("bicicleta"), syllables: ["BI", "CI", "CLE", "TA"], difficulty: 2 },
 ];
 
 const totalRounds = 5;
@@ -200,8 +200,9 @@ function highlightSyllable(index, duration) {
 }
 
 function speakSyllable(text) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'es-ES';
+    const utterance = new SpeechSynthesisUtterance(typeof tg === 'function' ? tg(text) : text);
+    const currentLang = localStorage.getItem('blueminds_lang') || 'es';
+    utterance.lang = currentLang === 'en' ? 'en-US' : currentLang === 'pt' ? 'pt-BR' : 'es-MX';
     utterance.rate = 1;
     utterance.pitch = 1.1;
     utterance.volume = 1;
@@ -311,7 +312,8 @@ async function startSpeechRecognition() {
     }
     
     const recognition = new SpeechRecognition();
-    recognition.lang = 'es-ES';
+    const currentLangRecog = localStorage.getItem('blueminds_lang') || 'es';
+    recognition.lang = currentLangRecog === 'en' ? 'en-US' : currentLangRecog === 'pt' ? 'pt-BR' : 'es-MX';
     recognition.continuous = false;
     recognition.interimResults = false;
     

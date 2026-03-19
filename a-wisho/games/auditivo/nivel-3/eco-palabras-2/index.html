@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" id="html-tag">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,19 +13,19 @@
         <header class="game-header">
             <div class="back-button">
                 <button onclick="goToMainPage()">
-                    <i class="fas fa-arrow-left"></i> Volver
+                    <i class="fas fa-arrow-left"></i> <span data-i18n="game_ui.back">Volver</span>
                 </button>
             </div>
             <h1 class="game-title">Sonidos de Animales</h1>
-            <div class="game-info">
+            <div class="game-info" style="display:flex;align-items:center;gap:15px;"><div id="lang-picker-anchor"></div>
                 <span id="score-display">Cargando récord...</span>
             </div>
         </header>
 
         <div class="progress-card">
             <div class="progress-header">
-                <span>Ronda <span id="current-round">1</span> de <span id="total-rounds">5</span></span>
-                <span id="score">0 puntos</span>
+                <span data-i18n="game_ui.round_word">Ronda</span> <span id="current-round">1</span> <span data-i18n="game_ui.of">de</span> <span id="total-rounds">5</span>
+                <span id="score" data-i18n="game_ui.zero_points">0 puntos</span>
             </div>
             <div class="progress-bar">
                 <div id="progress-fill" class="progress-fill"></div>
@@ -41,7 +41,7 @@
             </div>
 
             <div class="animal-display" id="animal-display">
-                <div class="animal-name-badge" id="animal-name">Cargando...</div>
+                <div class="animal-name-badge" id="animal-name"><span data-i18n="game_ui.loading">Cargando...</span></div>
                 <div class="animal-image-container">
                     <img id="animal-image" src="" alt="Animal" class="animal-image">
                     <div class="mouth-animation" id="mouth-animation" style="display: none;">
@@ -55,8 +55,7 @@
                     <i class="fas fa-volume-up"></i> Escuchar Sonido
                 </button>
                 <button id="record-button" class="btn secondary" style="display: none;">
-                    <i class="fas fa-microphone"></i> Grabar mi voz
-                </button>
+                    <i class="fas fa-microphone"></i><span data-i18n="game_ui.record_voice">Grabar mi voz</span></button>
             </div>
 
             <div id="recorded-text" class="recorded-text" style="display: none;">
@@ -81,12 +80,13 @@
 
         <div class="instructions-card">
             <p>
-                💡 <span style="font-weight: 700;">Tip:</span> Escucha atentamente el sonido del animal y trata de imitarlo. ¡La IA te ayudará si es muy difícil!
-            </p>
+                💡 <span style="font-weight: 700;">Tip:</span> <span data-i18n="game_ui.tip_4">Escucha atentamente el sonido del animal y trata de imitarlo. ¡La IA te ayudará si es muy difícil!</span></p>
         </div>
     </div>
 
     <script src="../../../../api.js"></script>
     <script src="script.js"></script>
+    <script src="../../../../js/game-translations.js"></script>
+    <script src="../../../../js/i18n.js"></script>
 </body>
 </html>

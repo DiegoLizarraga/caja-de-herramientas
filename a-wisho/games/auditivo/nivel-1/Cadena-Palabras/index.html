@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" id="html-tag">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,21 +13,21 @@
         <header class="game-header">
             <div class="back-button">
                 <button onclick="goToMainPage()">
-                    <i class="fas fa-arrow-left"></i> Volver
+                    <i class="fas fa-arrow-left"></i> <span data-i18n="game_ui.back">Volver</span>
                 </button>
             </div>
-            <h1 class="game-title">La Cadena de Palabras</h1>
-            <div class="game-info">
+            <h1 class="game-title" data-i18n="game.cadena_palabras">La Cadena de Palabras</h1>
+            <div class="game-info" style="display:flex;align-items:center;gap:15px;"><div id="lang-picker-anchor"></div>
               <div class="score-container"style="display: flex; flex-direction: column; align-items: flex-end;">
-                <span id="score-display">0 puntos</span>
+                <span id="score-display" data-i18n="game_ui.zero_points">0 puntos</span>
               </div>
             </div>
         </header>
 
         <div class="progress-card">
             <div class="progress-header">
-                <span>Ronda <span id="current-round">1</span> de <span id="total-rounds">5</span></span>
-                <span id="score">0 puntos</span>
+                <span data-i18n="game_ui.round_word">Ronda</span> <span id="current-round">1</span> <span data-i18n="game_ui.of">de</span> <span id="total-rounds">5</span>
+                <span id="score" data-i18n="game_ui.zero_points">0 puntos</span>
             </div>
             <div class="progress-bar">
                 <div id="progress-fill" class="progress-fill"></div>
@@ -35,10 +35,10 @@
         </div>
 
         <div class="main-card" id="main-card">
-            <h2>Escucha y ordena las palabras</h2>
+            <h2 data-i18n="game_ui.listen_order_words">Escucha y ordena las palabras</h2>
 
             <div class="difficulty-info">
-                <div id="difficulty-badge" class="difficulty-badge easy">Dificultad: Fácil</div>
+                <div id="difficulty-badge" class="difficulty-badge easy" data-i18n="game_ui.diff_easy"> <span data-i18n="game_ui.diff_easy">Dificultad: Fácil</span> </div>
                 <p class="instruction-text" id="instruction-text">Presiona el botón para escuchar una cadena de palabras, luego selecciona las imágenes en el orden correcto</p>
             </div>
 
@@ -84,12 +84,13 @@
 
         <div class="instructions-card">
             <p>
-                💡 <span style="font-weight: 700;">Tip:</span> Escucha con atención las palabras y recuerda el orden en el que las escuchaste. ¡Puedes repetir cuantas veces necesites!
-            </p>
+                💡 <span style="font-weight: 700;">Tip:</span> <span data-i18n="game_ui.tip_1">Escucha con atención las palabras y recuerda el orden en el que las escuchaste. ¡Puedes repetir cuantas veces necesites!</span></p>
         </div>
     </div>
 
     <script src="../../../../api.js"></script>
     <script src="script.js"></script>
+    <script src="../../../../js/game-translations.js"></script>
+    <script src="../../../../js/i18n.js"></script>
 </body>
 </html>

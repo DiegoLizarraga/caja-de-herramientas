@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" id="html-tag">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -125,11 +125,11 @@
             speak(text, rate = 1) {
                 if (!this.audioEnabled) return;
                 this.synth.cancel();
-                const utterance = new SpeechSynthesisUtterance(text);
+                const utterance = new SpeechSynthesisUtterance(typeof tg === 'function' ? tg(text) : text);
                 utterance.rate = rate;
                 utterance.pitch = 1.0;
                 utterance.volume = 1.0;
-                utterance.lang = 'es-ES';
+                utterance.lang = (localStorage.getItem('blueminds_lang') || 'es') + '-' + (localStorage.getItem('blueminds_lang') === 'en' ? 'US' : localStorage.getItem('blueminds_lang') === 'pt' ? 'BR' : 'ES');
                 this.synth.speak(utterance);
             }
             toggleAudio() {
@@ -152,5 +152,7 @@
     </script>
 
     <script src="script.js"></script>
+    <script src="../../../../js/game-translations.js"></script>
+    <script src="../../../../js/i18n.js"></script>
 </body>
 </html>

@@ -33,26 +33,26 @@ class AIAssociationGame {
         // Base de imágenes con múltiples categorías
         this.allImages = {
             easy: [
-                { src: "https://i.pinimg.com/originals/29/1e/d3/291ed353f93b45f607755109cca2a052.jpg", name: "coche", category: "vehículos", distractors: ["casa", "árbol"] },
-                { src: "https://cdn5.vectorstock.com/i/1000x1000/43/49/cartoon-house-vector-4514349.jpg", name: "casa", category: "lugares", distractors: ["coche", "flor"] },
-                { src: "https://thumbs.dreamstime.com/z/pelota-de-f%C3%BAtbol-para-jugar-icono-en-el-estilo-dibujos-animados-caricatura-aislado-fondo-blanco-236463054.jpg", name: "pelota", category: "juguetes", distractors: ["perro", "gato"] },
-                { src: "https://cdn.pixabay.com/photo/2024/03/10/13/43/dog-8624743_1280.png", name: "perro", category: "animales", distractors: ["gato", "casa"] },
-                { src: "https://static.vecteezy.com/system/resources/previews/013/089/641/original/illustration-of-cute-colored-cat-cat-cartoon-image-in-eps10-format-suitable-for-children-s-book-design-elements-introduction-of-cats-to-children-books-or-posters-about-animal-vector.jpg", name: "gato", category: "animales", distractors: ["perro", "pelota"] },
-                { src: "https://cdn.pixabay.com/photo/2022/12/13/05/16/flowers-7652496_1280.png", name: "flor", category: "naturaleza", distractors: ["árbol", "casa"] }
+                { src: "https://i.pinimg.com/originals/29/1e/d3/291ed353f93b45f607755109cca2a052.jpg", name: tg("coche"), category: tg("vehículos"), distractors: ["casa", "árbol"] },
+                { src: "https://cdn5.vectorstock.com/i/1000x1000/43/49/cartoon-house-vector-4514349.jpg", name: tg("casa"), category: tg("lugares"), distractors: ["coche", "flor"] },
+                { src: "https://thumbs.dreamstime.com/z/pelota-de-f%C3%BAtbol-para-jugar-icono-en-el-estilo-dibujos-animados-caricatura-aislado-fondo-blanco-236463054.jpg", name: tg("pelota"), category: tg("juguetes"), distractors: ["perro", "gato"] },
+                { src: "https://cdn.pixabay.com/photo/2024/03/10/13/43/dog-8624743_1280.png", name: tg("perro"), category: tg("animales"), distractors: ["gato", "casa"] },
+                { src: "https://static.vecteezy.com/system/resources/previews/013/089/641/original/illustration-of-cute-colored-cat-cat-cartoon-image-in-eps10-format-suitable-for-children-s-book-design-elements-introduction-of-cats-to-children-books-or-posters-about-animal-vector.jpg", name: tg("gato"), category: tg("animales"), distractors: ["perro", "pelota"] },
+                { src: "https://cdn.pixabay.com/photo/2022/12/13/05/16/flowers-7652496_1280.png", name: tg("flor"), category: tg("naturaleza"), distractors: ["árbol", "casa"] }
             ],
             medium: [
-                { src: "https://c8.alamy.com/compes/2bwxntf/ordenador-de-dibujos-animados-apuntando-con-su-dedo-2bwxntf.jpg", name: "computadora", category: "tecnología", distractors: ["teléfono", "libro"] },
-                { src: "https://i.pinimg.com/originals/49/6e/44/496e44ee1f77e1b12edf3c9d68e23707.png", name: "libro", category: "educación", distractors: ["computadora", "lápiz"] },
-                { src: "https://img.freepik.com/vetores-premium/pato-de-ilustracao-de-desenho-animado_323802-361.jpg?w=2000", name: "pato", category: "animales", distractors: ["gato", "pajaro"] },
-                { src: "https://static.vecteezy.com/system/resources/previews/011/157/544/large_2x/mobile-phone-cartoon-icon-illustration-technology-object-icon-concept-isolated-premium-flat-cartoon-style-vector.jpg", name: "teléfono", category: "tecnología", distractors: ["computadora", "reloj"] },
-                { src: "https://tse1.explicit.bing.net/th/id/OIP.nBy5c3VCj3LlojKPGb0ILgHaIm?rs=1&pid=ImgDetMain&o=7&rm=3", name: "manzana", category: "comida", distractors: ["naranja", "pan"] }
+                { src: "https://c8.alamy.com/compes/2bwxntf/ordenador-de-dibujos-animados-apuntando-con-su-dedo-2bwxntf.jpg", name: tg("computadora"), category: tg("tecnología"), distractors: ["teléfono", "libro"] },
+                { src: "https://i.pinimg.com/originals/49/6e/44/496e44ee1f77e1b12edf3c9d68e23707.png", name: tg("libro"), category: tg("educación"), distractors: ["computadora", "lápiz"] },
+                { src: "https://img.freepik.com/vetores-premium/pato-de-ilustracao-de-desenho-animado_323802-361.jpg?w=2000", name: tg("pato"), category: tg("animales"), distractors: ["gato", "pajaro"] },
+                { src: "https://static.vecteezy.com/system/resources/previews/011/157/544/large_2x/mobile-phone-cartoon-icon-illustration-technology-object-icon-concept-isolated-premium-flat-cartoon-style-vector.jpg", name: tg("teléfono"), category: tg("tecnología"), distractors: ["computadora", "reloj"] },
+                { src: "https://tse1.explicit.bing.net/th/id/OIP.nBy5c3VCj3LlojKPGb0ILgHaIm?rs=1&pid=ImgDetMain&o=7&rm=3", name: tg("manzana"), category: tg("comida"), distractors: ["naranja", "pan"] }
             ],
             hard: [
-                { src: "https://static.vecteezy.com/system/resources/previews/016/704/376/original/cartoon-illustration-acoustic-guitar-colorful-musical-instrument-vector.jpg", name: "guitarra", category: "música", distractors: ["piano", "trompeta"] },
-                { src: "https://tse2.mm.bing.net/th/id/OIP.dgfaiili0WFTJb1FPxoEKQHaHa?rs=1&pid=ImgDetMain&o=7&rm=3", name: "bicicleta", category: "vehículos", distractors: ["coche", "tren"] },
-                { src: "https://img.freepik.com/vector-premium/ilustracion-vectorial-al-estilo-dibujos-animados-clip-microfono_761413-4518.jpg", name: "micrófono", category: "música", distractors: ["guitarra", "auriculares"] },
-                { src: "https://tse2.mm.bing.net/th/id/OIP.29aisGf4Boe8M1l2_xNJJAHaGH?rs=1&pid=ImgDetMain&o=7&rm=3", name: "escritorio", category: "lugares", distractors: ["silla", "cama"] },
-                { src: "https://image.freepik.com/vector-gratis/dibujos-animados-naturaleza-paisaje-mar_107173-7110.jpg", name: "mar", category: "naturaleza", distractors: ["montaña", "bosque"] }
+                { src: "https://static.vecteezy.com/system/resources/previews/016/704/376/original/cartoon-illustration-acoustic-guitar-colorful-musical-instrument-vector.jpg", name: tg("guitarra"), category: tg("música"), distractors: ["piano", "trompeta"] },
+                { src: "https://tse2.mm.bing.net/th/id/OIP.dgfaiili0WFTJb1FPxoEKQHaHa?rs=1&pid=ImgDetMain&o=7&rm=3", name: tg("bicicleta"), category: tg("vehículos"), distractors: ["coche", "tren"] },
+                { src: "https://img.freepik.com/vector-premium/ilustracion-vectorial-al-estilo-dibujos-animados-clip-microfono_761413-4518.jpg", name: tg("micrófono"), category: tg("música"), distractors: ["guitarra", "auriculares"] },
+                { src: "https://tse2.mm.bing.net/th/id/OIP.29aisGf4Boe8M1l2_xNJJAHaGH?rs=1&pid=ImgDetMain&o=7&rm=3", name: tg("escritorio"), category: tg("lugares"), distractors: ["silla", "cama"] },
+                { src: "https://image.freepik.com/vector-gratis/dibujos-animados-naturaleza-paisaje-mar_107173-7110.jpg", name: tg("mar"), category: tg("naturaleza"), distractors: ["montaña", "bosque"] }
             ]
         };
         

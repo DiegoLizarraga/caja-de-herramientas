@@ -260,7 +260,7 @@ function updateUI() {
     let diffText = 'Fácil';
     if (difficulty === 'medium') diffText = 'Medio';
     if (difficulty === 'hard') diffText = 'Difícil';
-    badgeElement.textContent = 'Dificultad: ' + diffText;
+    badgeElement.textContent = tg('Dificultad: ') + tg(diffText);
     badgeElement.className = 'difficulty-badge ' + difficulty;
 
     const instructionElement = document.getElementById('instruction-text');
@@ -435,8 +435,9 @@ function playSequenceAudio(words, index, speechRate) {
     // --- INTENTO DE VOZ (Si funciona, genial; si no, el niño lee) ---
     try {
         window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(words[index]);
-        utterance.lang = 'es-MX';
+        const utterance = new SpeechSynthesisUtterance(typeof tg === 'function' ? tg(words[index]) : words[index]);
+        const currentLang = localStorage.getItem('blueminds_lang') || 'es';
+    utterance.lang = currentLang === 'en' ? 'en-US' : currentLang === 'pt' ? 'pt-BR' : 'es-MX';
         utterance.rate = speechRate;
         window.speechSynthesis.speak(utterance);
     } catch (e) {

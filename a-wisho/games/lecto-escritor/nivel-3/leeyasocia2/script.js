@@ -31,7 +31,7 @@ const wordBanks = {
             sentence: "El gato duerme.",
             correctImageIndex: 0,
             difficultWords: ['gato'],
-            category: 'animals',
+            category: tg('animals'),
             errorType: 'semantic',
             explanation: "La oración describe a un gato durmiendo. Es una acción simple y clara.",
             images: [
@@ -44,7 +44,7 @@ const wordBanks = {
             sentence: "El niño juega en el parque.",
             correctImageIndex: 1,
             difficultWords: ['parque'],
-            category: 'places',
+            category: tg('places'),
             errorType: 'semantic',
             explanation: "La oración habla de un niño jugando. El parque es el lugar donde ocurre la acción.",
             images: [
@@ -57,7 +57,7 @@ const wordBanks = {
             sentence: "El pajarito canta.",
             correctImageIndex: 2,
             difficultWords: ['pajarito'],
-            category: 'animals',
+            category: tg('animals'),
             errorType: 'semantic',
             explanation: "Un pajarito es un pájaro pequeño. La acción es cantar.",
             images: [
@@ -72,7 +72,7 @@ const wordBanks = {
             sentence: "La mariposa vuela entre las flores.",
             correctImageIndex: 1,
             difficultWords: ['mariposa', 'flores'],
-            category: 'nature',
+            category: tg('nature'),
             errorType: 'semantic',
             explanation: "Una mariposa es un insecto colorido que vuela. Está entre flores naturalmente.",
             images: [
@@ -85,7 +85,7 @@ const wordBanks = {
             sentence: "El elefante camina lentamente por la sabana.",
             correctImageIndex: 0,
             difficultWords: ['elefante', 'sabana'],
-            category: 'animals',
+            category: tg('animals'),
             errorType: 'semantic',
             explanation: "Un elefante es un animal grande. La sabana es su hábitat natural.",
             images: [
@@ -98,7 +98,7 @@ const wordBanks = {
             sentence: "El cocodrilo nada en el río.",
             correctImageIndex: 2,
             difficultWords: ['cocodrilo'],
-            category: 'animals',
+            category: tg('animals'),
             errorType: 'semantic',
             explanation: "Un cocodrilo es un reptil que vive en el agua. Nada es su actividad principal.",
             images: [
@@ -113,7 +113,7 @@ const wordBanks = {
             sentence: "La majestuosa orquesta sinfónica interpretaba una sonata extraordinaria.",
             correctImageIndex: 1,
             difficultWords: ['majestuosa', 'orquesta', 'sinfónica', 'interpretaba', 'sonata', 'extraordinaria'],
-            category: 'arts',
+            category: tg('arts'),
             errorType: 'phonetic',
             explanation: "Describe músicos tocando instrumento juntos. Las palabras complejas hacen la lectura más desafiante.",
             images: [
@@ -126,7 +126,7 @@ const wordBanks = {
             sentence: "El hipopótamo se sumerge profundamente en el pantano cenagoso.",
             correctImageIndex: 0,
             difficultWords: ['hipopótamo', 'sumerge', 'profundamente', 'pantano', 'cenagoso'],
-            category: 'animals',
+            category: tg('animals'),
             errorType: 'visual',
             explanation: "Describe un hipopótamo en su ambiente acuático. Palabras complejas para vocabulario avanzado.",
             images: [
@@ -139,7 +139,7 @@ const wordBanks = {
             sentence: "El diligente investigador examinaba meticulosamente los artefactos arqueológicos.",
             correctImageIndex: 2,
             difficultWords: ['diligente', 'investigador', 'examinaba', 'meticulosamente', 'artefactos', 'arqueológicos'],
-            category: 'professions',
+            category: tg('professions'),
             errorType: 'phonetic',
             explanation: "Describe un arqueólogo trabajando. Vocabulario académico para estimular pensamiento crítico.",
             images: [
@@ -297,8 +297,9 @@ function selectImage(index, element) {
 
 // Leer oración en voz alta
 function readSentence() {
-    const utterance = new SpeechSynthesisUtterance(currentExercise.sentence);
-    utterance.lang = 'es-ES';
+    const utterance = new SpeechSynthesisUtterance(typeof tg === 'function' ? tg(currentExercise.sentence) : currentExercise.sentence);
+    const currentLang = localStorage.getItem('blueminds_lang') || 'es';
+    utterance.lang = currentLang === 'en' ? 'en-US' : currentLang === 'pt' ? 'pt-BR' : 'es-MX';
     utterance.rate = 0.9;
     
     const button = document.getElementById('read-button');
@@ -314,8 +315,9 @@ function readSentence() {
 
 // Hablar palabra individual
 function speakWord(word) {
-    const utterance = new SpeechSynthesisUtterance(word);
-    utterance.lang = 'es-ES';
+    const utterance = new SpeechSynthesisUtterance(typeof tg === 'function' ? tg(word) : word);
+    const currentLang = localStorage.getItem('blueminds_lang') || 'es';
+    utterance.lang = currentLang === 'en' ? 'en-US' : currentLang === 'pt' ? 'pt-BR' : 'es-MX';
     utterance.rate = 0.8;
     
     window.speechSynthesis.cancel();

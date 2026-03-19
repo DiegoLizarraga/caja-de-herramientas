@@ -10,64 +10,64 @@ const totalRounds = 5;
 // PATRONES DEFINIDOS MANUALMENTE CON EMOJIS
 const patternsDatabase = [
     {
-        name: "alternancia_cuadrados_rojo_azul",
+        name: tg("alternancia_cuadrados_rojo_azul"),
         display: ["🟥", "🟦", "🟥", "🟦", "🟥", "?"],
         correct: "🟦",
-        options: ["🟥", "🟦", "🟩"]
+        options: [tg("🟥"), tg("🟦"), tg("🟩")]
     },
     {
-        name: "alternancia_cuadrados_verde_amarillo",
+        name: tg("alternancia_cuadrados_verde_amarillo"),
         display: ["🟩", "🟨", "🟩", "🟨", "🟩", "?"],
         correct: "🟨",
-        options: ["🟩", "🟨", "🟪"]
+        options: [tg("🟩"), tg("🟨"), tg("🟪")]
     },
     {
-        name: "tres_partes_rojo_azul_verde",
+        name: tg("tres_partes_rojo_azul_verde"),
         display: ["🟥", "🟦", "🟩", "🟥", "🟦", "?"],
         correct: "🟩",
-        options: ["🟥", "🟦", "🟩"]
+        options: [tg("🟥"), tg("🟦"), tg("🟩")]
     },
     {
-        name: "doble_rojo_azul",
+        name: tg("doble_rojo_azul"),
         display: ["🟥", "🟥", "🟦", "🟦", "🟥", "?"],
         correct: "🟥",
-        options: ["🟥", "🟦", "🟨"]
+        options: [tg("🟥"), tg("🟦"), tg("🟨")]
     },
     {
-        name: "alternancia_morado_negro",
+        name: tg("alternancia_morado_negro"),
         display: ["🟪", "⬛", "🟪", "⬛", "🟪", "?"],
         correct: "⬛",
-        options: ["🟪", "⬛", "⬜"]
+        options: [tg("🟪"), tg("⬛"), tg("⬜")]
     },
     {
-        name: "tres_partes_amarillo_morado_negro",
+        name: tg("tres_partes_amarillo_morado_negro"),
         display: ["🟨", "🟪", "⬛", "🟨", "🟪", "?"],
         correct: "⬛",
-        options: ["🟨", "🟪", "⬛"]
+        options: [tg("🟨"), tg("🟪"), tg("⬛")]
     },
     {
-        name: "doble_verde_amarillo",
+        name: tg("doble_verde_amarillo"),
         display: ["🟩", "🟩", "🟨", "🟨", "🟩", "?"],
         correct: "🟩",
-        options: ["🟩", "🟨", "🟦"]
+        options: [tg("🟩"), tg("🟨"), tg("🟦")]
     },
     {
-        name: "alternancia_azul_verde",
+        name: tg("alternancia_azul_verde"),
         display: ["🟦", "🟩", "🟦", "🟩", "🟦", "?"],
         correct: "🟩",
-        options: ["🟦", "🟩", "🟥"]
+        options: [tg("🟦"), tg("🟩"), tg("🟥")]
     },
     {
-        name: "tres_partes_blanco_negro_rojo",
+        name: tg("tres_partes_blanco_negro_rojo"),
         display: ["⬜", "⬛", "🟥", "⬜", "⬛", "?"],
         correct: "🟥",
-        options: ["⬜", "⬛", "🟥"]
+        options: [tg("⬜"), tg("⬛"), tg("🟥")]
     },
     {
-        name: "doble_morado_blanco",
+        name: tg("doble_morado_blanco"),
         display: ["🟪", "🟪", "⬜", "⬜", "🟪", "?"],
         correct: "🟪",
-        options: ["🟪", "⬜", "🟦"]
+        options: [tg("🟪"), tg("⬜"), tg("🟦")]
     }
 ];
 

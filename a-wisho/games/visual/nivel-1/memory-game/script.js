@@ -46,8 +46,9 @@ class AIMemoryGame {
         // Cancelar cualquier audio en curso
         this.synth.cancel();
         
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'es-ES';
+        const utterance = new SpeechSynthesisUtterance(typeof tg === 'function' ? tg(text) : text);
+        const currentLang = localStorage.getItem('blueminds_lang') || 'es';
+    utterance.lang = currentLang === 'en' ? 'en-US' : currentLang === 'pt' ? 'pt-BR' : 'es-MX';
         utterance.rate = 1;
         utterance.pitch = 1.0;
         utterance.volume = 1.0;

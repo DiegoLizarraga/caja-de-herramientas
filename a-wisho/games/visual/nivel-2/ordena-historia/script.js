@@ -8,11 +8,12 @@ class AudioManager {
     speak(text, rate = 1) {
         if (!this.audioEnabled) return;
         this.synth.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
+        const utterance = new SpeechSynthesisUtterance(typeof tg === 'function' ? tg(text) : text);
         utterance.rate = rate;
         utterance.pitch = 1.0;
         utterance.volume = 1.0;
-        utterance.lang = 'es-ES';
+        const currentLang = localStorage.getItem('blueminds_lang') || 'es';
+    utterance.lang = currentLang === 'en' ? 'en-US' : currentLang === 'pt' ? 'pt-BR' : 'es-MX';
         this.synth.speak(utterance);
     }
     

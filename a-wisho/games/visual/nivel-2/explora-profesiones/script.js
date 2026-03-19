@@ -23,126 +23,126 @@ class AIProfessionsGame {
             easy: [
                 {
                     image: "https://i.pinimg.com/originals/dd/5f/5d/dd5f5d4cbe0531cd5dc4d5b7204b38a4.png",
-                    options: ["Médico", "Ingeniero", "Cocinero"],
+                    options: [tg("Médico"), tg("Ingeniero"), tg("Cocinero")],
                     correctAnswer: 0,
                     profession: "Médico",
-                    category: "salud",
+                    category: tg("salud"),
                     complexity: 1
                 },
                 {
                     image: "https://tse1.mm.bing.net/th/id/OIP.msPDaNRRUyVPXdHj-pV-pwHaHa?rs=1&pid=ImgDetMain",
-                    options: ["Abogado", "Profesor", "Piloto"],
+                    options: [tg("Abogado"), tg("Profesor"), tg("Piloto")],
                     correctAnswer: 1,
                     profession: "Profesor",
-                    category: "educacion",
+                    category: tg("educacion"),
                     complexity: 1
                 },
                 {
                     image: "https://static.vecteezy.com/system/resources/previews/002/084/042/original/cute-fire-fighter-holding-wooden-stairs-character-cartoon-icon-illustration-free-vector.jpg",
-                    options: ["Bombero", "Electricista", "Músico"],
+                    options: [tg("Bombero"), tg("Electricista"), tg("Músico")],
                     correctAnswer: 0,
                     profession: "Bombero",
-                    category: "seguridad",
+                    category: tg("seguridad"),
                     complexity: 1
                 },
                 {
                     image: "https://img.freepik.com/vector-premium/ilustracion-vectorial-dibujos-animados-chef-cocinando-plato-arroz-frito_1263357-24820.jpg?w=2000",
-                    options: ["Cocinero", "Mesero", "piloto"],
+                    options: [tg("Cocinero"), tg("Mesero"), tg("piloto")],
                     correctAnswer: 0,
                     profession: "Cocinero",
-                    category: "gastronomia",
+                    category: tg("gastronomia"),
                     complexity: 1
                 },
                 {
                     image: "https://img.freepik.com/vector-premium/profesion-constructor-hombre-estilo-dibujos-animados-plana_180868-418.jpg",
-                    options: ["Constructor", "Plomero", "Carpintero"],
+                    options: [tg("Constructor"), tg("Plomero"), tg("Carpintero")],
                     correctAnswer: 0,
                     profession: "Constructor",
-                    category: "construccion",
+                    category: tg("construccion"),
                     complexity: 1
                 }
             ],
             medium: [
                 {
                     image: "https://image.freepik.com/vector-gratis/enfermera-personaje-dibujos-animados-lindo_78094-108.jpg",
-                    options: ["Abogada", "Doctora", "Enfermera"],
+                    options: [tg("Abogada"), tg("Doctora"), tg("Enfermera")],
                     correctAnswer: 2,
                     profession: "Enfermera",
-                    category: "salud",
+                    category: tg("salud"),
                     complexity: 2
                 },
                 {
                     image: "https://static.vecteezy.com/system/resources/previews/049/166/524/original/cute-girl-photographer-with-camera-illustration-cartoon-style-free-vector.jpg",
-                    options: ["Fotógrafo", "Camarógrafo", "Artista"],
+                    options: [tg("Fotógrafo"), tg("Camarógrafo"), tg("Artista")],
                     correctAnswer: 0,
                     profession: "Fotógrafo",
-                    category: "artes",
+                    category: tg("artes"),
                     complexity: 2
                 },
                 {
                     image: "https://tse3.mm.bing.net/th/id/OIP.v0OHHvrgQAR3Py8Yn7kxPQHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",
-                    options: ["Veterinario", "Dentista", "Oftalmólogo"],
+                    options: [tg("Veterinario"), tg("Dentista"), tg("Oftalmólogo")],
                     correctAnswer: 1,
                     profession: "Dentista",
-                    category: "salud",
+                    category: tg("salud"),
                     complexity: 2
                 },
                 {
                     image: "https://tse3.mm.bing.net/th/id/OIP.gVeGGYgBXKC50q1hUWjCIQHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",
-                    options: ["Jardinero", "Granjero", "Paisajista"],
+                    options: [tg("Jardinero"), tg("Granjero"), tg("Paisajista")],
                     correctAnswer: 0,
                     profession: "Jardinero",
-                    category: "naturaleza",
+                    category: tg("naturaleza"),
                     complexity: 2
                 },
                 {
                     image: "https://tse3.mm.bing.net/th/id/OIP.iWlnUosfG4X9bSz_-DkuwAHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",
-                    options: ["Mecánico", "Ingeniero", "Técnico"],
+                    options: [tg("Mecánico"), tg("Ingeniero"), tg("Técnico")],
                     correctAnswer: 0,
                     profession: "Mecánico",
-                    category: "mecanica",
+                    category: tg("mecanica"),
                     complexity: 2
                 }
             ],
             hard: [
                 {
                     image: "https://tse3.mm.bing.net/th/id/OIP.MdwKTsCeC81Mt6HWsT8NHQHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",
-                    options: ["Piloto", "Comandante", "Aeromoza"],
+                    options: [tg("Piloto"), tg("Comandante"), tg("Aeromoza")],
                     correctAnswer: 0,
                     profession: "Piloto",
-                    category: "aviacion",
+                    category: tg("aviacion"),
                     complexity: 3
                 },
                 {
                     image: "https://tse4.mm.bing.net/th/id/OIP.PeivQAgqUPUvKdKGxZDsDAHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",
-                    options: ["Científico", "Investigador", "Químico"],
+                    options: [tg("Científico"), tg("Investigador"), tg("Químico")],
                     correctAnswer: 0,
                     profession: "Científico",
-                    category: "ciencia",
+                    category: tg("ciencia"),
                     complexity: 3
                 },
                 {
                     image: "https://static.vecteezy.com/system/resources/previews/034/344/816/non_2x/rear-view-of-cartoon-man-architect-working-on-construction-project-illustration-vector.jpg",
-                    options: ["Arquitecto", "Ingeniero", "Dibujante"],
+                    options: [tg("Arquitecto"), tg("Ingeniero"), tg("Dibujante")],
                     correctAnswer: 0,
                     profession: "Arquitecto",
-                    category: "diseno",
+                    category: tg("diseno"),
                     complexity: 3
                 },
                 {
                     image: "https://tse2.mm.bing.net/th/id/OIP.ACOKrk7PUAT4z7HPG3bLFwHaGe?rs=1&pid=ImgDetMain&o=7&rm=3",
-                    options: ["Actor", "Cantante", "Comediante"],
+                    options: [tg("Actor"), tg("Cantante"), tg("Comediante")],
                     correctAnswer: 0,
                     profession: "Actor",
-                    category: "espectaculos",
+                    category: tg("espectaculos"),
                     complexity: 3
                 },
                 {
                     image: "https://img.freepik.com/vector-premium/chibi-contable-personaje-dibujos-animados-hombre-calculadora-mano_161819-1130.jpg",
-                    options: ["Contador", "Auditor", "Economista"],
+                    options: [tg("Contador"), tg("Auditor"), tg("Economista")],
                     correctAnswer: 0,
                     profession: "Contador",
-                    category: "finanzas",
+                    category: tg("finanzas"),
                     complexity: 3
                 }
             ]

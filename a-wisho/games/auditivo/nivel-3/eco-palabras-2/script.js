@@ -336,6 +336,65 @@ let recognition;
 // ========================
 
 document.addEventListener('DOMContentLoaded', function() {
+
+  // --- INYECCIÓN DE TRADUCCIÓN AUTOMÁTICA ---
+  if (typeof tg === 'function') {
+    const translateArray = (arr, keys) => {
+      if (!arr || !Array.isArray(arr)) return;
+      arr.forEach(item => {
+        if (!item) return;
+        keys.forEach(key => {
+          if (typeof item[key] === 'string') {
+            item[key] = tg(item[key]);
+          } else if (Array.isArray(item[key])) {
+             // For syllables and such, though typically syllables are specific.
+             // We'll translate if they happen to be translated, else keep original
+          }
+        });
+
+        // Handle nested options or items
+        if (Array.isArray(item.options)) {
+          item.options = item.options.map(opt => typeof opt === 'string' ? tg(opt) : opt);
+          item.options.forEach(opt => {
+             if (opt && typeof opt === 'object') {
+                 if (opt.word) opt.word = tg(opt.word);
+                 if (opt.text) opt.text = tg(opt.text);
+             }
+          });
+        }
+        if (Array.isArray(item.items)) {
+          translateArray(item.items, keys);
+        }
+        if (Array.isArray(item.correctOrder)) {
+            item.correctOrder = item.correctOrder.map(opt => typeof opt === 'string' ? tg(opt) : opt);
+        }
+        if (Array.isArray(item.sequence)) {
+            item.sequence = item.sequence.map(opt => typeof opt === 'string' ? tg(opt) : opt);
+        }
+        if (Array.isArray(item.words)) {
+            item.words = item.words.map(opt => typeof opt === 'string' ? tg(opt) : opt);
+        }
+      });
+    };
+
+    // Arrays comunes en los juegos
+    if (typeof words !== 'undefined') translateArray(words, ['name', 'word', 'text']);
+    if (typeof movements !== 'undefined') translateArray(movements, ['name', 'instruction']);
+    if (typeof emotions !== 'undefined') translateArray(emotions, ['name']);
+    if (typeof scenes !== 'undefined') translateArray(scenes, ['text']);
+    if (typeof sentences !== 'undefined') translateArray(sentences, ['sentence', 'missing', 'fullText']);
+    if (typeof exercises !== 'undefined') translateArray(exercises, ['sentence', 'missing', 'word']);
+    if (typeof levels !== 'undefined') translateArray(levels, ['text', 'word', 'sentence']);
+    if (typeof levelsData !== 'undefined') translateArray(levelsData, ['text', 'word', 'sentence']);
+    if (typeof stories !== 'undefined') translateArray(stories, ['text']);
+    if (typeof professions !== 'undefined') translateArray(professions, ['name']);
+    if (typeof scenesData !== 'undefined') translateArray(scenesData, ['text']);
+    if (typeof patterns !== 'undefined') translateArray(patterns, ['text']);
+    if (typeof groups !== 'undefined') translateArray(groups, ['name', 'text']);
+    if (typeof associations !== 'undefined') translateArray(associations, ['text', 'word']);
+  }
+  // ------------------------------------------
+
     const gameId = 'imitacion-animales-1';
     api.getBestScore(gameId).then(bestScore => {
         document.getElementById('score-display').innerHTML = 
@@ -353,7 +412,8 @@ function setupSpeechRecognition() {
     
     if (SpeechRecognition) {
         recognition = new SpeechRecognition();
-        recognition.lang = 'es-ES';
+        const currentLangRecog = localStorage.getItem('blueminds_lang') || 'es';
+    recognition.lang = currentLangRecog === 'en' ? 'en-US' : currentLangRecog === 'pt' ? 'pt-BR' : 'es-MX';
         recognition.continuous = false;
         recognition.interimResults = false;
 
@@ -432,7 +492,7 @@ function updateUI() {
     document.getElementById('recorded-text').style.display = 'none';
 
     const recordButton = document.getElementById('record-button');
-    recordButton.innerHTML = '<i class="fas fa-microphone"></i> Grabar mi voz';
+    recordButton.innerHTML = '<i class="fas fa-microphone"></i> ' + tg('Grabar mi voz');
     recordButton.className = 'btn secondary';
     recordButton.style.display = 'none';
 }
@@ -447,8 +507,9 @@ function playAnimalSound() {
     const nextAdjustment = analyzer.getNextAdjustment();
     const rate = nextAdjustment.soundClarity;
     
-    const utterance = new SpeechSynthesisUtterance(currentAnimal.sound);
-    utterance.lang = 'es-ES';
+    const utterance = new SpeechSynthesisUtterance(typeof tg === 'function' ? tg(currentAnimal.sound) : currentAnimal.sound);
+    const currentLang = localStorage.getItem('blueminds_lang') || 'es';
+    utterance.lang = currentLang === 'en' ? 'en-US' : currentLang === 'pt' ? 'pt-BR' : 'es-MX';
     utterance.rate = rate;
     utterance.pitch = 1;
     

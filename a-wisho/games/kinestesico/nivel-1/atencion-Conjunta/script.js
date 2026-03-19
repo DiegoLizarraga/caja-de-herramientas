@@ -12,11 +12,11 @@ let eyeGazeData = {
 };
 
 const words = [
-    { word: "Mira", emoji: "👀", soundUrl: "data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA==" },
-    { word: "Escucha", emoji: "👂", soundUrl: "data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA==" },
-    { word: "Salta", emoji: "⬆️", soundUrl: "data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA==" },
-    { word: "Sonríe", emoji: "😊", soundUrl: "data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA==" },
-    { word: "Canta", emoji: "🎵", soundUrl: "data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA==" },
+    { word: tg("Mira"), emoji: "👀", soundUrl: "data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA==" },
+    { word: tg("Escucha"), emoji: "👂", soundUrl: "data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA==" },
+    { word: tg("Salta"), emoji: "⬆️", soundUrl: "data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA==" },
+    { word: tg("Sonríe"), emoji: "😊", soundUrl: "data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA==" },
+    { word: tg("Canta"), emoji: "🎵", soundUrl: "data:audio/wav;base64,UklGRiYAAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQIAAAAAAA==" },
 ];
 
 const totalRounds = 5;
@@ -180,8 +180,9 @@ async function startActivity() {
 }
 
 function playWordSound() {
-    const utterance = new SpeechSynthesisUtterance(currentWord.word);
-    utterance.lang = 'es-ES';
+    const utterance = new SpeechSynthesisUtterance(typeof tg === 'function' ? tg(currentWord.word) : currentWord.word);
+    const currentLang = localStorage.getItem('blueminds_lang') || 'es';
+    utterance.lang = currentLang === 'en' ? 'en-US' : currentLang === 'pt' ? 'pt-BR' : 'es-MX';
     utterance.rate = 1;
     utterance.pitch = 1.2;
     utterance.volume = 1;
@@ -321,7 +322,8 @@ async function startSpeechRecognition() {
     }
     
     const recognition = new SpeechRecognition();
-    recognition.lang = 'es-ES';
+    const currentLangRecog = localStorage.getItem('blueminds_lang') || 'es';
+    recognition.lang = currentLangRecog === 'en' ? 'en-US' : currentLangRecog === 'pt' ? 'pt-BR' : 'es-MX';
     recognition.continuous = false;
     recognition.interimResults = false;
     

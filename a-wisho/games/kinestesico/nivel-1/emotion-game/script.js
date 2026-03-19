@@ -14,11 +14,11 @@ let movementAnalysisData = {
 };
 
 const emotions = [
-    { name: "Feliz", color: "primary", videoUrl: "https://i.pinimg.com/originals/20/57/74/2057740a1b96ddb0b0a306b20cf4d666.gif" },
-    { name: "Triste", color: "blue", videoUrl: "https://cdnl.iconscout.com/lottie/premium/thumb/nina-llorando-a-fuerza-5105643-4277861.gif" },
-    { name: "Enojado", color: "red", videoUrl: "https://media.tenor.com/WYkqpAQVImkAAAAM/euphoria-boy.gif" },
-    { name: "Asustado", color: "purple", videoUrl: "https://media.tenor.com/azK-UXf7o5cAAAAM/anime-scream.gif" },
-    { name: "Sorprendido", color: "accent", videoUrl: "https://cdn-icons-gif.flaticon.com/11175/11175756.gif" },
+    { name: tg("Feliz"), color: "primary", videoUrl: "https://i.pinimg.com/originals/20/57/74/2057740a1b96ddb0b0a306b20cf4d666.gif" },
+    { name: tg("Triste"), color: "blue", videoUrl: "https://cdnl.iconscout.com/lottie/premium/thumb/nina-llorando-a-fuerza-5105643-4277861.gif" },
+    { name: tg("Enojado"), color: "red", videoUrl: "https://media.tenor.com/WYkqpAQVImkAAAAM/euphoria-boy.gif" },
+    { name: tg("Asustado"), color: "purple", videoUrl: "https://media.tenor.com/azK-UXf7o5cAAAAM/anime-scream.gif" },
+    { name: tg("Sorprendido"), color: "accent", videoUrl: "https://cdn-icons-gif.flaticon.com/11175/11175756.gif" },
 ];
 
 const totalRounds = 5;

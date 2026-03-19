@@ -251,8 +251,9 @@ function selectImage(index, element) {
 
 // Leer oración en voz alta
 function readSentence() {
-    const utterance = new SpeechSynthesisUtterance(currentExercise.sentence);
-    utterance.lang = 'es-ES';
+    const utterance = new SpeechSynthesisUtterance(typeof tg === 'function' ? tg(currentExercise.sentence) : currentExercise.sentence);
+    const currentLang = localStorage.getItem('blueminds_lang') || 'es';
+    utterance.lang = currentLang === 'en' ? 'en-US' : currentLang === 'pt' ? 'pt-BR' : 'es-MX';
     utterance.rate = 0.9;
     
     const button = document.getElementById('read-button');
@@ -268,8 +269,9 @@ function readSentence() {
 
 // Hablar palabra individual
 function speakWord(word) {
-    const utterance = new SpeechSynthesisUtterance(word);
-    utterance.lang = 'es-ES';
+    const utterance = new SpeechSynthesisUtterance(typeof tg === 'function' ? tg(word) : word);
+    const currentLang = localStorage.getItem('blueminds_lang') || 'es';
+    utterance.lang = currentLang === 'en' ? 'en-US' : currentLang === 'pt' ? 'pt-BR' : 'es-MX';
     utterance.rate = 0.8;
     
     window.speechSynthesis.cancel();

@@ -13,25 +13,25 @@ let recordedWords = []; // Para estadísticas
 // Palabras por dificultad
 const wordBanks = {
     easy: [
-        { word: 'gato', image: 'https://static.vecteezy.com/system/resources/previews/013/089/641/original/illustration-of-cute-colored-cat-cat-cartoon-image-in-eps10-format-suitable-for-children-s-book-design-elements-introduction-of-cats-to-children-books-or-posters-about-animal-vector.jpg?w=400&h=300&fit=crop' },
-        { word: 'sol', image: 'https://static.vecteezy.com/system/resources/previews/018/800/828/original/cartoon-bright-sun-icon-png.png?w=400&h=300&fit=crop' },
-        { word: 'casa', image: 'https://static.vecteezy.com/system/resources/previews/006/986/358/original/house-illustration-cartoon-vector.jpg?w=400&h=300&fit=crop' },
-        { word: 'agua', image: 'https://static.vecteezy.com/system/resources/previews/012/781/853/non_2x/cute-water-drop-cartoon-character-giving-water-bottle-free-vector.jpg?w=400&h=300&fit=crop' },
-        { word: 'flor', image: 'https://cdn.pixabay.com/photo/2022/12/13/05/16/flowers-7652496_1280.png?w=400&h=300&fit=crop' },
+        { word: tg('gato'), image: 'https://static.vecteezy.com/system/resources/previews/013/089/641/original/illustration-of-cute-colored-cat-cat-cartoon-image-in-eps10-format-suitable-for-children-s-book-design-elements-introduction-of-cats-to-children-books-or-posters-about-animal-vector.jpg?w=400&h=300&fit=crop' },
+        { word: tg('sol'), image: 'https://static.vecteezy.com/system/resources/previews/018/800/828/original/cartoon-bright-sun-icon-png.png?w=400&h=300&fit=crop' },
+        { word: tg('casa'), image: 'https://static.vecteezy.com/system/resources/previews/006/986/358/original/house-illustration-cartoon-vector.jpg?w=400&h=300&fit=crop' },
+        { word: tg('agua'), image: 'https://static.vecteezy.com/system/resources/previews/012/781/853/non_2x/cute-water-drop-cartoon-character-giving-water-bottle-free-vector.jpg?w=400&h=300&fit=crop' },
+        { word: tg('flor'), image: 'https://cdn.pixabay.com/photo/2022/12/13/05/16/flowers-7652496_1280.png?w=400&h=300&fit=crop' },
     ],
     normal: [
-        { word: 'mariposa', image: 'https://static.vecteezy.com/system/resources/previews/014/655/698/original/butterfly-icon-cartoon-style-vector.jpg?w=400&h=300&fit=crop' },
-        { word: 'teléfono', image: 'https://static.vecteezy.com/system/resources/previews/011/157/544/large_2x/mobile-phone-cartoon-icon-illustration-technology-object-icon-concept-isolated-premium-flat-cartoon-style-vector.jpg?w=400&h=300&fit=crop' },
-        { word: 'bicicleta', image: 'https://static.vecteezy.com/system/resources/previews/005/239/753/non_2x/bicycle-cartoon-illustration-free-vector.jpg?w=400&h=300&fit=crop' },
-        { word: 'dinosaurio', image: 'https://static.vecteezy.com/system/resources/previews/009/877/405/original/cute-little-triceratops-dinosaur-cartoon-sitting-vector.jpg?w=400&h=300&fit=crop' },
-        { word: 'montaña', image: 'https://img.freepik.com/vector-premium/dibujo-dibujos-animados-montana-cielo-azul-campo-hierba-verde_1084749-7629.jpg?w=400&h=300&fit=crop' },
+        { word: tg('mariposa'), image: 'https://static.vecteezy.com/system/resources/previews/014/655/698/original/butterfly-icon-cartoon-style-vector.jpg?w=400&h=300&fit=crop' },
+        { word: tg('teléfono'), image: 'https://static.vecteezy.com/system/resources/previews/011/157/544/large_2x/mobile-phone-cartoon-icon-illustration-technology-object-icon-concept-isolated-premium-flat-cartoon-style-vector.jpg?w=400&h=300&fit=crop' },
+        { word: tg('bicicleta'), image: 'https://static.vecteezy.com/system/resources/previews/005/239/753/non_2x/bicycle-cartoon-illustration-free-vector.jpg?w=400&h=300&fit=crop' },
+        { word: tg('dinosaurio'), image: 'https://static.vecteezy.com/system/resources/previews/009/877/405/original/cute-little-triceratops-dinosaur-cartoon-sitting-vector.jpg?w=400&h=300&fit=crop' },
+        { word: tg('montaña'), image: 'https://img.freepik.com/vector-premium/dibujo-dibujos-animados-montana-cielo-azul-campo-hierba-verde_1084749-7629.jpg?w=400&h=300&fit=crop' },
     ],
     hard: [
-        { word: 'extraordinario', image: 'https://img.freepik.com/vector-premium/persona-emocionada-asombrada-que-reacciona-algo-inesperado-concepto-efecto-guau-mujer-feliz-mirando-algo-increible-alegria-extasis-reaccion-ilustracion-vectorial-plana-aislada-sobre-fondo-blanco_198278-15226.jpg?w=400&h=300&fit=crop' },
-        { word: 'hipopótamo', image: 'https://static.vecteezy.com/system/resources/previews/005/561/609/non_2x/hippo-cartoon-colored-illustration-free-vector.jpg?w=400&h=300&fit=crop' },
-        { word: 'investigador', image: 'https://img.freepik.com/vector-premium/lindo-chico-detective-lupa-ilustraciones-vectoriales-dibujos-animados_1057-118480.jpg?w=400&h=300&fit=crop' },
-        { word: 'arquitectura', image: 'https://img.freepik.com/vector-premium/arquitecto-trabajando-construccion_75487-439.jpg?w=400&h=300&fit=crop' },
-        { word: 'biblioteca', image: 'https://img.freepik.com/vector-premium/ninos-dibujos-animados-que-estudian-biblioteca_29190-5145.jpg?w=400&h=300&fit=crop' },
+        { word: tg('extraordinario'), image: 'https://img.freepik.com/vector-premium/persona-emocionada-asombrada-que-reacciona-algo-inesperado-concepto-efecto-guau-mujer-feliz-mirando-algo-increible-alegria-extasis-reaccion-ilustracion-vectorial-plana-aislada-sobre-fondo-blanco_198278-15226.jpg?w=400&h=300&fit=crop' },
+        { word: tg('hipopótamo'), image: 'https://static.vecteezy.com/system/resources/previews/005/561/609/non_2x/hippo-cartoon-colored-illustration-free-vector.jpg?w=400&h=300&fit=crop' },
+        { word: tg('investigador'), image: 'https://img.freepik.com/vector-premium/lindo-chico-detective-lupa-ilustraciones-vectoriales-dibujos-animados_1057-118480.jpg?w=400&h=300&fit=crop' },
+        { word: tg('arquitectura'), image: 'https://img.freepik.com/vector-premium/arquitecto-trabajando-construccion_75487-439.jpg?w=400&h=300&fit=crop' },
+        { word: tg('biblioteca'), image: 'https://img.freepik.com/vector-premium/ninos-dibujos-animados-que-estudian-biblioteca_29190-5145.jpg?w=400&h=300&fit=crop' },
     ]
 };
 

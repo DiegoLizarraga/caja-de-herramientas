@@ -13,10 +13,11 @@ class AudioManager {
         // Cancelar cualquier audio en progreso
         this.synth.cancel();
 
-        const utterance = new SpeechSynthesisUtterance(text);
+        const utterance = new SpeechSynthesisUtterance(typeof tg === 'function' ? tg(text) : text);
         utterance.rate = rate;
         utterance.pitch = pitch;
-        utterance.lang = 'es-ES';
+        const currentLang = localStorage.getItem('blueminds_lang') || 'es';
+    utterance.lang = currentLang === 'en' ? 'en-US' : currentLang === 'pt' ? 'pt-BR' : 'es-MX';
 
         utterance.onstart = () => {
             this.isSpeaking = true;
@@ -77,7 +78,7 @@ class AISyntaxGame {
         // Base de oraciones con descripciones de audio
         this.sentences = [
             { 
-                words: ["El", "gato", "duerme"], 
+                words: [tg("El"), tg("gato"), tg("duerme")],
                 correct: ["El", "gato", "duerme"], 
                 complexity: 'easy',
                 type: 'SVO',
@@ -86,7 +87,7 @@ class AISyntaxGame {
                 audioInstruction: "Forma la oración correcta haciendo clic en las palabras en el orden adecuado"
             },
             { 
-                words: ["perro", "El", "corre"], 
+                words: [tg("perro"), tg("El"), tg("corre")],
                 correct: ["El", "perro", "corre"], 
                 complexity: 'easy',
                 type: 'SV',
@@ -95,7 +96,7 @@ class AISyntaxGame {
                 audioInstruction: "Haz clic en las palabras para formar: El perro corre"
             },
             { 
-                words: ["vuela", "pájaro", "El"], 
+                words: [tg("vuela"), tg("pájaro"), tg("El")],
                 correct: ["El", "pájaro", "vuela"], 
                 complexity: 'easy',
                 type: 'SV',
@@ -105,7 +106,7 @@ class AISyntaxGame {
             },
             
             { 
-                words: ["niña", "come", "La", "manzana"], 
+                words: [tg("niña"), tg("come"), tg("La"), tg("manzana")],
                 correct: ["La", "niña", "come", "manzana"], 
                 complexity: 'medium',
                 type: 'SVO',
@@ -114,7 +115,7 @@ class AISyntaxGame {
                 audioInstruction: "Forma la oración con cuatro palabras sobre la niña"
             },
             { 
-                words: ["bonita", "Una", "casa", "es"], 
+                words: [tg("bonita"), tg("Una"), tg("casa"), tg("es")],
                 correct: ["Una", "casa", "es", "bonita"], 
                 complexity: 'medium',
                 type: 'SVC',
@@ -124,7 +125,7 @@ class AISyntaxGame {
             },
             
             { 
-                words: ["niños", "parque", "Los", "en", "juegan"], 
+                words: [tg("niños"), tg("parque"), tg("Los"), tg("en"), tg("juegan")],
                 correct: ["Los", "niños", "juegan", "en", "parque"], 
                 complexity: 'hard',
                 type: 'SVLP',

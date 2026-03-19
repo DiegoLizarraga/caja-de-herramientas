@@ -16,15 +16,15 @@ let roundStartTime = null;
 let roundTimes = [];
 
 const words = [
-    { src: "https://tse1.mm.bing.net/th/id/OIP.z589HEF6wuRZZR-B9C49RQHaFK?rs=1&pid=ImgDetMain&o=7&rm=3", name: "sol", audio: "sol", color: "primary", difficulty: 'easy' },
-    { src: "https://img.freepik.com/vector-premium/icono-luna-lindo-estilo-dibujos-animados_74102-7166.jpg?w=2000", name: "luna", audio: "luna", color: "blue", difficulty: 'easy' },
-    { src: "https://img.freepik.com/vector-premium/estrella-dibujada-mano-plana-elegante-mascota-personaje-dibujos-animados-dibujo-pegatina-icono-concepto-aislado_730620-302755.jpg", name: "estrella", audio: "estrella", color: "red", difficulty: 'medium' },
-    { src: "https://static.vecteezy.com/system/resources/previews/024/190/108/non_2x/cute-cartoon-cloud-kawaii-weather-illustrations-for-kids-free-png.png", name: "nube", audio: "nube", color: "purple", difficulty: 'easy' },
-    { src: "https://img.freepik.com/fotos-premium/estilo-ilustracion-vectorial-lluvia-dibujos-animados_750724-13162.jpg", name: "lluvia", audio: "lluvia", color: "accent", difficulty: 'hard' },
-    { src: "https://img.freepik.com/vector-premium/ilustracion-vectorial-dibujos-animados-dinosaurio-lindo_104589-158.jpg", name: "dinosaurio", audio: "dinosaurio", color: "green", difficulty: 'hard' },
-    { src: "https://img.freepik.com/vector-premium/dibujos-animados-mariposa-linda-aislado-blanco_29190-4712.jpg", name: "mariposa", audio: "mariposa", color: "pink", difficulty: 'hard' },
-    { src: "https://img.freepik.com/vector-premium/computadora-portatil-dibujos-animados-aislada-blanco_29190-4354.jpg", name: "computadora", audio: "computadora", color: "blue", difficulty: 'hard' },
-    { src: "https://static.vecteezy.com/system/resources/previews/008/132/083/non_2x/green-tree-cartoon-isolated-on-white-background-illustration-of-green-tree-cartoon-free-vector.jpg", name: "árbol", audio: "arbol", color: "primary", difficulty: 'medium' },
+    { src: "https://tse1.mm.bing.net/th/id/OIP.z589HEF6wuRZZR-B9C49RQHaFK?rs=1&pid=ImgDetMain&o=7&rm=3", name: tg("sol"), audio: "sol", color: "primary", difficulty: 'easy' },
+    { src: "https://img.freepik.com/vector-premium/icono-luna-lindo-estilo-dibujos-animados_74102-7166.jpg?w=2000", name: tg("luna"), audio: "luna", color: "blue", difficulty: 'easy' },
+    { src: "https://img.freepik.com/vector-premium/estrella-dibujada-mano-plana-elegante-mascota-personaje-dibujos-animados-dibujo-pegatina-icono-concepto-aislado_730620-302755.jpg", name: tg("estrella"), audio: "estrella", color: "red", difficulty: 'medium' },
+    { src: "https://static.vecteezy.com/system/resources/previews/024/190/108/non_2x/cute-cartoon-cloud-kawaii-weather-illustrations-for-kids-free-png.png", name: tg("nube"), audio: "nube", color: "purple", difficulty: 'easy' },
+    { src: "https://img.freepik.com/fotos-premium/estilo-ilustracion-vectorial-lluvia-dibujos-animados_750724-13162.jpg", name: tg("lluvia"), audio: "lluvia", color: "accent", difficulty: 'hard' },
+    { src: "https://img.freepik.com/vector-premium/ilustracion-vectorial-dibujos-animados-dinosaurio-lindo_104589-158.jpg", name: tg("dinosaurio"), audio: "dinosaurio", color: "green", difficulty: 'hard' },
+    { src: "https://img.freepik.com/vector-premium/dibujos-animados-mariposa-linda-aislado-blanco_29190-4712.jpg", name: tg("mariposa"), audio: "mariposa", color: "pink", difficulty: 'hard' },
+    { src: "https://img.freepik.com/vector-premium/computadora-portatil-dibujos-animados-aislada-blanco_29190-4354.jpg", name: tg("computadora"), audio: "computadora", color: "blue", difficulty: 'hard' },
+    { src: "https://static.vecteezy.com/system/resources/previews/008/132/083/non_2x/green-tree-cartoon-isolated-on-white-background-illustration-of-green-tree-cartoon-free-vector.jpg", name: tg("árbol"), audio: "arbol", color: "primary", difficulty: 'medium' },
 ];
 
 const totalRounds = 5;
@@ -35,6 +35,65 @@ let recognition;
 // ========================
 
 document.addEventListener('DOMContentLoaded', function() {
+
+  // --- INYECCIÓN DE TRADUCCIÓN AUTOMÁTICA ---
+  if (typeof tg === 'function') {
+    const translateArray = (arr, keys) => {
+      if (!arr || !Array.isArray(arr)) return;
+      arr.forEach(item => {
+        if (!item) return;
+        keys.forEach(key => {
+          if (typeof item[key] === 'string') {
+            item[key] = tg(item[key]);
+          } else if (Array.isArray(item[key])) {
+             // For syllables and such, though typically syllables are specific.
+             // We'll translate if they happen to be translated, else keep original
+          }
+        });
+
+        // Handle nested options or items
+        if (Array.isArray(item.options)) {
+          item.options = item.options.map(opt => typeof opt === 'string' ? tg(opt) : opt);
+          item.options.forEach(opt => {
+             if (opt && typeof opt === 'object') {
+                 if (opt.word) opt.word = tg(opt.word);
+                 if (opt.text) opt.text = tg(opt.text);
+             }
+          });
+        }
+        if (Array.isArray(item.items)) {
+          translateArray(item.items, keys);
+        }
+        if (Array.isArray(item.correctOrder)) {
+            item.correctOrder = item.correctOrder.map(opt => typeof opt === 'string' ? tg(opt) : opt);
+        }
+        if (Array.isArray(item.sequence)) {
+            item.sequence = item.sequence.map(opt => typeof opt === 'string' ? tg(opt) : opt);
+        }
+        if (Array.isArray(item.words)) {
+            item.words = item.words.map(opt => typeof opt === 'string' ? tg(opt) : opt);
+        }
+      });
+    };
+
+    // Arrays comunes en los juegos
+    if (typeof words !== 'undefined') translateArray(words, ['name', 'word', 'text']);
+    if (typeof movements !== 'undefined') translateArray(movements, ['name', 'instruction']);
+    if (typeof emotions !== 'undefined') translateArray(emotions, ['name']);
+    if (typeof scenes !== 'undefined') translateArray(scenes, ['text']);
+    if (typeof sentences !== 'undefined') translateArray(sentences, ['sentence', 'missing', 'fullText']);
+    if (typeof exercises !== 'undefined') translateArray(exercises, ['sentence', 'missing', 'word']);
+    if (typeof levels !== 'undefined') translateArray(levels, ['text', 'word', 'sentence']);
+    if (typeof levelsData !== 'undefined') translateArray(levelsData, ['text', 'word', 'sentence']);
+    if (typeof stories !== 'undefined') translateArray(stories, ['text']);
+    if (typeof professions !== 'undefined') translateArray(professions, ['name']);
+    if (typeof scenesData !== 'undefined') translateArray(scenesData, ['text']);
+    if (typeof patterns !== 'undefined') translateArray(patterns, ['text']);
+    if (typeof groups !== 'undefined') translateArray(groups, ['name', 'text']);
+    if (typeof associations !== 'undefined') translateArray(associations, ['text', 'word']);
+  }
+  // ------------------------------------------
+
   loadHighScore();
   setupSpeechRecognition();
   setupEventListeners();
@@ -51,7 +110,8 @@ function setupSpeechRecognition() {
     
     if (SpeechRecognition) {
         recognition = new SpeechRecognition();
-        recognition.lang = 'es-ES';
+        const currentLangRecog = localStorage.getItem('blueminds_lang') || 'es';
+    recognition.lang = currentLangRecog === 'en' ? 'en-US' : currentLangRecog === 'pt' ? 'pt-BR' : 'es-MX';
         recognition.continuous = false;
         recognition.interimResults = false;
 
@@ -211,7 +271,7 @@ function updateUI() {
     } else if (difficulty === 'hard') {
         diffText = 'Difícil';
     }
-    badgeElement.textContent = 'Dificultad: ' + diffText;
+    badgeElement.textContent = tg('Dificultad: ') + tg(diffText);
     badgeElement.className = 'difficulty-badge ' + difficulty;
     
     // Limpiar medidor de similitud
@@ -222,7 +282,7 @@ function updateUI() {
     
     // Resetear botón de grabación
     const recordButton = document.getElementById('record-button');
-    recordButton.innerHTML = '<i class="fas fa-microphone"></i> Grabar mi voz';
+    recordButton.innerHTML = '<i class="fas fa-microphone"></i> ' + tg('Grabar mi voz');
     recordButton.className = 'audio-button red';
     
     // Limpiar feedback
@@ -242,21 +302,22 @@ function playWord() {
     playButton.disabled = true;
     
     // Crear utterance para síntesis de voz
-    const utterance = new SpeechSynthesisUtterance(currentWord.name);
-    utterance.lang = 'es-ES';
+    const utterance = new SpeechSynthesisUtterance(typeof tg === 'function' ? tg(currentWord.name) : currentWord.name);
+    const currentLang = localStorage.getItem('blueminds_lang') || 'es';
+    utterance.lang = currentLang === 'en' ? 'en-US' : currentLang === 'pt' ? 'pt-BR' : 'es-MX';
     utterance.rate = difficulty === 'hard' ? 0.6 : 0.8;
     utterance.pitch = 1;
     utterance.volume = 1;
     
     utterance.onend = function() {
-        playButton.innerHTML = '<i class="fas fa-volume-up"></i> Escuchar palabra';
+        playButton.innerHTML = '<i class="fas fa-volume-up"></i> ' + tg('Escuchar palabra');
         playButton.disabled = false;
         hasPlayed = true;
     };
     
     utterance.onerror = function(event) {
         console.error('Error en síntesis de voz:', event.error);
-        playButton.innerHTML = '<i class="fas fa-volume-up"></i> Escuchar palabra';
+        playButton.innerHTML = '<i class="fas fa-volume-up"></i> ' + tg('Escuchar palabra');
         playButton.disabled = false;
         hasPlayed = true;
     };

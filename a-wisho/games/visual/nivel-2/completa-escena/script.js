@@ -28,118 +28,118 @@ class AISceneGame {
             easy: [
                 {
                     sentence: "El pájaro está en el",
-                    options: ["🍅", "🪺", "🌊"],
+                    options: [tg("🍅"), tg("🪺"), tg("🌊")],
                     correct: "🪺",
                     correctText: "nido",
-                    category: "animales",
+                    category: tg("animales"),
                     complexity: 1
                 },
                 {
                     sentence: "El pez vive en el",
-                    options: ["🌳", "🌊", "🏠"],
+                    options: [tg("🌳"), tg("🌊"), tg("🏠")],
                     correct: "🌊",
                     correctText: "agua",
-                    category: "animales",
+                    category: tg("animales"),
                     complexity: 1
                 },
                 {
                     sentence: "El gato come",
-                    options: ["🐟", "🌽", "🥕"],
+                    options: [tg("🐟"), tg("🌽"), tg("🥕")],
                     correct: "🐟",
                     correctText: "pescado",
-                    category: "animales",
+                    category: tg("animales"),
                     complexity: 1
                 },
                 {
                     sentence: "La flor está en el",
-                    options: ["🌳", "🌐", "💻"],
+                    options: [tg("🌳"), tg("🌐"), tg("💻")],
                     correct: "🌳",
                     correctText: "jardín",
-                    category: "naturaleza",
+                    category: tg("naturaleza"),
                     complexity: 1
                 },
                 {
                     sentence: "El niño juega con la",
-                    options: ["🦃", "⚽", "🪱"],
+                    options: [tg("🦃"), tg("⚽"), tg("🪱")],
                     correct: "⚽",
                     correctText: "pelota",
-                    category: "juegos",
+                    category: tg("juegos"),
                     complexity: 1
                 }
             ],
             medium: [
                 {
                     sentence: "El profesor enseña en la",
-                    options: ["🛒", "🏫", "🪸"],
+                    options: [tg("🛒"), tg("🏫"), tg("🪸")],
                     correct: "🏫",
                     correctText: "escuela",
-                    category: "lugares",
+                    category: tg("lugares"),
                     complexity: 2
                 },
                 {
                     sentence: "El médico trabaja en el",
-                    options: ["🪸", "🏥", "🪄"],
+                    options: [tg("🪸"), tg("🏥"), tg("🪄")],
                     correct: "🏥",
                     correctText: "hospital",
-                    category: "lugares",
+                    category: tg("lugares"),
                     complexity: 2
                 },
                 {
                     sentence: "La abeja vuela entre las",
-                    options: ["😭", "🌻", "🏢"],
+                    options: [tg("😭"), tg("🌻"), tg("🏢")],
                     correct: "🌻",
                     correctText: "flores",
-                    category: "naturaleza",
+                    category: tg("naturaleza"),
                     complexity: 2
                 },
                 {
                     sentence: "La mariposa necesita",
-                    options: ["👻", "🔥", "🌻"],
+                    options: [tg("👻"), tg("🔥"), tg("🌻")],
                     correct: "🌻",
                     correctText: "flores",
-                    category: "naturaleza",
+                    category: tg("naturaleza"),
                     complexity: 2
                 },
                 {
                     sentence: "El perro juega con la",
-                    options: ["🛹", "🦺", "🥎"],
+                    options: [tg("🛹"), tg("🦺"), tg("🥎")],
                     correct: "🥎",
                     correctText: "pelota",
-                    category: "lugares",
+                    category: tg("lugares"),
                     complexity: 2
                 }
             ],
             hard: [
                 {
                     sentence: "El pintor usa el",
-                    options: ["🎨", "👽", "⚽"],
+                    options: [tg("🎨"), tg("👽"), tg("⚽")],
                     correct: "🎨",
                     correctText: "pincel",
-                    category: "profesiones",
+                    category: tg("profesiones"),
                     complexity: 3
                 },
                 {
                     sentence: "La dentista examina los",
-                    options: ["👂", "👁️", "🦷"],
+                    options: [tg("👂"), tg("👁️"), tg("🦷")],
                     correct: "🦷",
                     correctText: "dientes",
-                    category: "profesiones",
+                    category: tg("profesiones"),
                     complexity: 3
                 },
                 {
                     sentence: "El cocinero prepara la",
-                    options: ["🍕", "📚", "🚗"],
+                    options: [tg("🍕"), tg("📚"), tg("🚗")],
                     correct: "🍕",
                     correctText: "comida",
-                    category: "profesiones",
+                    category: tg("profesiones"),
                     complexity: 3
                 },
                 {
                     sentence: "La granjero cultiva en el",
-                    options: ["🏙️", "🌾", "🏢"],
+                    options: [tg("🏙️"), tg("🌾"), tg("🏢")],
                     correct: "🌾",
                     correctText: "campo",
-                    category: "lugares",
+                    category: tg("lugares"),
                     complexity: 3
                 }
             ]

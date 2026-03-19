@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" id="html-tag">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,12 +13,12 @@
         <header class="game-header">
             <div class="back-button">
                 <button onclick="goToMainPage()">
-                    <i class="fas fa-arrow-left"></i> Volver
+                    <i class="fas fa-arrow-left"></i> <span data-i18n="game_ui.back">Volver</span>
                 </button>
             </div>
-            <h1 class="game-title">El Ritmo de las Sílabas</h1>
-            <div class="game-info">
-                <span id="score-display">0 puntos</span>
+            <h1 class="game-title" data-i18n="game.ritmo_silabas">El Ritmo de las Sílabas</h1>
+            <div class="game-info" style="display:flex;align-items:center;gap:15px;"><div id="lang-picker-anchor"></div>
+                <span id="score-display" data-i18n="game_ui.zero_points">0 puntos</span>
             </div>
         </header>
 
@@ -26,8 +26,8 @@
             <!-- Progress -->
             <div class="progress-card">
                 <div class="progress-header">
-                    <span>Ronda <span id="current-round">1</span> de <span id="total-rounds">5</span></span>
-                    <span id="score">0 puntos</span>
+                    <span data-i18n="game_ui.round_word">Ronda</span> <span id="current-round">1</span> <span data-i18n="game_ui.of">de</span> <span id="total-rounds">5</span>
+                    <span id="score" data-i18n="game_ui.zero_points">0 puntos</span>
                 </div>
                 <div class="progress-bar">
                     <div id="progress-fill" class="progress-fill"></div>
@@ -36,7 +36,7 @@
 
             <!-- Main Game Card -->
             <div class="rhythm-card">
-                <h2>Sigue el Ritmo de las Sílabas 🎵</h2>
+                <h2 data-i18n="game_ui.follow_rhythm">Sigue el Ritmo de las Sílabas 🎵</h2>
 
                 <!-- Difficulty Level -->
                 <div class="difficulty-level">
@@ -115,12 +115,14 @@
             <!-- Instructions -->
             <div class="instructions-card">
                 <p>
-                    💡 <span class="font-bold">Cómo jugar:</span> Escucha la palabra dividida en sílabas. Sigue el ritmo haciendo click, y luego repite la palabra completa.
-                </p>
+                    💡 <span class="font-bold">Cómo jugar:</span> <span data-i18n="game_ui.tip_16">Escucha la palabra dividida en sílabas. Sigue el ritmo haciendo click, y luego repite la palabra completa.
+                </span></p>
             </div>
         </main>
     </div>
 
     <script src="script.js"></script>
+    <script src="../../../../js/game-translations.js"></script>
+    <script src="../../../../js/i18n.js"></script>
 </body>
 </html>

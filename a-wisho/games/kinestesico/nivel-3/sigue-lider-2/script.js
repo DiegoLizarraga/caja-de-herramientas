@@ -9,22 +9,22 @@ let movementDetected = 0;
 
 const movements = [
     { 
-        name: "Levanta los brazos", 
+        name: tg("Levanta los brazos"),
         instruction: "levanta los brazos hacia arriba",
         animation: "raise-arms",
     },
     { 
-        name: "Baja los brazos", 
+        name: tg("Baja los brazos"),
         instruction: "baja los brazos hacia abajo",
         animation: "lower-arms",
     },
     { 
-        name: "Salta", 
+        name: tg("Salta"),
         instruction: "salta hacia arriba",
         animation: "jump",
     },
     { 
-        name: "Celebra", 
+        name: tg("Celebra"),
         instruction: "celebra con alegría",
         animation: "celebrate",
     },
@@ -133,8 +133,9 @@ function showMovement() {
     avatar.classList.add(currentMovement.animation);
     
     // Reproducir instrucción de audio
-    const utterance = new SpeechSynthesisUtterance(currentMovement.instruction);
-    utterance.lang = 'es-ES';
+    const utterance = new SpeechSynthesisUtterance(typeof tg === 'function' ? tg(currentMovement.instruction) : currentMovement.instruction);
+    const currentLang = localStorage.getItem('blueminds_lang') || 'es';
+    utterance.lang = currentLang === 'en' ? 'en-US' : currentLang === 'pt' ? 'pt-BR' : 'es-MX';
     utterance.rate = 0.9;
     speechSynthesis.speak(utterance);
     

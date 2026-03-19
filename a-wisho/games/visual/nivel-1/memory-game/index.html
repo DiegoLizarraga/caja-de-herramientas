@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" id="html-tag">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,12 +13,12 @@
         <header class="game-header">
             <div class="back-button">
                 <button onclick="goToMainPage()">
-                    <i class="fas fa-arrow-left"></i> Volver
+                    <i class="fas fa-arrow-left"></i> <span data-i18n="game_ui.back">Volver</span>
                 </button>
             </div>
             <h1 class="game-title">Juego de Memoria IA</h1>
             <div class="ai-status">
-                <span id="score-display">0 puntos</span>
+                <span id="score-display" data-i18n="game_ui.zero_points">0 puntos</span>
                 <div class="ai-indicator" title="IA adaptativa activa">
                     <i class="fas fa-robot"></i>
                     <span>IA</span>
@@ -29,8 +29,8 @@
         <main class="game-content">
             <div class="progress-card">
                 <div class="progress-header">
-                    <span>Nivel <span id="current-level">1</span> de <span id="max-level">5</span></span>
-                    <span id="score">0 puntos</span>
+                    <span>Nivel <span id="current-level">1</span>de <span id="max-level">5</span></span>
+                    <span id="score" data-i18n="game_ui.zero_points">0 puntos</span>
                 </div>
                 <div class="progress-bar">
                     <div id="progress-fill" class="progress-fill"></div>
@@ -90,5 +90,7 @@
 
     <script src="../../../../api.js"></script>
     <script src="script.js"></script>
+    <script src="../../../../js/game-translations.js"></script>
+    <script src="../../../../js/i18n.js"></script>
 </body>
 </html>

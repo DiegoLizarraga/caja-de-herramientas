@@ -259,9 +259,9 @@ const sentenceDatabase = {
             correctAnswer: 'pescado',
             image: 'https://img.freepik.com/vector-premium/lindo-gato-comiendo-pescado-dibujos-animados-vector-ilustracion_9845-581.jpg?w=400',
             options: [
-                { word: 'pescado', image: 'https://static.vecteezy.com/system/resources/previews/002/174/077/original/fish-cartoon-style-isolated-free-vector.jpg?w=300' },
-                { word: 'martillo', image: 'https://img.freepik.com/vector-gratis/diseno-etiqueta-martillo-garra-aislado_1308-61820.jpg?w=300' },
-                { word: 'pelota', image: 'https://wallpaperaccess.com/full/6273127.png?w=300' }
+                { word: tg('pescado'), image: 'https://static.vecteezy.com/system/resources/previews/002/174/077/original/fish-cartoon-style-isolated-free-vector.jpg?w=300' },
+                { word: tg('martillo'), image: 'https://img.freepik.com/vector-gratis/diseno-etiqueta-martillo-garra-aislado_1308-61820.jpg?w=300' },
+                { word: tg('pelota'), image: 'https://wallpaperaccess.com/full/6273127.png?w=300' }
             ]
         },
         {
@@ -271,9 +271,9 @@ const sentenceDatabase = {
             correctAnswer: 'agua',
             image: 'https://img.freepik.com/vector-premium/ilustracion-vectorial-nino-bebiendo-agua-estilo-diseno-plano_844724-4072.jpg?w=400',
             options: [
-                { word: 'agua', image: 'https://thumbs.dreamstime.com/z/glass-water-cartoon-vector-illustration-144223612.jpg?w=300' },
-                { word: 'zumo', image: 'https://thumbs.dreamstime.com/z/estilo-de-dibujos-animados-iconos-zumo-naranja-tropical-icono-del-jugo-caricatura-vector-para-el-dise%C3%B1o-web-aislado-en-fondo-176870364.jpg?w=300' },
-                { word: 'leche', image: 'https://clipground.com/images/milk-glass-clipart-4.jpg?w=300' }
+                { word: tg('agua'), image: 'https://thumbs.dreamstime.com/z/glass-water-cartoon-vector-illustration-144223612.jpg?w=300' },
+                { word: tg('zumo'), image: 'https://thumbs.dreamstime.com/z/estilo-de-dibujos-animados-iconos-zumo-naranja-tropical-icono-del-jugo-caricatura-vector-para-el-dise%C3%B1o-web-aislado-en-fondo-176870364.jpg?w=300' },
+                { word: tg('leche'), image: 'https://clipground.com/images/milk-glass-clipart-4.jpg?w=300' }
             ]
         },
         {
@@ -283,9 +283,9 @@ const sentenceDatabase = {
             correctAnswer: 'bella',
             image: 'https://i.pinimg.com/736x/30/9f/75/309f75498f8b6e50bea5904d16493593--cartoon-flowers-jigsaw-puzzles.jpg?w=400',
             options: [
-                { word: 'bella', image: 'https://img.freepik.com/vector-premium/dibujo-dibujos-animados-flor-rosa-centro-amarillo_1167562-3170.jpg?w=300' },
-                { word: 'metalica', image: 'https://cdn.pixabay.com/photo/2012/04/18/12/17/metal-36867_1280.png?w=300' },
-                { word: 'fuego', image: 'https://static.vecteezy.com/system/resources/previews/008/063/039/non_2x/fire-cartoon-element-vector.jpg?w=300' }
+                { word: tg('bella'), image: 'https://img.freepik.com/vector-premium/dibujo-dibujos-animados-flor-rosa-centro-amarillo_1167562-3170.jpg?w=300' },
+                { word: tg('metalica'), image: 'https://cdn.pixabay.com/photo/2012/04/18/12/17/metal-36867_1280.png?w=300' },
+                { word: tg('fuego'), image: 'https://static.vecteezy.com/system/resources/previews/008/063/039/non_2x/fire-cartoon-element-vector.jpg?w=300' }
             ]
         },
         {
@@ -295,9 +295,9 @@ const sentenceDatabase = {
             correctAnswer: 'el cielo',
             image: 'https://img.freepik.com/vector-gratis/fondo-pajaros-azules-volando_23-2147739864.jpg?w=400',
             options: [
-                { word: 'el cielo', image: 'https://img.freepik.com/vector-gratis/ilustracion-diaria-nubes-cielo-cirros-dibujos-animados-cumulos-nubes-blancas-rayos-sol-ilustracion_1284-62767.jpg?size=626&ext=jpg?w=300' },
-                { word: 'el mar', image: 'https://image.freepik.com/vector-gratis/dibujos-animados-naturaleza-paisaje-mar_107173-7110.jpg?w=300' },
-                { word: 'la cueva', image: 'https://static.vecteezy.com/system/resources/previews/026/717/887/original/cave-cartoon-illustration-vector.jpg?w=300' }
+                { word: tg('el cielo'), image: 'https://img.freepik.com/vector-gratis/ilustracion-diaria-nubes-cielo-cirros-dibujos-animados-cumulos-nubes-blancas-rayos-sol-ilustracion_1284-62767.jpg?size=626&ext=jpg?w=300' },
+                { word: tg('el mar'), image: 'https://image.freepik.com/vector-gratis/dibujos-animados-naturaleza-paisaje-mar_107173-7110.jpg?w=300' },
+                { word: tg('la cueva'), image: 'https://static.vecteezy.com/system/resources/previews/026/717/887/original/cave-cartoon-illustration-vector.jpg?w=300' }
             ]
         },
         {
@@ -307,9 +307,9 @@ const sentenceDatabase = {
             correctAnswer: 'el parque',
             image: 'https://static.vecteezy.com/system/resources/previews/001/943/139/non_2x/kids-playing-at-the-park-vector.jpg?w=400',
             options: [
-                { word: 'el parque', image: 'https://c8.alamy.com/comp/2HB036D/playground-park-design-with-games-2HB036D.jpg?w=300' },
-                { word: 'la escuela', image: 'https://static.vecteezy.com/system/resources/previews/008/734/924/large_2x/cartoon-group-of-elementary-school-kids-in-the-school-yard-vector.jpg?w=300' },
-                { word: 'la casa', image: 'https://static.vecteezy.com/system/resources/previews/025/902/050/original/house-cartoon-style-illustration-ai-generated-vector.jpg?w=300' }
+                { word: tg('el parque'), image: 'https://c8.alamy.com/comp/2HB036D/playground-park-design-with-games-2HB036D.jpg?w=300' },
+                { word: tg('la escuela'), image: 'https://static.vecteezy.com/system/resources/previews/008/734/924/large_2x/cartoon-group-of-elementary-school-kids-in-the-school-yard-vector.jpg?w=300' },
+                { word: tg('la casa'), image: 'https://static.vecteezy.com/system/resources/previews/025/902/050/original/house-cartoon-style-illustration-ai-generated-vector.jpg?w=300' }
             ]
         }
     ]
@@ -446,8 +446,9 @@ function playSentence() {
     }
     
     // Reproducir oración
-    const utterance = new SpeechSynthesisUtterance(sentenceText);
-    utterance.lang = 'es-ES';
+    const utterance = new SpeechSynthesisUtterance(typeof tg === 'function' ? tg(sentenceText) : sentenceText);
+    const currentLang = localStorage.getItem('blueminds_lang') || 'es';
+    utterance.lang = currentLang === 'en' ? 'en-US' : currentLang === 'pt' ? 'pt-BR' : 'es-MX';
     utterance.rate = speechRate;
     utterance.pitch = 1;
     
@@ -527,7 +528,7 @@ function checkAnswer() {
 }
 function playFeedbackSound(isCorrect) {
     const synth = window.speechSynthesis;
-    const utterance = new SpeechSynthesisUtterance(isCorrect ? "¡Sí!" : "¡Oh!");
+    const utterance = new SpeechSynthesisUtterance(typeof tg === 'function' ? tg(isCorrect ? "¡Sí!" : "¡Oh!") : isCorrect ? "¡Sí!" : "¡Oh!");
     utterance.volume = 0.5;
     utterance.pitch = isCorrect ? 1.5 : 0.5;
     utterance.rate = 2;

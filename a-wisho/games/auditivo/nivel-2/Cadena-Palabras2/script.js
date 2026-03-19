@@ -490,8 +490,9 @@ function playSequenceAudio(words, index, speechRate) {
         return;
     }
 
-    const utterance = new SpeechSynthesisUtterance(words[index]);
-    utterance.lang = 'es-ES';
+    const utterance = new SpeechSynthesisUtterance(typeof tg === 'function' ? tg(words[index]) : words[index]);
+    const currentLang = localStorage.getItem('blueminds_lang') || 'es';
+    utterance.lang = currentLang === 'en' ? 'en-US' : currentLang === 'pt' ? 'pt-BR' : 'es-MX';
     utterance.rate = speechRate;
     utterance.pitch = 1;
 

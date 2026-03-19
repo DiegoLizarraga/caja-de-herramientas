@@ -23,21 +23,21 @@ class AIClassificationGame {
         this.allPuzzles = {
             easy: [
                 {
-                    name: "animales_comida_ropa",
+                    name: tg("animales_comida_ropa"),
                     categories: {
-                        animals: { name: '🐾 Animales', color: '#0066CC', items: ['🐱', '🐕', '🐻'] },
-                        food: { name: '🍎 Comida', color: '#00B4D8', items: ['🍕', '🍎', '🥕'] },
-                        clothes: { name: '👕 Ropa', color: '#0099FF', items: ['👔', '👗', '👟'] }
+                        animals: { name: tg('🐾 Animales'), color: '#0066CC', items: ['🐱', '🐕', '🐻'] },
+                        food: { name: tg('🍎 Comida'), color: '#00B4D8', items: ['🍕', '🍎', '🥕'] },
+                        clothes: { name: tg('👕 Ropa'), color: '#0099FF', items: ['👔', '👗', '👟'] }
                     },
                     distractors: ['🌟', '⭐', '☀️'],
                     interest: "numbers"
                 },
                 {
-                    name: "mascotas_frutas_zapatos",
+                    name: tg("mascotas_frutas_zapatos"),
                     categories: {
-                        animals: { name: '🐾 Mascotas', color: '#0066CC', items: ['🐶', '🐱', '🐰'] },
-                        food: { name: '🍎 Frutas', color: '#00B4D8', items: ['🍌', '🍊', '🍇'] },
-                        clothes: { name: '👠 Zapatos', color: '#0099FF', items: ['👞', '👟', '🩴'] }
+                        animals: { name: tg('🐾 Mascotas'), color: '#0066CC', items: ['🐶', '🐱', '🐰'] },
+                        food: { name: tg('🍎 Frutas'), color: '#00B4D8', items: ['🍌', '🍊', '🍇'] },
+                        clothes: { name: tg('👠 Zapatos'), color: '#0099FF', items: ['👞', '👟', '🩴'] }
                     },
                     distractors: ['🎨', '🎭', '🎪'],
                     interest: "numbers"
@@ -45,21 +45,21 @@ class AIClassificationGame {
             ],
             medium: [
                 {
-                    name: "animales_comida_accesorios",
+                    name: tg("animales_comida_accesorios"),
                     categories: {
-                        animals: { name: '🐾 Animales', color: '#0066CC', items: ['🦁', '🐘', '🦒'] },
-                        food: { name: '🍔 Comida', color: '#00B4D8', items: ['🍔', '🌭', '🍟'] },
-                        clothes: { name: '⌚ Accesorios', color: '#0099FF', items: ['👓', '⌚', '👜'] }
+                        animals: { name: tg('🐾 Animales'), color: '#0066CC', items: ['🦁', '🐘', '🦒'] },
+                        food: { name: tg('🍔 Comida'), color: '#00B4D8', items: ['🍔', '🌭', '🍟'] },
+                        clothes: { name: tg('⌚ Accesorios'), color: '#0099FF', items: ['👓', '⌚', '👜'] }
                     },
                     distractors: ['🚗', '✈️', '🚢'],
                     interest: "general"
                 },
                 {
-                    name: "aves_verduras_prendas",
+                    name: tg("aves_verduras_prendas"),
                     categories: {
-                        animals: { name: '🦅 Aves', color: '#0066CC', items: ['🦅', '🦆', '🦉'] },
-                        food: { name: '🥬 Verduras', color: '#00B4D8', items: ['🥬', '🌽', '🥒'] },
-                        clothes: { name: '🧥 Prendas', color: '#0099FF', items: ['🧥', '👖', '🧢'] }
+                        animals: { name: tg('🦅 Aves'), color: '#0066CC', items: ['🦅', '🦆', '🦉'] },
+                        food: { name: tg('🥬 Verduras'), color: '#00B4D8', items: ['🥬', '🌽', '🥒'] },
+                        clothes: { name: tg('🧥 Prendas'), color: '#0099FF', items: ['🧥', '👖', '🧢'] }
                     },
                     distractors: ['🎸', '🎹', '🎺'],
                     interest: "general"
@@ -67,21 +67,21 @@ class AIClassificationGame {
             ],
             hard: [
                 {
-                    name: "animales_marinos_postre_ropa_formal",
+                    name: tg("animales_marinos_postre_ropa_formal"),
                     categories: {
-                        animals: { name: '🐠 Marinos', color: '#0066CC', items: ['🐠', '🐙', '🦈'] },
-                        food: { name: '🍰 Postres', color: '#00B4D8', items: ['🍰', '🍪', '🍩'] },
-                        clothes: { name: '🤵 Formal', color: '#0099FF', items: ['🤵', '👰', '🎩'] }
+                        animals: { name: tg('🐠 Marinos'), color: '#0066CC', items: ['🐠', '🐙', '🦈'] },
+                        food: { name: tg('🍰 Postres'), color: '#00B4D8', items: ['🍰', '🍪', '🍩'] },
+                        clothes: { name: tg('🤵 Formal'), color: '#0099FF', items: ['🤵', '👰', '🎩'] }
                     },
                     distractors: ['💎', '👑', '🔱'],
                     interest: "sophisticated"
                 },
                 {
-                    name: "insectos_bebidas_deportes",
+                    name: tg("insectos_bebidas_deportes"),
                     categories: {
-                        animals: { name: '🦋 Insectos', color: '#0066CC', items: ['🦋', '🐛', '🐝'] },
-                        food: { name: '🥤 Bebidas', color: '#00B4D8', items: ['🥤', '🍷', '☕'] },
-                        clothes: { name: '⚽ Deportes', color: '#0099FF', items: ['⚽', '🏀', '🎾'] }
+                        animals: { name: tg('🦋 Insectos'), color: '#0066CC', items: ['🦋', '🐛', '🐝'] },
+                        food: { name: tg('🥤 Bebidas'), color: '#00B4D8', items: ['🥤', '🍷', '☕'] },
+                        clothes: { name: tg('⚽ Deportes'), color: '#0099FF', items: ['⚽', '🏀', '🎾'] }
                     },
                     distractors: ['🌴', '🌲', '🌳'],
                     interest: "sports"

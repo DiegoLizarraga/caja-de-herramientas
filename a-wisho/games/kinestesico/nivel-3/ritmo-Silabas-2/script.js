@@ -8,12 +8,12 @@ let tapCount = 0;
 let expectedTaps = 0;
 
 const words = [
-    { word: "casa", syllables: ["CA", "SA"] },
-    { word: "mesa", syllables: ["ME", "SA"] },
-    { word: "mano", syllables: ["MA", "NO"] },
-    { word: "libro", syllables: ["LI", "BRO"] },
-    { word: "gato", syllables: ["GA", "TO"] },
-    { word: "sol", syllables: ["SOL"] },
+    { word: tg("casa"), syllables: ["CA", "SA"] },
+    { word: tg("mesa"), syllables: ["ME", "SA"] },
+    { word: tg("mano"), syllables: ["MA", "NO"] },
+    { word: tg("libro"), syllables: ["LI", "BRO"] },
+    { word: tg("gato"), syllables: ["GA", "TO"] },
+    { word: tg("sol"), syllables: ["SOL"] },
 ];
 
 const totalRounds = 3;
@@ -165,8 +165,9 @@ function highlightSyllable(index, duration) {
 }
 
 function speakSyllable(text) {
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'es-ES';
+    const utterance = new SpeechSynthesisUtterance(typeof tg === 'function' ? tg(text) : text);
+    const currentLang = localStorage.getItem('blueminds_lang') || 'es';
+    utterance.lang = currentLang === 'en' ? 'en-US' : currentLang === 'pt' ? 'pt-BR' : 'es-MX';
     utterance.rate = 1;
     utterance.pitch = 1.1;
     utterance.volume = 1;
@@ -232,7 +233,8 @@ async function startSpeechRecognition() {
     }
     
     const recognition = new SpeechRecognition();
-    recognition.lang = 'es-ES';
+    const currentLangRecog = localStorage.getItem('blueminds_lang') || 'es';
+    recognition.lang = currentLangRecog === 'en' ? 'en-US' : currentLangRecog === 'pt' ? 'pt-BR' : 'es-MX';
     recognition.continuous = false;
     recognition.interimResults = false;
     

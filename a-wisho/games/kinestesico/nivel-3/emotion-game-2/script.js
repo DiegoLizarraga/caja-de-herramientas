@@ -8,9 +8,9 @@ let cameraActive = false;
 let emotionDetected = '';
 
 const emotions = [
-    { name: "Feliz", color: "primary", gifUrl: "https://i.pinimg.com/originals/20/57/74/2057740a1b96ddb0b0a306b20cf4d666.gif" },
-    { name: "Triste", color: "blue", gifUrl: "https://cdnl.iconscout.com/lottie/premium/thumb/nina-llorando-a-fuerza-5105643-4277861.gif" },
-    { name: "Enojado", color: "red", gifUrl: "https://media.tenor.com/WYkqpAQVImkAAAAM/euphoria-boy.gif" },
+    { name: tg("Feliz"), color: "primary", gifUrl: "https://i.pinimg.com/originals/20/57/74/2057740a1b96ddb0b0a306b20cf4d666.gif" },
+    { name: tg("Triste"), color: "blue", gifUrl: "https://cdnl.iconscout.com/lottie/premium/thumb/nina-llorando-a-fuerza-5105643-4277861.gif" },
+    { name: tg("Enojado"), color: "red", gifUrl: "https://media.tenor.com/WYkqpAQVImkAAAAM/euphoria-boy.gif" },
 ];
 
 const totalRounds = 3;

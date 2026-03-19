@@ -15,7 +15,7 @@ let movementAnalysisData = {
 
 const movements = [
     { 
-        name: "Levanta los brazos", 
+        name: tg("Levanta los brazos"),
         instruction: "levanta los brazos hacia arriba",
         animation: "raise-arms",
         color: "primary",
@@ -27,7 +27,7 @@ const movements = [
         }
     },
     { 
-        name: "Baja los brazos", 
+        name: tg("Baja los brazos"),
         instruction: "baja los brazos hacia abajo",
         animation: "lower-arms",
         color: "blue",
@@ -39,7 +39,7 @@ const movements = [
         }
     },
     { 
-        name: "Salta", 
+        name: tg("Salta"),
         instruction: "salta hacia arriba",
         animation: "jump",
         color: "red",
@@ -51,7 +51,7 @@ const movements = [
         }
     },
     { 
-        name: "Gira a la derecha", 
+        name: tg("Gira a la derecha"),
         instruction: "gira el cuerpo a la derecha",
         animation: "turn-right",
         color: "purple",
@@ -63,7 +63,7 @@ const movements = [
         }
     },
     { 
-        name: "Agáchate", 
+        name: tg("Agáchate"),
         instruction: "agáchate hacia abajo",
         animation: "squat",
         color: "accent",
@@ -75,7 +75,7 @@ const movements = [
         }
     },
     { 
-        name: "Saluda", 
+        name: tg("Saluda"),
         instruction: "saluda con la mano",
         animation: "wave",
         color: "primary",
@@ -226,8 +226,9 @@ function showMovement() {
     avatar.classList.add(currentMovement.animation);
     
     // Reproducir instrucción de audio
-    const utterance = new SpeechSynthesisUtterance(currentMovement.instruction);
-    utterance.lang = 'es-ES';
+    const utterance = new SpeechSynthesisUtterance(typeof tg === 'function' ? tg(currentMovement.instruction) : currentMovement.instruction);
+    const currentLang = localStorage.getItem('blueminds_lang') || 'es';
+    utterance.lang = currentLang === 'en' ? 'en-US' : currentLang === 'pt' ? 'pt-BR' : 'es-MX';
     utterance.rate = 0.9;
     speechSynthesis.speak(utterance);
     

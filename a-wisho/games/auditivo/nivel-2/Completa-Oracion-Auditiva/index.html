@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" id="html-tag">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,19 +13,19 @@
         <header class="game-header">
             <div class="back-button">
                 <button onclick="goToMainPage()">
-                    <i class="fas fa-arrow-left"></i> Volver
+                    <i class="fas fa-arrow-left"></i> <span data-i18n="game_ui.back">Volver</span>
                 </button>
             </div>
-            <h1 class="game-title">Completa la Oración</h1>
-            <div class="game-info">
-                <span id="score-display">0 puntos</span>
+            <h1 class="game-title" data-i18n="game.completa_oracion">Completa la Oración</h1>
+            <div class="game-info" style="display:flex;align-items:center;gap:15px;"><div id="lang-picker-anchor"></div>
+                <span id="score-display" data-i18n="game_ui.zero_points">0 puntos</span>
             </div>
         </header>
 
         <div class="progress-card">
             <div class="progress-header">
-                <span>Pregunta <span id="current-question">1</span> de <span id="total-questions">5</span></span>
-                <span id="score">0 puntos</span>
+                <span>Pregunta <span id="current-question">1</span>de <span id="total-questions">5</span></span>
+                <span id="score" data-i18n="game_ui.zero_points">0 puntos</span>
             </div>
             <div class="progress-bar">
                 <div id="progress-fill" class="progress-fill"></div>
@@ -33,7 +33,7 @@
         </div>
 
         <div class="main-card" id="main-card">
-            <h2>Escucha y completa la oración</h2>
+            <h2 data-i18n="game_ui.listen_complete">Escucha y completa la oración</h2>
 
             <div class="difficulty-info">
                 <div id="difficulty-badge" class="difficulty-badge adaptive">Comprensión Auditiva</div>
@@ -42,8 +42,7 @@
 
             <div class="audio-controls">
                 <button id="play-button" class="btn primary">
-                    <i class="fas fa-volume-up"></i> Escuchar Oración
-                </button>
+                    <i class="fas fa-volume-up"></i><span data-i18n="game_ui.listen_sentence">Escuchar Oración</span></button>
                 <button id="repeat-button" class="btn secondary" style="display: none;">
                     <i class="fas fa-redo"></i> Repetir
                 </button>
@@ -68,12 +67,13 @@
 
         <div class="instructions-card">
             <p>
-                💡 <span style="font-weight: 700;">Tip:</span> Escucha atentamente la oración y piensa qué palabra tiene más sentido. ¡Puedes escuchar de nuevo si lo necesitas!
-            </p>
+                💡 <span style="font-weight: 700;">Tip:</span> <span data-i18n="game_ui.tip_3">Escucha atentamente la oración y piensa qué palabra tiene más sentido. ¡Puedes escuchar de nuevo si lo necesitas!</span></p>
         </div>
     </div>
 
     <script src="../../../../api.js"></script>
     <script src="script.js"></script>
+    <script src="../../../../js/game-translations.js"></script>
+    <script src="../../../../js/i18n.js"></script>
 </body>
 </html>

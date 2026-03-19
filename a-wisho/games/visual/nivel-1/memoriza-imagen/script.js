@@ -29,12 +29,12 @@ class AIMemoryGame {
 
         // Base de imágenes categorizadas
         this.images = [
-            { src: "https://tse2.mm.bing.net/th/id/OIP.iremaMYVEQmKqX0XkISwQgAAAA?rs=1&pid=ImgDetMain&o=7&rm=3?w=1380", name: "gato", category: "animal", difficulty: 1 },
-            { src: "https://tse4.mm.bing.net/th/id/OIP.g20yYrHhw8E7FZWE5yf3MwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3?w=1380", name: "perro", category: "animal", difficulty: 1 },
-            { src: "https://tse2.mm.bing.net/th/id/OIP.vluLeVl5ITns3V9R5ptDZgHaFc?rs=1&pid=ImgDetMain&o=7&rm=3?w=1380", name: "casa", category: "objeto", difficulty: 1 },
-            { src: "https://img.freepik.com/vector-premium/dibujo-dibujos-animados-flor-rosa-centro-amarillo_1167562-3170.jpg?w=1380", name: "flor", category: "naturaleza", difficulty: 1 },
-            { src: "https://tse1.mm.bing.net/th/id/OIP.J48Rm8Jv492HD2uEpSw6uwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3?w=1380", name: "árbol", category: "naturaleza", difficulty: 1 },
-            { src: "https://th.bing.com/th/id/OIP.KvENQqXrbmaCQ9st9X_kkQHaHH?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3?w=1380", name: "sol", category: "naturaleza", difficulty: 1 }
+            { src: "https://tse2.mm.bing.net/th/id/OIP.iremaMYVEQmKqX0XkISwQgAAAA?rs=1&pid=ImgDetMain&o=7&rm=3?w=1380", name: tg("gato"), category: tg("animal"), difficulty: 1 },
+            { src: "https://tse4.mm.bing.net/th/id/OIP.g20yYrHhw8E7FZWE5yf3MwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3?w=1380", name: tg("perro"), category: tg("animal"), difficulty: 1 },
+            { src: "https://tse2.mm.bing.net/th/id/OIP.vluLeVl5ITns3V9R5ptDZgHaFc?rs=1&pid=ImgDetMain&o=7&rm=3?w=1380", name: tg("casa"), category: tg("objeto"), difficulty: 1 },
+            { src: "https://img.freepik.com/vector-premium/dibujo-dibujos-animados-flor-rosa-centro-amarillo_1167562-3170.jpg?w=1380", name: tg("flor"), category: tg("naturaleza"), difficulty: 1 },
+            { src: "https://tse1.mm.bing.net/th/id/OIP.J48Rm8Jv492HD2uEpSw6uwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3?w=1380", name: tg("árbol"), category: tg("naturaleza"), difficulty: 1 },
+            { src: "https://th.bing.com/th/id/OIP.KvENQqXrbmaCQ9st9X_kkQHaHH?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3?w=1380", name: tg("sol"), category: tg("naturaleza"), difficulty: 1 }
         ];
 
         this.totalRounds = 5;
