@@ -72,19 +72,19 @@
     <script>
         const gamesData = {
             nivel1: [
-                { id: 'memory-game', titleKey: 'game.memory', descKey: 'game.memory_desc', icon: '🎮', path: '../games/visual/nivel-1/memory-game/index.html', nivel: '1' },
-                { id: 'memoriza-imagen', titleKey: 'game.memoriza', descKey: 'game.memoriza_desc', icon: '🎨', path: '../games/visual/nivel-1/memoriza-imagen/index.html', nivel: '1' },
-                { id: 'detective-errores', titleKey: 'game.detective', descKey: 'game.detective_desc', icon: '🔍', path: '../games/visual/nivel-1/detective-errores/index.html', nivel: '1' }
+                { id: 'memory-game', titleKey: 'game.memory', descKey: 'game.memory_desc', icon: '🎮', path: `../games-${localStorage.getItem('blueminds_lang') || 'es'}/visual/nivel-1/memory-game/index.html`, nivel: '1' },
+                { id: 'memoriza-imagen', titleKey: 'game.memoriza', descKey: 'game.memoriza_desc', icon: '🎨', path: `../games-${localStorage.getItem('blueminds_lang') || 'es'}/visual/nivel-1/memoriza-imagen/index.html`, nivel: '1' },
+                { id: 'detective-errores', titleKey: 'game.detective', descKey: 'game.detective_desc', icon: '🔍', path: `../games-${localStorage.getItem('blueminds_lang') || 'es'}/visual/nivel-1/detective-errores/index.html`, nivel: '1' }
             ],
             nivel2: [
-                { id: 'completa-escena', titleKey: 'game.completa_escena', descKey: 'game.completa_escena_desc', icon: '🖼️', path: '../games/visual/nivel-2/completa-escena/index.html', nivel: '2' },
-                { id: 'ordena-historia', titleKey: 'game.ordena_historia', descKey: 'game.ordena_historia_desc', icon: '📖', path: '../games/visual/nivel-2/ordena-historia/index.html', nivel: '2' },
-                { id: 'explora-profesiones', titleKey: 'game.explora', descKey: 'game.explora_desc', icon: '💼', path: '../games/visual/nivel-2/explora-profesiones/index.html', nivel: '2' }
+                { id: 'completa-escena', titleKey: 'game.completa_escena', descKey: 'game.completa_escena_desc', icon: '🖼️', path: `../games-${localStorage.getItem('blueminds_lang') || 'es'}/visual/nivel-2/completa-escena/index.html`, nivel: '2' },
+                { id: 'ordena-historia', titleKey: 'game.ordena_historia', descKey: 'game.ordena_historia_desc', icon: '📖', path: `../games-${localStorage.getItem('blueminds_lang') || 'es'}/visual/nivel-2/ordena-historia/index.html`, nivel: '2' },
+                { id: 'explora-profesiones', titleKey: 'game.explora', descKey: 'game.explora_desc', icon: '💼', path: `../games-${localStorage.getItem('blueminds_lang') || 'es'}/visual/nivel-2/explora-profesiones/index.html`, nivel: '2' }
             ],
             nivel3: [
-                { id: 'asocia-imagen', titleKey: 'game.asocia', descKey: 'game.asocia_desc', icon: '🎯', path: '../games/visual/nivel-3/asocia-imagen/index.html', nivel: '3' },
-                { id: 'clasificacion-grupos', titleKey: 'game.clasificacion', descKey: 'game.clasificacion_desc', icon: '📦', path: '../games/visual/nivel-3/clasificacion-grupos/index.html', nivel: '3' },
-                { id: 'patterns-game', titleKey: 'game.patterns', descKey: 'game.patterns_desc', icon: '🧩', path: '../games/visual/nivel-3/patterns-game/index.html', nivel: '3' }
+                { id: 'asocia-imagen', titleKey: 'game.asocia', descKey: 'game.asocia_desc', icon: '🎯', path: `../games-${localStorage.getItem('blueminds_lang') || 'es'}/visual/nivel-3/asocia-imagen/index.html`, nivel: '3' },
+                { id: 'clasificacion-grupos', titleKey: 'game.clasificacion', descKey: 'game.clasificacion_desc', icon: '📦', path: `../games-${localStorage.getItem('blueminds_lang') || 'es'}/visual/nivel-3/clasificacion-grupos/index.html`, nivel: '3' },
+                { id: 'patterns-game', titleKey: 'game.patterns', descKey: 'game.patterns_desc', icon: '🧩', path: `../games-${localStorage.getItem('blueminds_lang') || 'es'}/visual/nivel-3/patterns-game/index.html`, nivel: '3' }
             ]
         };
 

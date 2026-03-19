@@ -71,16 +71,16 @@
     <script>
         const gamesData = {
             nivel1: [
-                { id: 'error-gramatical', titleKey: 'game.error_gramatical', descKey: 'game.error_desc', icon: '🔤', path: '../games/lecto-escritor/nivel-1/encuentra-error/index.html', nivel: '1' },
-                { id: 'lee-asocia', titleKey: 'game.lee_asocia', descKey: 'game.lee_asocia_desc', icon: '🖼️', path: '../games/lecto-escritor/nivel-1/leeyasocia/index.html', nivel: '1' },
-                { id: 'oracion-colores', titleKey: 'game.oracion_colores', descKey: 'game.oracion_desc', icon: '📚', path: '../games/lecto-escritor/nivel-1/oracion-colores/index.html', nivel: '1' }
+                { id: 'error-gramatical', titleKey: 'game.error_gramatical', descKey: 'game.error_desc', icon: '🔤', path: `../games-${localStorage.getItem('blueminds_lang') || 'es'}/lecto-escritor/nivel-1/encuentra-error/index.html`, nivel: '1' },
+                { id: 'lee-asocia', titleKey: 'game.lee_asocia', descKey: 'game.lee_asocia_desc', icon: '🖼️', path: `../games-${localStorage.getItem('blueminds_lang') || 'es'}/lecto-escritor/nivel-1/leeyasocia/index.html`, nivel: '1' },
+                { id: 'oracion-colores', titleKey: 'game.oracion_colores', descKey: 'game.oracion_desc', icon: '📚', path: `../games-${localStorage.getItem('blueminds_lang') || 'es'}/lecto-escritor/nivel-1/oracion-colores/index.html`, nivel: '1' }
             ],
             nivel2: [
-                { id: 'completa-oracion', titleKey: 'game.completa_oracion_esc', descKey: 'game.completa_esc_desc', icon: '✍️', path: '../games/lecto-escritor/nivel-2/completa-oracion/index.html', nivel: '2' },
-                { id: 'escribe-palabra', titleKey: 'game.escribe_palabra', descKey: 'game.escribe_desc', icon: '💭', path: '../games/lecto-escritor/nivel-2/escribe-palabra/index.html', nivel: '2' }
+                { id: 'completa-oracion', titleKey: 'game.completa_oracion_esc', descKey: 'game.completa_esc_desc', icon: '✍️', path: `../games-${localStorage.getItem('blueminds_lang') || 'es'}/lecto-escritor/nivel-2/completa-oracion/index.html`, nivel: '2' },
+                { id: 'escribe-palabra', titleKey: 'game.escribe_palabra', descKey: 'game.escribe_desc', icon: '💭', path: `../games-${localStorage.getItem('blueminds_lang') || 'es'}/lecto-escritor/nivel-2/escribe-palabra/index.html`, nivel: '2' }
             ],
             nivel3: [
-                { id: 'lee-asocia-2', titleKey: 'game.lee_asocia_2', descKey: 'game.lee_asocia_2_desc', icon: '📖', path: '../games/lecto-escritor/nivel-3/leeyasocia2/index.html', nivel: '3' }
+                { id: 'lee-asocia-2', titleKey: 'game.lee_asocia_2', descKey: 'game.lee_asocia_2_desc', icon: '📖', path: `../games-${localStorage.getItem('blueminds_lang') || 'es'}/lecto-escritor/nivel-3/leeyasocia2/index.html`, nivel: '3' }
             ]
         };
 
