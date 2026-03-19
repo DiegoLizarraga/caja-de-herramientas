@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - BlueMinds</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/perfil.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="BlueMindsMain.html" class="logo">
+                <img src="../favicon-32x32.png" alt="BlueMinds">
+                <span>BlueMinds</span>
+            </a>
+            <ul class="nav-center">
+                <li><a href="BlueMindsMain.html" data-i18n="nav.home">Inicio</a></li>
+                <li><a href="test-selector.html" data-i18n="nav.test">Test</a></li>
+                <li><a href="https://plekdev.github.io/BlueMindsLandingPage/" data-i18n="nav.about">Acerca de</a></li>
+            </ul>
+            <div class="user-menu">
+                <span class="user-name" id="userName">Usuario</span>
+                <a href="perfil.html" class="nav-btn" title="Dashboard">
+                    <i class="fas fa-home"></i>
+                </a>
+                <button class="logout-btn" onclick="logout()" title="Cerrar Sesión">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="profile-section">
+            <!-- Profile Card -->
+            <div class="profile-card">
+                <div class="profile-header">
+                    <h2 data-i18n="perfil.title">Mi Perfil</h2>
+                    <button class="edit-btn" id="editBtn" onclick="toggleEditMode()">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </div>
+
+                <!-- View Mode -->
+                <div id="viewMode">
+                    <div class="avatar-section text-center mb-6">
+                        <div class="avatar" id="userAvatar"></div>
+                        <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                        <button class="mt-4 text-blue-400 hover:text-blue-300 text-sm"
+                            onclick="document.getElementById('avatarInput').click()" data-i18n="perfil.change_photo">
+                            Cambiar foto de perfil
+                        </button>
+                    </div>
+
+                    <div class="profile-field">
+                        <div class="field-label">
+                            <i class="fas fa-user"></i> <span data-i18n="perfil.name">Nombre</span>
+                        </div>
+                        <div class="field-value" id="nameValue">Nombre</div>
+                    </div>
+                    <div class="profile-field">
+                        <div class="field-label">
+                            <i class="fas fa-envelope"></i> <span data-i18n="perfil.email">Email</span>
+                        </div>
+                        <div class="field-value" id="emailValue"> @email.com</div>
+                        <div style="font-size: 12px; color: #999; margin-top: 5px; padding-left: 24px;" data-i18n="perfil.email_note">
+                            El email no se puede cambiar
+                        </div>
+                    </div>
+                    <div class="profile-field">
+                        <div class="field-label">
+                            <i class="fas fa-calendar"></i> <span data-i18n="perfil.birth">Fecha de Nacimiento</span>
+                        </div>
+                        <div class="field-value" id="birthValue" data-i18n-default="perfil.birth_none">No especificada</div>
+                    </div>
+                    <div class="profile-field">
+                        <div class="field-label">
+                            <i class="fas fa-globe"></i> <span data-i18n="perfil.country">País</span>
+                        </div>
+                        <div class="field-value" id="countryValue">México</div>
+                    </div>
+                </div>
+
+                <!-- Edit Mode -->
+                <div id="editMode" style="display: none;">
+                    <div class="profile-field">
+                        <label class="field-label">
+                            <i class="fas fa-user"></i> <span data-i18n="perfil.name">Nombre</span>
+                        </label>
+                        <input type="text" class="field-input" id="editName">
+                    </div>
+                    <div class="profile-field">
+                        <label class="field-label">
+                            <i class="fas fa-calendar"></i> <span data-i18n="perfil.birth">Fecha de Nacimiento</span>
+                        </label>
+                        <input type="date" class="field-input" id="editBirth" disabled
+                            title="La fecha de nacimiento solo puede configurarse una vez">
+                    </div>
+                    <div class="profile-field">
+                        <label class="field-label">
+                            <i class="fas fa-globe"></i> <span data-i18n="perfil.country">País</span>
+                        </label>
+                        <select class="field-input" id="editCountry">
+                            <option value="" data-i18n="perfil.select_country">Selecciona tu país</option>
+                            <option value="México">México</option>
+                            <option value="Argentina">Argentina</option>
+                            <option value="Bolivia">Bolivia</option>
+                            <option value="Brasil">Brasil</option>
+                            <option value="Chile">Chile</option>
+                            <option value="Colombia">Colombia</option>
+                            <option value="Costa Rica">Costa Rica</option>
+                            <option value="Ecuador">Ecuador</option>
+                            <option value="El Salvador">El Salvador</option>
+                            <option value="España">España</option>
+                            <option value="Estados Unidos">Estados Unidos</option>
+                            <option value="Guatemala">Guatemala</option>
+                            <option value="Honduras">Honduras</option>
+                            <option value="Nicaragua">Nicaragua</option>
+                            <option value="Panamá">Panamá</option>
+                            <option value="Paraguay">Paraguay</option>
+                            <option value="Perú">Perú</option>
+                            <option value="República Dominicana">República Dominicana</option>
+                            <option value="Uruguay">Uruguay</option>
+                            <option value="Venezuela">Venezuela</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="edit-actions">
+                        <button class="save-btn" onclick="saveProfile()">
+                            <i class="fas fa-save"></i> <span data-i18n="perfil.save">Guardar</span>
+                        </button>
+                        <button class="cancel-btn" onclick="cancelEdit()" data-i18n="perfil.cancel">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side -->
+            <div>
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-value" id="tasksValue">127</div>
+                        <div class="stat-label" data-i18n="perfil.tasks">Tareas Completadas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔥</div>
+                        <div class="stat-value" id="streakValue">12</div>
+                        <div class="stat-label" data-i18n="perfil.streak">Racha Actual (días)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-value" id="achievementsValue">8</div>
+                        <div class="stat-label" data-i18n="perfil.achievements">Logros Desbloqueados</div>
+                    </div>
+                </div>
+
+                <!-- Achievements Section -->
+                <div class="achievements-section">
+                    <h3 class="section-title" data-i18n="perfil.ach_title">Logros</h3>
+                    <p class="section-subtitle" data-i18n="perfil.ach_sub">Tus logros desbloqueados en BlueMinds</p>
+                    <div class="achievements-grid" id="achievementsGrid"></div>
+                </div>
+
+                <!-- Account Info Section -->
+                <div class="account-info-section">
+                    <h3 class="section-title" data-i18n="perfil.account">Información de la Cuenta</h3>
+                    <p class="section-subtitle" data-i18n="perfil.account_sub">Detalles y configuración de tu cuenta</p>
+                    <div class="account-item">
+                        <div>
+                            <div class="account-item-label" data-i18n="perfil.status">Estado de la cuenta</div>
+                            <div class="account-item-description" data-i18n="perfil.status_desc">Tu cuenta está activa</div>
+                        </div>
+                        <div class="account-item-value">
+                            <span class="badge active" data-i18n="perfil.status_badge">Activa</span>
+                        </div>
+                    </div>
+                    <div class="account-item">
+                        <div>
+                            <div class="account-item-label" data-i18n="perfil.member">Miembro desde</div>
+                            <div class="account-item-description" id="memberSinceDesc">Enero 2026</div>
+                        </div>
+                        <div class="account-item-value" id="memberSinceValue" data-i18n="perfil.new_user">
+                            Nuevo usuario
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../api.js"></script>
+    <script src="../js/auth-guard.js"></script>
+    <script src="../js/i18n.js"></script>
+    <script>
+        const achievements = [
+            { id: 1, name: 'Primer Paso', description: 'Completaste tu primera tarea', earned: true },
+            { id: 2, name: 'Constante', description: '7 días seguidos completados', earned: true },
+            { id: 3, name: 'Experto en Lenguaje', description: 'Nivel 5 en Lenguaje', earned: true },
+            { id: 4, name: 'Social', description: 'Nivel 5 en Conducta', earned: false },
+            { id: 5, name: 'Profesional', description: 'Nivel 5 en Ocupacional', earned: false },
+            { id: 6, name: 'Maestro', description: 'Completa todos los módulos', earned: false },
+        ];
+
+        function loadUserData() {
+            const currentUser = localStorage.getItem('blueminds_current_user');
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            const user = JSON.parse(currentUser);
+
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('nameValue').textContent = user.name;
+            document.getElementById('emailValue').textContent = user.email;
+            document.getElementById('userAvatar').innerHTML = user.picture
+                ? `<img src="${user.picture}" alt="Avatar" class="w-full h-full object-cover rounded-full">`
+                : user.name.charAt(0).toUpperCase();
+
+            if (user.birth) {
+                const birthDate = new Date(user.birth);
+                const formattedDate = birthDate.toLocaleDateString('es-MX', {
+                    day: '2-digit', month: 'long', year: 'numeric'
+                });
+                const age = Math.floor((new Date() - birthDate) / (365.25 * 24 * 60 * 60 * 1000));
+                document.getElementById('birthValue').textContent = `${formattedDate} (${age} años)`;
+            } else {
+                document.getElementById('birthValue').textContent = I18n.t('perfil.birth_none');
+            }
+
+            document.getElementById('countryValue').textContent = user.country || I18n.t('perfil.country_none');
+            document.getElementById('memberSinceDesc').textContent = user.createdAt
+                ? new Date(user.createdAt).toLocaleDateString('es-MX', { month: 'long', year: 'numeric' })
+                : 'Enero 2026';
+
+            loadAchievements();
+        }
+
+        function loadAchievements() {
+            const grid = document.getElementById('achievementsGrid');
+            grid.innerHTML = achievements.map(achievement => `
+                <div class="achievement-card ${achievement.earned ? 'earned' : 'locked'}">
+                    <div class="achievement-header">
+                        <div class="achievement-icon">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <div class="achievement-info">
+                            <div class="achievement-name">${achievement.name}</div>
+                            <div class="achievement-description">${achievement.description}</div>
+                            ${achievement.earned ? `<div class="achievement-badge">${I18n.t('perfil.ach_unlocked')}</div>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleEditMode() {
+            const viewMode = document.getElementById('viewMode');
+            const editMode = document.getElementById('editMode');
+            if (editMode.style.display === 'none') {
+                const currentUser = JSON.parse(localStorage.getItem('blueminds_current_user'));
+                document.getElementById('editName').value = currentUser.name;
+                document.getElementById('editBirth').value = currentUser.birth ? new Date(currentUser.birth).toISOString().split('T')[0] : '';
+                document.getElementById('editCountry').value = currentUser.country || '';
+
+                if (currentUser.birth) {
+                    document.getElementById('editBirth').disabled = true;
+                }
+
+                viewMode.style.display = 'none';
+                editMode.style.display = 'block';
+            }
+        }
+
+        document.getElementById('avatarInput').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) { alert('Solo se permiten imágenes'); return; }
+
+            const formData = new FormData();
+            formData.append('avatar', file);
+
+            try {
+                const response = await fetch(`${api.baseURL}/user/upload-avatar`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${api.token}` },
+                    body: formData
+                });
+                if (!response.ok) throw new Error('Error al subir');
+                const result = await response.json();
+                document.getElementById('userAvatar').innerHTML = `<img src="${result.avatarUrl}" alt="Avatar" class="w-full h-full object-cover rounded-full">`;
+                const user = JSON.parse(localStorage.getItem('blueminds_current_user'));
+                user.picture = result.avatarUrl;
+                localStorage.setItem('blueminds_current_user', JSON.stringify(user));
+                alert('Foto actualizada correctamente');
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        });
+
+        async function saveProfile() {
+            const name = document.getElementById('editName').value.trim();
+            const birth = document.getElementById('editBirth').value;
+            const country = document.getElementById('editCountry').value.trim();
+
+            if (!name || !country) { alert('Nombre y país son requeridos'); return; }
+
+            try {
+                const payload = { name, country };
+                const currentUser = JSON.parse(localStorage.getItem('blueminds_current_user'));
+                if (!currentUser.birth && birth) payload.birth = birth;
+
+                const response = await fetch(`${api.baseURL}/user/profile`, {
+                    method: 'PATCH',
+                    headers: api._getHeaders(),
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const err = await response.json();
+                    throw new Error(err.error || 'Error al guardar');
+                }
+
+                const result = await response.json();
+                localStorage.setItem('blueminds_current_user', JSON.stringify(result.user));
+
+                document.getElementById('nameValue').textContent = result.user.name;
+                document.getElementById('countryValue').textContent = result.user.country;
+
+                if (result.user.birth) {
+                    const bd = new Date(result.user.birth);
+                    const formattedDate = bd.toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' });
+                    const age = Math.floor((new Date() - bd) / (365.25 * 24 * 60 * 60 * 1000));
+                    document.getElementById('birthValue').textContent = `${formattedDate} (${age} años)`;
+                }
+
+                document.getElementById('userName').textContent = result.user.name;
+                document.getElementById('userAvatar').textContent = result.user.name.charAt(0).toUpperCase();
+
+                cancelEdit();
+                alert('Perfil actualizado correctamente');
+            } catch (error) {
+                alert(error.message || 'Error al guardar cambios');
+            }
+        }
+
+        function cancelEdit() {
+            document.getElementById('viewMode').style.display = 'block';
+            document.getElementById('editMode').style.display = 'none';
+        }
+
+        function logout() {
+            localStorage.removeItem('blueminds_current_user');
+            window.location.href = '../index.html';
+        }
+
+        window.addEventListener('load', loadUserData);
+    </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "BlueMinds",
+  "version": "1.0.0",
+  "description": "Plataforma de aprendizaje para niños especiales con minijuegos educativos",
+  "main": "index.html",
+  "scripts": {
+    "start": "live-server",
+    "build": "echo 'No build process needed for this project'"
+  },
+  "keywords": [
+    "education",
+    "children",
+    "autism",
+    "games"
+  ],
+  "author": "DiegoLizarraga and Victor Velazquez",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlueMinds - Iniciar Sesión</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/login.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+
+    <!-- Loading overlay -->
+    <div id="globalLoadingOverlay" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl text-center max-w-sm w-full">
+            <i class="fas fa-spinner fa-spin text-blue-600 text-5xl mb-6"></i>
+            <h3 class="text-xl font-bold text-slate-800 mb-2" data-i18n="login.google_loading_title">Conectando con Google</h3>
+            <p class="text-slate-600" data-i18n="login.google_loading_desc">Un momento mientras verificamos tu cuenta...</p>
+        </div>
+    </div>
+
+    <div class="login-container">
+
+        <!-- Estado del servidor -->
+        <div id="serverStatus" class="server-status offline">
+            <i class="fas fa-wifi"></i>
+            <span id="statusText" data-i18n="login.server_connecting">Conectando al servidor...</span>
+        </div>
+
+        <!-- Header -->
+        <div class="login-header text-center mx-auto flex justify-center flex-col items-center">
+            <img src="android-chrome-192x192.png" alt="BlueMinds">
+            <h1>BlueMinds</h1>
+            <p data-i18n="login.tagline">Plataforma de Educación Inclusiva</p>
+        </div>
+
+        <!-- Selector de idioma -->
+        <div id="lang-picker-anchor" style="display:flex;justify-content:center;margin-bottom:12px;"></div>
+
+        <!-- Content -->
+        <div class="login-content overflow-hidden">
+
+            <!-- ── Login Form ── -->
+            <div id="loginForm" class="form-section active overflow-hidden">
+                <h2 data-i18n="login.title">Iniciar Sesión</h2>
+
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="login-email" data-i18n="login.email_label">Email</label>
+                        <input type="email" id="login-email" data-i18n-placeholder="login.email_ph" placeholder="tu@email.com" required>
+                        <span class="error-message" id="login-emailError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="login-password" data-i18n="login.password_label">Contraseña</label>
+                        <div class="password-toggle">
+                            <input type="password" id="login-password" placeholder="••••••••" required>
+                            <button type="button" onclick="togglePassword('login-password')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <span class="error-message" id="login-passwordError"></span>
+                    </div>
+
+                    <div class="remember-check">
+                        <input type="checkbox" id="rememberMe">
+                        <label for="rememberMe" data-i18n="login.remember_me">Recuérdame</label>
+                    </div>
+
+                    <button type="submit" class="btn-login" id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span data-i18n="login.btn_login">Iniciar Sesión</span>
+                    </button>
+
+                    <div class="google-section mt-6 text-center">
+                        <p class="text-sm text-gray-600 py-4" data-i18n="login.google_or">O inicia sesión / regístrate con Google</p>
+                        <div id="googleBtnContainer" style="display:flex;justify-content:center;">
+                            <div id="g_id_onload"
+                                data-client_id="88404835696-5a92quu3ter0qff5couhl4kk7s0jslqg.apps.googleusercontent.com"
+                                data-callback="handleGoogleLogin"
+                                data-auto_prompt="false"
+                                data-itp_support="true">
+                            </div>
+                            <div class="g_id_signin"
+                                data-type="standard" data-size="large"
+                                data-theme="outline" data-text="sign_in_with"
+                                data-shape="rectangular" data-logo_alignment="left">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="divider">
+                    <span data-i18n="login.no_account">¿No tienes cuenta?</span>
+                </div>
+                <div class="toggle-form">
+                    <button onclick="toggleForms()" data-i18n="login.go_register">Crear una cuenta aquí</button>
+                </div>
+            </div>
+
+            <!-- ── Register Form ── -->
+            <div id="registerForm" class="form-section">
+                <h2 data-i18n="login.register_title">Crear Cuenta</h2>
+
+                <div class="google-section mb-6 text-center">
+                    <div id="googleBtnContainerReg" class="flex justify-center py-2">
+                        <div id="g_id_onload_reg"
+                            data-client_id="88404835696-5a92quu3ter0qff5couhl4kk7s0jslqg.apps.googleusercontent.com"
+                            data-callback="handleGoogleLogin"
+                            data-auto_prompt="false"
+                            data-itp_support="true">
+                        </div>
+                        <div class="g_id_signin"
+                            data-type="standard" data-size="large"
+                            data-theme="outline" data-text="signup_with"
+                            data-shape="rectangular" data-logo_alignment="left" data-width="320">
+                        </div>
+                    </div>
+                    <div class="relative flex py-5 items-center">
+                        <div class="flex-grow border-t border-gray-200"></div>
+                        <span class="flex-shrink mx-4 text-gray-400 text-xs uppercase tracking-widest" data-i18n="login.or_email">o usa tu correo</span>
+                        <div class="flex-grow border-t border-gray-200"></div>
+                    </div>
+                </div>
+
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label for="register-name" data-i18n="login.name_label">Nombre Completo</label>
+                        <input type="text" id="register-name" data-i18n-placeholder="login.name_ph" placeholder="Tu nombre" required>
+                        <span class="error-message" id="register-nameError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-birth" data-i18n="login.birth_label">Fecha de Nacimiento</label>
+                        <input type="date" id="register-birth" required>
+                        <span class="error-message" id="register-birthError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-email" data-i18n="login.email_label">Email</label>
+                        <input type="email" id="register-email" data-i18n-placeholder="login.email_ph" placeholder="tu@email.com" required>
+                        <span class="error-message" id="register-emailError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-country" data-i18n="login.country_label">País</label>
+                        <input type="text" id="register-country" data-i18n-placeholder="login.country_ph" placeholder="Tu país" required>
+                        <span class="error-message" id="register-countryError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-password" data-i18n="login.password_label">Contraseña</label>
+                        <div class="password-toggle">
+                            <input type="password" id="register-password" placeholder="••••••••" required>
+                            <button type="button" onclick="togglePassword('register-password')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <span class="error-message" id="register-passwordError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-confirm" data-i18n="login.confirm_label">Confirmar Contraseña</label>
+                        <div class="password-toggle">
+                            <input type="password" id="register-confirm" placeholder="••••••••" required>
+                            <button type="button" onclick="togglePassword('register-confirm')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <span class="error-message" id="register-confirmError"></span>
+                    </div>
+
+                    <button type="submit" class="btn-login" id="registerBtn">
+                        <i class="fas fa-user-plus"></i>
+                        <span data-i18n="login.btn_register">Crear Cuenta</span>
+                    </button>
+                </form>
+
+                <div class="divider">
+                    <span data-i18n="login.have_account">¿Ya tienes cuenta?</span>
+                </div>
+                <div class="toggle-form">
+                    <button onclick="toggleForms()" data-i18n="login.go_login">Inicia sesión aquí</button>
+                </div>
+            </div>
+
+        </div><!-- /.login-content -->
+    </div><!-- /.login-container -->
+
+    <script src="api.js"></script>
+    <script>
+        let serverOnline = false;
+
+        function initializeForm() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('action') === 'register') {
+                document.getElementById('loginForm').classList.remove('active');
+                document.getElementById('registerForm').classList.add('active');
+            }
+        }
+
+        function disableAllInputs() {
+            document.querySelectorAll('input, button, a').forEach(el => {
+                el.disabled = true;
+                el.style.pointerEvents = 'none';
+                el.classList.add('opacity-50', 'cursor-not-allowed');
+            });
+        }
+
+        function enableAllInputs() {
+            document.querySelectorAll('input, button, a').forEach(el => {
+                el.disabled = false;
+                el.style.pointerEvents = 'auto';
+                el.classList.remove('opacity-50', 'cursor-not-allowed');
+            });
+        }
+
+        function showGlobalLoading() {
+            document.getElementById('globalLoadingOverlay').classList.remove('hidden');
+            disableAllInputs();
+        }
+
+        function hideGlobalLoading() {
+            document.getElementById('globalLoadingOverlay').classList.add('hidden');
+            enableAllInputs();
+        }
+
+        async function checkServerStatus() {
+            try {
+                const isOnline = await api.checkHealth();
+                serverOnline = isOnline;
+                updateServerStatusUI(isOnline);
+            } catch (error) {
+                updateServerStatusUI(false);
+            }
+        }
+
+        async function handleGoogleLogin(response) {
+            const googleBtnContainer = document.querySelector('.google-section > div');
+            const originalHTML = googleBtnContainer.innerHTML;
+            try {
+                showGlobalLoading();
+                googleBtnContainer.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin text-blue-600 text-2xl"></i><p class="text-sm mt-2">Conectando...</p></div>';
+                const result = await api.loginWithGoogle(response.credential);
+                if (result.needsOnboarding) {
+                    localStorage.setItem('blueminds_token_temp', result.token);
+                    window.location.href = 'onboarding.html';
+                } else {
+                    setTimeout(() => { window.location.href = 'pages/perfil.html'; }, 800);
+                }
+            } catch (error) {
+                showError('login-email', error.message || 'Error al conectar con Google.');
+                hideGlobalLoading();
+                googleBtnContainer.innerHTML = originalHTML;
+            }
+        }
+
+        function updateServerStatusUI(isOnline) {
+            const statusEl = document.getElementById('serverStatus');
+            const statusText = document.getElementById('statusText');
+            if (isOnline) {
+                statusEl.classList.remove('offline');
+                statusEl.classList.add('online');
+                statusText.textContent = I18n.t('login.server_online');
+            } else {
+                statusEl.classList.remove('online');
+                statusEl.classList.add('offline');
+                statusText.textContent = I18n.t('login.server_offline');
+            }
+        }
+
+        function toggleForms() {
+            document.getElementById('loginForm').classList.toggle('active');
+            document.getElementById('registerForm').classList.toggle('active');
+            clearErrors();
+            const isLogin = document.getElementById('loginForm').classList.contains('active');
+            window.history.replaceState({}, document.title, isLogin ? 'login.html' : 'login.html?action=register');
+        }
+
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const button = event.target.closest('button');
+            if (input.type === 'password') {
+                input.type = 'text';
+                button.innerHTML = '<i class="fas fa-eye-slash"></i>';
+            } else {
+                input.type = 'password';
+                button.innerHTML = '<i class="fas fa-eye"></i>';
+            }
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('.error-message').forEach(el => { el.classList.remove('show'); el.textContent = ''; });
+            document.querySelectorAll('input').forEach(el => el.classList.remove('error'));
+        }
+
+        function showError(inputId, message) {
+            const input = document.getElementById(inputId);
+            const errorEl = document.getElementById(inputId + 'Error');
+            if (input) input.classList.add('error');
+            if (errorEl) { errorEl.textContent = message; errorEl.classList.add('show'); }
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            if (!serverOnline) { showError('login-email', I18n.t('login.err_server')); return; }
+            clearErrors();
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            if (!email || !password) {
+                if (!email) showError('login-email', I18n.t('login.err_email_req'));
+                if (!password) showError('login-password', I18n.t('login.err_pass_req'));
+                return;
+            }
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + I18n.t('login.loading_login');
+            try {
+                await api.login(email, password);
+                setTimeout(() => { window.location.href = 'pages/perfil.html'; }, 500);
+            } catch (error) {
+                showError('login-email', error.message || I18n.t('login.err_login'));
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> ' + I18n.t('login.btn_login');
+            }
+        }
+
+        async function handleRegister(event) {
+            event.preventDefault();
+            if (!serverOnline) { showError('register-email', I18n.t('login.err_server')); return; }
+            clearErrors();
+            const name = document.getElementById('register-name').value.trim();
+            const birth = document.getElementById('register-birth').value;
+            const email = document.getElementById('register-email').value.trim();
+            const country = document.getElementById('register-country').value.trim();
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm').value;
+            let isValid = true;
+            if (!name || name.length < 3) { showError('register-name', I18n.t('login.err_name')); isValid = false; }
+            if (!birth) { showError('register-birth', I18n.t('login.err_birth')); isValid = false; }
+            if (!email) { showError('register-email', I18n.t('login.err_email_req')); isValid = false; }
+            if (!country || country.length < 2) { showError('register-country', I18n.t('login.err_country')); isValid = false; }
+            if (!password || password.length < 6) { showError('register-password', I18n.t('login.err_pass_short')); isValid = false; }
+            if (password !== confirmPassword) { showError('register-confirm', I18n.t('login.err_pass_match')); isValid = false; }
+            if (!isValid) return;
+            const registerBtn = document.getElementById('registerBtn');
+            registerBtn.disabled = true;
+            registerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + I18n.t('login.loading_register');
+            try {
+                await api.register(name, birth, email, country, password, confirmPassword);
+                setTimeout(() => { window.location.href = 'pages/perfil.html'; }, 500);
+            } catch (error) {
+                showError('register-email', error.message || I18n.t('login.err_register'));
+            } finally {
+                registerBtn.disabled = false;
+                registerBtn.innerHTML = '<i class="fas fa-user-plus"></i> ' + I18n.t('login.btn_register');
+            }
+        }
+
+        window.addEventListener('load', () => {
+            const currentUser = api.getCurrentUser();
+            if (currentUser) window.location.href = 'pages/perfil.html';
+            initializeForm();
+            checkServerStatus();
+            setInterval(checkServerStatus, 5000);
+        });
+    </script>
+
+    <!-- i18n -->
+    <script>
+    const BLUEMINDS_TRANSLATIONS = {
+      es: {
+        "login.tagline":            "Plataforma de Educación Inclusiva",
+        "login.title":              "Iniciar Sesión",
+        "login.register_title":     "Crear Cuenta",
+        "login.email_label":        "Email",
+        "login.email_ph":           "tu@email.com",
+        "login.password_label":     "Contraseña",
+        "login.confirm_label":      "Confirmar Contraseña",
+        "login.name_label":         "Nombre Completo",
+        "login.name_ph":            "Tu nombre",
+        "login.birth_label":        "Fecha de Nacimiento",
+        "login.country_label":      "País",
+        "login.country_ph":         "Tu país",
+        "login.remember_me":        "Recuérdame",
+        "login.btn_login":          "Iniciar Sesión",
+        "login.btn_register":       "Crear Cuenta",
+        "login.google_or":          "O inicia sesión / regístrate con Google",
+        "login.or_email":           "o usa tu correo",
+        "login.no_account":         "¿No tienes cuenta?",
+        "login.go_register":        "Crear una cuenta aquí",
+        "login.have_account":       "¿Ya tienes cuenta?",
+        "login.go_login":           "Inicia sesión aquí",
+        "login.server_connecting":  "Conectando al servidor...",
+        "login.server_online":      "Servidor conectado",
+        "login.server_offline":     "Servidor no disponible - Verifica la conexión",
+        "login.google_loading_title":"Conectando con Google",
+        "login.google_loading_desc":"Un momento mientras verificamos tu cuenta...",
+        "login.err_server":         "El servidor no está disponible",
+        "login.err_email_req":      "El email es requerido",
+        "login.err_pass_req":       "La contraseña es requerida",
+        "login.err_name":           "El nombre debe tener al menos 3 caracteres",
+        "login.err_birth":          "La fecha de nacimiento es requerida",
+        "login.err_country":        "El país es requerido",
+        "login.err_pass_short":     "La contraseña debe tener al menos 6 caracteres",
+        "login.err_pass_match":     "Las contraseñas no coinciden",
+        "login.err_login":          "Error al iniciar sesión",
+        "login.err_register":       "Error al crear cuenta",
+        "login.loading_login":      "Iniciando...",
+        "login.loading_register":   "Creando...",
+      },
+      en: {
+        "login.tagline":            "Inclusive Education Platform",
+        "login.title":              "Log In",
+        "login.register_title":     "Create Account",
+        "login.email_label":        "Email",
+        "login.email_ph":           "you@email.com",
+        "login.password_label":     "Password",
+        "login.confirm_label":      "Confirm Password",
+        "login.name_label":         "Full Name",
+        "login.name_ph":            "Your name",
+        "login.birth_label":        "Date of Birth",
+        "login.country_label":      "Country",
+        "login.country_ph":         "Your country",
+        "login.remember_me":        "Remember me",
+        "login.btn_login":          "Log In",
+        "login.btn_register":       "Create Account",
+        "login.google_or":          "Or sign in / sign up with Google",
+        "login.or_email":           "or use your email",
+        "login.no_account":         "Don't have an account?",
+        "login.go_register":        "Create an account here",
+        "login.have_account":       "Already have an account?",
+        "login.go_login":           "Log in here",
+        "login.server_connecting":  "Connecting to server...",
+        "login.server_online":      "Server connected",
+        "login.server_offline":     "Server unavailable - Check your connection",
+        "login.google_loading_title":"Connecting with Google",
+        "login.google_loading_desc":"One moment while we verify your account...",
+        "login.err_server":         "Server is not available",
+        "login.err_email_req":      "Email is required",
+        "login.err_pass_req":       "Password is required",
+        "login.err_name":           "Name must be at least 3 characters",
+        "login.err_birth":          "Date of birth is required",
+        "login.err_country":        "Country is required",
+        "login.err_pass_short":     "Password must be at least 6 characters",
+        "login.err_pass_match":     "Passwords do not match",
+        "login.err_login":          "Login failed",
+        "login.err_register":       "Account creation failed",
+        "login.loading_login":      "Logging in...",
+        "login.loading_register":   "Creating...",
+      },
+      pt: {
+        "login.tagline":            "Plataforma de Educação Inclusiva",
+        "login.title":              "Entrar",
+        "login.register_title":     "Criar Conta",
+        "login.email_label":        "E-mail",
+        "login.email_ph":           "voce@email.com",
+        "login.password_label":     "Senha",
+        "login.confirm_label":      "Confirmar Senha",
+        "login.name_label":         "Nome Completo",
+        "login.name_ph":            "Seu nome",
+        "login.birth_label":        "Data de Nascimento",
+        "login.country_label":      "País",
+        "login.country_ph":         "Seu país",
+        "login.remember_me":        "Lembrar de mim",
+        "login.btn_login":          "Entrar",
+        "login.btn_register":       "Criar Conta",
+        "login.google_or":          "Ou entre / cadastre-se com o Google",
+        "login.or_email":           "ou use seu e-mail",
+        "login.no_account":         "Não tem uma conta?",
+        "login.go_register":        "Criar uma conta aqui",
+        "login.have_account":       "Já tem uma conta?",
+        "login.go_login":           "Entre aqui",
+        "login.server_connecting":  "Conectando ao servidor...",
+        "login.server_online":      "Servidor conectado",
+        "login.server_offline":     "Servidor indisponível - Verifique a conexão",
+        "login.google_loading_title":"Conectando com o Google",
+        "login.google_loading_desc":"Um momento enquanto verificamos sua conta...",
+        "login.err_server":         "O servidor não está disponível",
+        "login.err_email_req":      "O e-mail é obrigatório",
+        "login.err_pass_req":       "A senha é obrigatória",
+        "login.err_name":           "O nome deve ter pelo menos 3 caracteres",
+        "login.err_birth":          "A data de nascimento é obrigatória",
+        "login.err_country":        "O país é obrigatório",
+        "login.err_pass_short":     "A senha deve ter pelo menos 6 caracteres",
+        "login.err_pass_match":     "As senhas não coincidem",
+        "login.err_login":          "Falha ao entrar",
+        "login.err_register":       "Falha ao criar conta",
+        "login.loading_login":      "Entrando...",
+        "login.loading_register":   "Criando...",
+      }
+    };
+
+    const I18n = (() => {
+      const STORAGE_KEY = 'blueminds_lang';
+      let lang = localStorage.getItem(STORAGE_KEY) || 'es';
+
+      function t(key) {
+        return (BLUEMINDS_TRANSLATIONS[lang] || BLUEMINDS_TRANSLATIONS.es)[key] || key;
+      }
+
+      function apply() {
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const text = t(el.getAttribute('data-i18n'));
+          const icon = el.querySelector('i');
+          if (icon) {
+            Array.from(el.childNodes).forEach(n => { if (n.nodeType === 3) n.remove(); });
+            el.appendChild(document.createTextNode(' ' + text));
+          } else {
+            el.textContent = text;
+          }
+        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+          el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+        });
+        document.documentElement.lang = lang;
+        const lbl = document.getElementById('lang-current-label');
+        if (lbl) lbl.textContent = lang.toUpperCase();
+        document.querySelectorAll('.bm-lang-option').forEach(b =>
+          b.classList.toggle('active', b.dataset.lang === lang)
+        );
+      }
+
+      function setLang(l) {
+        if (!BLUEMINDS_TRANSLATIONS[l]) return;
+        lang = l;
+        localStorage.setItem(STORAGE_KEY, l);
+        apply();
+        const dd = document.getElementById('lang-dropdown');
+        if (dd) dd.classList.remove('open');
+      }
+
+      function getLang() { return lang; }
+      return { t, apply, setLang, getLang };
+    })();
+
+    (function buildPicker() {
+      const style = document.createElement('style');
+      style.textContent = `
+        #bm-lang-picker { position: relative; display: inline-flex; align-items: center; }
+        .bm-lang-btn {
+          display: flex; align-items: center; gap: 5px;
+          background: none; border: 1.5px solid rgba(0,188,212,0.45); border-radius: 8px;
+          padding: 7px 14px; font-family: 'Nunito', sans-serif;
+          font-size: 13px; font-weight: 700; color: #00bcd4;
+          cursor: pointer; transition: all 0.25s ease;
+        }
+        .bm-lang-btn:hover { background: rgba(0,188,212,0.08); }
+        .bm-lang-dropdown {
+          display: none; position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+          background: white; border-radius: 10px;
+          box-shadow: 0 8px 25px rgba(0,0,0,0.14); border: 1px solid #e5e7eb;
+          overflow: hidden; z-index: 9999; min-width: 145px;
+          animation: bmFade 0.15s ease;
+        }
+        .bm-lang-dropdown.open { display: block; }
+        @keyframes bmFade { from{opacity:0;transform:translateX(-50%) translateY(-5px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+        .bm-lang-option {
+          display: flex; align-items: center; gap: 8px;
+          width: 100%; padding: 10px 15px; background: none; border: none;
+          font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 600;
+          color: #3c3c3c; cursor: pointer; transition: background 0.2s ease;
+        }
+        .bm-lang-option:hover  { background: rgba(0,188,212,0.09); color: #00bcd4; }
+        .bm-lang-option.active { background: linear-gradient(135deg,#00bcd4,#0097a7); color: white; }
+      `;
+      document.head.appendChild(style);
+
+      const picker = document.createElement('div');
+      picker.id = 'bm-lang-picker';
+      picker.innerHTML = `
+        <button class="bm-lang-btn"
+          onclick="(function(e){e.stopPropagation();document.getElementById('lang-dropdown').classList.toggle('open');})(event)">
+          🌐 <span id="lang-current-label">${I18n.getLang().toUpperCase()}</span> ▾
+        </button>
+        <div class="bm-lang-dropdown" id="lang-dropdown">
+          <button class="bm-lang-option" data-lang="es" onclick="I18n.setLang('es')">🇲🇽 Español</button>
+          <button class="bm-lang-option" data-lang="en" onclick="I18n.setLang('en')">🇺🇸 English</button>
+          <button class="bm-lang-option" data-lang="pt" onclick="I18n.setLang('pt')">🇧🇷 Português</button>
+        </div>
+      `;
+      const anchor = document.getElementById('lang-picker-anchor');
+      if (anchor) anchor.appendChild(picker);
+
+      document.addEventListener('click', () => {
+        const dd = document.getElementById('lang-dropdown');
+        if (dd) dd.classList.remove('open');
+      });
+    })();
+
+    I18n.apply();
+    </script>
+
+</body>
+</html>

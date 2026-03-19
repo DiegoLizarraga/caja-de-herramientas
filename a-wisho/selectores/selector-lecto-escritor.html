@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lector-Escritor - BlueMinds</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/selector-lecto-escritor.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="../pages/BlueMindsMain.html" class="logo">
+                <img src="../favicon-32x32.png" alt="BlueMinds">
+                <span>BlueMinds</span>
+            </a>
+            <div class="nav-links user-menu">
+                <a href="../pages/BlueMindsMain.html"><i class="fas fa-home"></i> <span data-i18n="sel.home">Inicio</span></a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="category-header">
+            <div style="width: 100%;">
+                <a href="../pages/BlueMindsMain.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> <span data-i18n="sel.back">Volver</span>
+                </a>
+            </div>
+            <div class="header-info">
+                <div class="category-icon-large"><i class="fas fa-book"></i></div>
+                <div class="header-text">
+                    <h1 data-i18n="sel.lec_title">Lector-Escritor</h1>
+                    <p data-i18n="sel.lec_desc">Aprende leyendo y escribiendo información</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="level-filter">
+            <button class="level-btn active" onclick="filterByLevel('all')">
+                <i class="fas fa-th"></i> <span data-i18n="sel.all">Todos los Niveles</span>
+            </button>
+            <button class="level-btn" onclick="filterByLevel('1')">
+                <i class="fas fa-flag"></i> <span data-i18n="sel.level">Nivel</span> 1
+            </button>
+            <button class="level-btn" onclick="filterByLevel('2')">
+                <i class="fas fa-flag"></i> <span data-i18n="sel.level">Nivel</span> 2
+            </button>
+            <button class="level-btn" onclick="filterByLevel('3')">
+                <i class="fas fa-flag"></i> <span data-i18n="sel.level">Nivel</span> 3
+            </button>
+        </div>
+
+        <div class="games-container" id="gamesContainer"></div>
+        <div id="emptyState" style="display: none;">
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <p data-i18n="sel.no_games">No hay juegos disponibles para este nivel</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p data-i18n="main.footer">© BlueMinds - Plataforma de Educación Inclusiva</p>
+        </div>
+    </footer>
+
+    <script src="../js/i18n.js"></script>
+    <script>
+        const gamesData = {
+            nivel1: [
+                { id: 'error-gramatical', titleKey: 'game.error_gramatical', descKey: 'game.error_desc', icon: '🔤', path: '../games/lecto-escritor/nivel-1/encuentra-error/index.html', nivel: '1' },
+                { id: 'lee-asocia', titleKey: 'game.lee_asocia', descKey: 'game.lee_asocia_desc', icon: '🖼️', path: '../games/lecto-escritor/nivel-1/leeyasocia/index.html', nivel: '1' },
+                { id: 'oracion-colores', titleKey: 'game.oracion_colores', descKey: 'game.oracion_desc', icon: '📚', path: '../games/lecto-escritor/nivel-1/oracion-colores/index.html', nivel: '1' }
+            ],
+            nivel2: [
+                { id: 'completa-oracion', titleKey: 'game.completa_oracion_esc', descKey: 'game.completa_esc_desc', icon: '✍️', path: '../games/lecto-escritor/nivel-2/completa-oracion/index.html', nivel: '2' },
+                { id: 'escribe-palabra', titleKey: 'game.escribe_palabra', descKey: 'game.escribe_desc', icon: '💭', path: '../games/lecto-escritor/nivel-2/escribe-palabra/index.html', nivel: '2' }
+            ],
+            nivel3: [
+                { id: 'lee-asocia-2', titleKey: 'game.lee_asocia_2', descKey: 'game.lee_asocia_2_desc', icon: '📖', path: '../games/lecto-escritor/nivel-3/leeyasocia2/index.html', nivel: '3' }
+            ]
+        };
+
+        let currentFilter = 'all';
+
+        function getAllGames() { return [...gamesData.nivel1, ...gamesData.nivel2, ...gamesData.nivel3]; }
+        function getGamesByLevel(level) { return level === 'all' ? getAllGames() : (gamesData[`nivel${level}`] || []); }
+
+        function renderGames(games) {
+            const container = document.getElementById('gamesContainer');
+            const emptyState = document.getElementById('emptyState');
+            if (games.length === 0) { container.innerHTML = ''; emptyState.style.display = 'block'; return; }
+            emptyState.style.display = 'none';
+
+            const gamesByLevel = {};
+            games.forEach(game => { if (!gamesByLevel[game.nivel]) gamesByLevel[game.nivel] = []; gamesByLevel[game.nivel].push(game); });
+
+            container.innerHTML = Object.keys(gamesByLevel).sort().map(nivel => `
+                <div class="level-section">
+                    <h2 class="level-title">
+                        <i class="fas fa-star"></i> ${I18n.t('sel.level')} ${nivel}
+                        <span class="level-badge">${gamesByLevel[nivel].length} ${gamesByLevel[nivel].length === 1 ? I18n.t('sel.games_singular') : I18n.t('sel.games_plural')}</span>
+                    </h2>
+                    <div class="games-grid">
+                        ${gamesByLevel[nivel].map(game => `
+                            <div class="game-card">
+                                <div class="game-icon">${game.icon}</div>
+                                <h3 class="game-title">${I18n.t(game.titleKey)}</h3>
+                                <p class="game-description">${I18n.t(game.descKey)}</p>
+                                <a href="${game.path}" class="game-button">
+                                    <i class="fas fa-play"></i> ${I18n.t('sel.play')}
+                                </a>
+                            </div>`).join('')}
+                    </div>
+                </div>`).join('');
+        }
+
+        function filterByLevel(level) {
+            currentFilter = level;
+            document.querySelectorAll('.level-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.level-btn').classList.add('active');
+            renderGames(getGamesByLevel(level));
+        }
+
+        window.addEventListener('load', () => { renderGames(getAllGames()); });
+    </script>
+</body>
+</html>

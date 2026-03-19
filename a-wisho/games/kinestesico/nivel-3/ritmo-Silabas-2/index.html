@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ritmo de las Sílabas Simple - Neuro Play World</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <div class="back-button">
+                <button onclick="goToMainPage()">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </button>
+            </div>
+            <h1 class="game-title">Ritmo de las Sílabas</h1>
+            <div class="game-info">
+                <span id="score-display">0 puntos</span>
+            </div>
+        </header>
+
+        <main class="game-content">
+            <!-- Progress -->
+            <div class="progress-card">
+                <div class="progress-header">
+                    <span>Ronda <span id="current-round">1</span> de <span id="total-rounds">3</span></span>
+                    <span id="score">0 puntos</span>
+                </div>
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- Main Game Card -->
+            <div class="rhythm-card">
+                <h2>Sigue el Ritmo 🎵</h2>
+
+                <!-- Syllable Display -->
+                <div class="syllable-stage">
+                    <div id="syllables-container" class="syllables-container">
+                        <!-- Las sílabas se generarán dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- Tap Detection Area -->
+                <div class="tap-area" id="tapArea">
+                    <div class="tap-instruction">
+                        👏 Haz clic aquí al ritmo
+                    </div>
+                    <div class="tap-feedback" id="tapFeedback"></div>
+                </div>
+
+                <!-- Simple Feedback -->
+                <div id="feedback" class="feedback hidden">
+                    <span id="feedback-text"></span>
+                </div>
+
+                <!-- Controls -->
+                <div class="action-controls">
+                    <button id="start-button" class="action-button primary">
+                        <i class="fas fa-play"></i> Escuchar Palabra
+                    </button>
+                </div>
+
+                <!-- Speech Recognition -->
+                <div class="speech-section" id="speechSection" style="display: none;">
+                    <h4>🎤 Repite la Palabra</h4>
+                    <button id="listen-button" class="listen-button">
+                        <i class="fas fa-microphone"></i> Escuchar
+                    </button>
+                    <div id="speech-feedback" class="speech-feedback hidden">
+                        <span id="speech-text"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="instructions-card">
+                <p>
+                    💡 <span class="font-bold">Cómo jugar:</span> Escucha la palabra. Haz clic al ritmo de las sílabas y luego repite la palabra.
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

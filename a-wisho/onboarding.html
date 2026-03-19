@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Completa tu Perfil - BlueMinds</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at top right, #1e40af, #1e3a8a, #020617);
+            color: white;
+            min-height: 100vh;
+        }
+        .glass {
+            background: rgba(30, 64, 175, 0.18);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+        }
+        .btn-gradient { background: linear-gradient(to right, #1e40af, #3b82f6); }
+        .btn-gradient:hover { background: linear-gradient(to right, #1e3a8a, #2563eb); }
+        input, select { transition: all 0.3s ease; }
+        input:focus, select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-6 bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-950">
+
+    <div class="max-w-lg w-full glass rounded-3xl p-10 md:p-12 shadow-2xl transform transition-all duration-500 hover:scale-[1.01]">
+
+        <!-- Selector de idioma (esquina superior derecha del card) -->
+        <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
+            <div id="lang-picker-anchor"></div>
+        </div>
+
+        <!-- Logo y Título -->
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl mb-6 shadow-2xl shadow-blue-500/40 mx-auto">
+                <img src="android-chrome-512x512.png" alt="BlueMinds Logo" class="w-16 h-16 object-contain">
+            </div>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-3 tracking-tight" data-i18n="onboard.title">
+                Completa tu Perfil
+            </h1>
+            <p class="text-blue-200/80 text-lg md:text-xl max-w-md mx-auto" data-i18n="onboard.subtitle">
+                Para personalizar tu experiencia en BlueMinds y cumplir con los requisitos, necesitamos estos datos.
+            </p>
+        </div>
+
+        <!-- Formulario -->
+        <form id="onboardingForm" class="space-y-8">
+
+            <!-- Fecha de Nacimiento -->
+            <div class="space-y-3">
+                <label class="block text-sm font-medium text-blue-200 tracking-wide uppercase" data-i18n="onboard.birth_label">
+                    Fecha de Nacimiento
+                </label>
+                <input
+                    type="date"
+                    id="birth"
+                    required
+                    class="w-full px-5 py-4 bg-slate-900/60 border border-slate-700 rounded-xl text-white placeholder-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition-all text-lg"
+                >
+            </div>
+
+            <!-- País -->
+            <div class="space-y-3">
+                <label class="block text-sm font-medium text-blue-200 tracking-wide uppercase" data-i18n="onboard.country_label">
+                    País
+                </label>
+                <select
+                    id="country"
+                    required
+                    class="w-full px-5 py-4 bg-slate-900/60 border border-slate-700 rounded-xl text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition-all text-lg appearance-none"
+                >
+                    <option value="" disabled selected data-i18n="onboard.country_ph">Selecciona tu país</option>
+                    <option value="México">México</option>
+                    <option value="Argentina">Argentina</option>
+                    <option value="Bolivia">Bolivia</option>
+                    <option value="Brasil">Brasil</option>
+                    <option value="Chile">Chile</option>
+                    <option value="Colombia">Colombia</option>
+                    <option value="Costa Rica">Costa Rica</option>
+                    <option value="Ecuador">Ecuador</option>
+                    <option value="El Salvador">El Salvador</option>
+                    <option value="España">España</option>
+                    <option value="Estados Unidos">Estados Unidos</option>
+                    <option value="Guatemala">Guatemala</option>
+                    <option value="Honduras">Honduras</option>
+                    <option value="Nicaragua">Nicaragua</option>
+                    <option value="Panamá">Panamá</option>
+                    <option value="Paraguay">Paraguay</option>
+                    <option value="Perú">Perú</option>
+                    <option value="República Dominicana">República Dominicana</option>
+                    <option value="Uruguay">Uruguay</option>
+                    <option value="Venezuela">Venezuela</option>
+                    <option value="Otro" data-i18n="onboard.country_other">Otro</option>
+                </select>
+            </div>
+
+            <!-- Botón Continuar -->
+            <button
+                type="submit"
+                id="submitBtn"
+                class="w-full btn-gradient text-white py-5 rounded-xl font-bold text-lg shadow-xl shadow-blue-700/40 hover:shadow-2xl hover:shadow-blue-700/60 transition-all duration-300 transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+                <span data-i18n="onboard.btn_continue">Continuar</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+
+        <!-- Footer -->
+        <p class="text-center text-blue-300/50 text-sm mt-10" data-i18n="onboard.footer">
+            BlueMinds • Educación Inclusiva con IA • 2025-2026
+        </p>
+
+    </div><!-- /.card -->
+
+    <script src="api.js"></script>
+    <script>
+        const form = document.getElementById('onboardingForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const birth   = document.getElementById('birth').value;
+            const country = document.getElementById('country').value.trim();
+            if (!birth || !country) {
+                alert(I18n.t('onboard.err_fields'));
+                return;
+            }
+            const originalHTML = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> ' + I18n.t('onboard.loading');
+            try {
+                await api.completeProfile(birth, country);
+                window.location.href = 'pages/perfil.html';
+            } catch (error) {
+                alert(I18n.t('onboard.err_save') + ': ' + (error.message || I18n.t('onboard.err_retry')));
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalHTML;
+            }
+        });
+    </script>
+
+    <!-- i18n -->
+    <script>
+    const BLUEMINDS_TRANSLATIONS = {
+      es: {
+        "onboard.title":        "Completa tu Perfil",
+        "onboard.subtitle":     "Para personalizar tu experiencia en BlueMinds y cumplir con los requisitos, necesitamos estos datos.",
+        "onboard.birth_label":  "Fecha de Nacimiento",
+        "onboard.country_label":"País",
+        "onboard.country_ph":   "Selecciona tu país",
+        "onboard.country_other":"Otro",
+        "onboard.btn_continue": "Continuar",
+        "onboard.footer":       "BlueMinds • Educación Inclusiva con IA • 2025-2026",
+        "onboard.err_fields":   "Por favor completa todos los campos",
+        "onboard.loading":      "Guardando...",
+        "onboard.err_save":     "Error al guardar",
+        "onboard.err_retry":    "Intenta nuevamente",
+      },
+      en: {
+        "onboard.title":        "Complete Your Profile",
+        "onboard.subtitle":     "To personalise your BlueMinds experience and meet requirements, we need a few details.",
+        "onboard.birth_label":  "Date of Birth",
+        "onboard.country_label":"Country",
+        "onboard.country_ph":   "Select your country",
+        "onboard.country_other":"Other",
+        "onboard.btn_continue": "Continue",
+        "onboard.footer":       "BlueMinds • Inclusive Education with AI • 2025-2026",
+        "onboard.err_fields":   "Please complete all fields",
+        "onboard.loading":      "Saving...",
+        "onboard.err_save":     "Error saving",
+        "onboard.err_retry":    "Please try again",
+      },
+      pt: {
+        "onboard.title":        "Complete seu Perfil",
+        "onboard.subtitle":     "Para personalizar sua experiência no BlueMinds e atender aos requisitos, precisamos desses dados.",
+        "onboard.birth_label":  "Data de Nascimento",
+        "onboard.country_label":"País",
+        "onboard.country_ph":   "Selecione seu país",
+        "onboard.country_other":"Outro",
+        "onboard.btn_continue": "Continuar",
+        "onboard.footer":       "BlueMinds • Educação Inclusiva com IA • 2025-2026",
+        "onboard.err_fields":   "Por favor preencha todos os campos",
+        "onboard.loading":      "Salvando...",
+        "onboard.err_save":     "Erro ao salvar",
+        "onboard.err_retry":    "Tente novamente",
+      }
+    };
+
+    const I18n = (() => {
+      const STORAGE_KEY = 'blueminds_lang';
+      let lang = localStorage.getItem(STORAGE_KEY) || 'es';
+
+      function t(key) {
+        return (BLUEMINDS_TRANSLATIONS[lang] || BLUEMINDS_TRANSLATIONS.es)[key] || key;
+      }
+
+      function apply() {
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const text = t(el.getAttribute('data-i18n'));
+          const icon = el.querySelector('i');
+          if (icon) {
+            Array.from(el.childNodes).forEach(n => { if (n.nodeType === 3) n.remove(); });
+            el.appendChild(document.createTextNode(' ' + text));
+          } else {
+            el.textContent = text;
+          }
+        });
+        document.documentElement.lang = lang;
+        const lbl = document.getElementById('lang-current-label');
+        if (lbl) lbl.textContent = lang.toUpperCase();
+        document.querySelectorAll('.bm-lang-option').forEach(b =>
+          b.classList.toggle('active', b.dataset.lang === lang)
+        );
+      }
+
+      function setLang(l) {
+        if (!BLUEMINDS_TRANSLATIONS[l]) return;
+        lang = l;
+        localStorage.setItem(STORAGE_KEY, l);
+        apply();
+        const dd = document.getElementById('lang-dropdown');
+        if (dd) dd.classList.remove('open');
+      }
+
+      function getLang() { return lang; }
+      return { t, apply, setLang, getLang };
+    })();
+
+    (function buildPicker() {
+      const style = document.createElement('style');
+      style.textContent = `
+        #bm-lang-picker { position: relative; display: inline-flex; align-items: center; }
+        .bm-lang-btn {
+          display: flex; align-items: center; gap: 5px;
+          background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.25);
+          border-radius: 8px; padding: 7px 14px;
+          font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700;
+          color: white; cursor: pointer; transition: all 0.25s ease;
+        }
+        .bm-lang-btn:hover { background: rgba(255,255,255,0.18); }
+        .bm-lang-dropdown {
+          display: none; position: absolute; top: calc(100% + 6px); right: 0;
+          background: #1e3a8a; border-radius: 10px;
+          box-shadow: 0 8px 25px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.15);
+          overflow: hidden; z-index: 9999; min-width: 145px;
+          animation: bmFade 0.15s ease;
+        }
+        .bm-lang-dropdown.open { display: block; }
+        @keyframes bmFade { from{opacity:0;transform:translateY(-5px)} to{opacity:1;transform:translateY(0)} }
+        .bm-lang-option {
+          display: flex; align-items: center; gap: 8px;
+          width: 100%; padding: 10px 15px; background: none; border: none;
+          font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600;
+          color: rgba(255,255,255,0.85); cursor: pointer; transition: background 0.2s ease;
+        }
+        .bm-lang-option:hover  { background: rgba(255,255,255,0.1); color: white; }
+        .bm-lang-option.active { background: linear-gradient(135deg,#3b82f6,#1e40af); color: white; }
+      `;
+      document.head.appendChild(style);
+
+      const picker = document.createElement('div');
+      picker.id = 'bm-lang-picker';
+      picker.innerHTML = `
+        <button class="bm-lang-btn"
+          onclick="(function(e){e.stopPropagation();document.getElementById('lang-dropdown').classList.toggle('open');})(event)">
+          🌐 <span id="lang-current-label">${I18n.getLang().toUpperCase()}</span> ▾
+        </button>
+        <div class="bm-lang-dropdown" id="lang-dropdown">
+          <button class="bm-lang-option" data-lang="es" onclick="I18n.setLang('es')">🇲🇽 Español</button>
+          <button class="bm-lang-option" data-lang="en" onclick="I18n.setLang('en')">🇺🇸 English</button>
+          <button class="bm-lang-option" data-lang="pt" onclick="I18n.setLang('pt')">🇧🇷 Português</button>
+        </div>
+      `;
+      const anchor = document.getElementById('lang-picker-anchor');
+      if (anchor) anchor.appendChild(picker);
+
+      document.addEventListener('click', () => {
+        const dd = document.getElementById('lang-dropdown');
+        if (dd) dd.classList.remove('open');
+      });
+    })();
+
+    I18n.apply();
+    </script>
+
+</body>
+</html>
